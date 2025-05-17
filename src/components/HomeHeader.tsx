@@ -16,7 +16,7 @@ function HomeHeader() {
           </div>
         )}
       <Link to="/"
-        className="text-white-100 text-[64px] font-bold mx-auto">DeepTruth</Link>
+        className="text-white-200 text-[64px] font-bold mx-auto">DeepTruth</Link>
     </div>
   );
 }
