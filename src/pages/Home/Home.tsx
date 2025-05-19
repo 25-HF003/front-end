@@ -1,12 +1,14 @@
+import SecondHome from "./SecondHome";
+
 function Home() {
 
   return(
-    <div className="grid justify-items-center relative py-6">
+    <div className="relative grid justify-items-center py-6">
       {/* 회색 반투명 배경 */}
-      <div className="absolute inset-0 bg-gray-300 z-10 opacity-25"></div>
+      <div className="absolute h-screen inset-0 bg-gray-300 z-10 opacity-25"></div>
 
       {/* 로고 */}
-      <div className="absolute inset-0 flex text-black-100 text-8xl z-50 justify-center items-center font-bold">
+      <div className="absolute h-[80vh] inset-0 flex text-black-100 text-8xl z-50 justify-center items-center font-bold">
         <p>Detect Deepfakes</p>
         <img src="/lock.svg" alt="로고"/>
         <p>Defend the Truth</p>
@@ -39,6 +41,11 @@ function Home() {
           <img src="/img/IMG8.png" alt="이미지8" />
         </div>
       </div>
+
+      {/* 여백 */}
+      <div className="h-[100vh]"></div>
+
+      <SecondHome />
     </div>
   )
 }
