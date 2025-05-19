@@ -8,7 +8,7 @@ function Home() {
       <div className="absolute h-screen inset-0 bg-gray-300 z-10 opacity-25"></div>
 
       {/* 로고 */}
-      <div className="absolute h-[80vh] inset-0 flex text-black-100 text-8xl z-50 justify-center items-center font-bold">
+      <div className="absolute h-[80vh] inset-0 flex text-black-100 text-8xl z-20 justify-center items-center font-bold">
         <p>Detect Deepfakes</p>
         <img src="/lock.svg" alt="로고"/>
         <p>Defend the Truth</p>

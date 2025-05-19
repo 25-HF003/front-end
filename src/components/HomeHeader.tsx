@@ -11,7 +11,7 @@ function HomeHeader() {
     <div className="relative flex h-[90px] items-center">
         <AiOutlineMenu className="w-[50px] h-[50px] text-white-200" onClick={() => setNavOpen(!navOpen)} />
         {navOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-50">
+          <div className="z-50 fixed inset-0 bg-black bg-opacity-50">
             <Navbar navOpen={navOpen} setNavOpen={setNavOpen} />
           </div>
         )}
