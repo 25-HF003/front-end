@@ -33,21 +33,24 @@ function Login() {
               회원가입
             </button>
 
+            {/* 소셜 로그인 */}
             <div className="max-w-sm w-full mx-auto p-4">  
               <div className="w-full h-px bg-gray-300"/>
             </div>
 
-            <div className="text-center text-sm text-gray-500 mb-2">소셜 로그인</div>
-            <div className="flex justify-center space-x-4">
-              <button className="text-white bg-white shadow p-2 rounded-full border">
-                <FaGoogle className="text-2xl text-red-500" />
-              </button>
-              <button className="bg-green-500 p-2 rounded-full">
-                <SiNaver className="text-2xl text-white-100" />
-              </button>
-              <button className="bg-yellow-300 p-2 rounded-full">
-                <RiKakaoTalkFill className="text-2xl text-black" />
-              </button>
+            <div className="mt-6 text-center">
+              <p className="text-sm text-gray-500 mb-3">소셜 로그인</p>
+              <div className="flex justify-center gap-4">
+                <button className="bg-white border border-gray-200 rounded-full p-2 shadow-sm">
+                  <img src="/google-icon.svg" alt="Google" className="w-8 h-8" />
+                </button>
+                <button className="bg-white border border-gray-200 rounded-full p-2 shadow-sm">
+                  <img src="/naver-icon.svg" alt="Naver" className="w-8 h-8" />
+                </button>
+                <button className="bg-white border border-gray-200 rounded-full p-2 shadow-sm">
+                 <img src="/kakao-icon.svg" alt="Kakao" className="w-8 h-8" />
+                </button>
+              </div>
             </div>
           </div>
         </div>
