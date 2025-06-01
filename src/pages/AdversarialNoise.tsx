@@ -1,7 +1,24 @@
+import { useState } from "react";
+import FileUploadPage from "../components/Upload/FileUploadPage";
+
 function AdversarialNoise() {
+
+  const [file, setFile] = useState<File | null>(null);
+  const [isSModal, setIsModal] = useState(false);
+
+  const handleNoiseInsert = () => {
+
+  }
+
   return(
     <>
-      <h1>적대적 노이즈 페이지입니다.</h1>
+      <FileUploadPage 
+        title="이미지"
+        file={file}
+        setFile={setFile}
+        accpet="image/*"
+        onDone={handleNoiseInsert}
+      />
     </>)
 }
 
