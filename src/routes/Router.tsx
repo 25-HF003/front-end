@@ -11,6 +11,7 @@ import AdversarialNoise from "../pages/AdversarialNoise";
 import Quiz from "../pages/Quiz";
 import NotFound from "../pages/NotFound";
 import RootLayout from "../layout/RootLayout";
+import InsertLoading from "../components/InsertLoading";
 
 const Router = createBrowserRouter([
   {
@@ -43,6 +44,10 @@ const Router = createBrowserRouter([
       {
         path: '/detection',
         element: <Detection />
+      },
+      {
+        path: '/detection/loading',
+        element: <InsertLoading text="탐지중..."/>
       },
       {
         path: '/watermark-insert',
