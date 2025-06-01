@@ -1,7 +1,11 @@
+import InsertFail from "../../components/InsertFail";
+import InsertLoading from "../../components/InsertLoading";
+
 function WatermarkInsert() {
   return(
     <>
-      <h1>워터마크 삽입 페이지입니다.</h1>
+      {/* <InsertLoading text="삽입중..." /> */}
+      {/* <InsertFail title="워터마크" link="watermark-insert" /> */}
     </>)
 }
 

@@ -5,7 +5,7 @@ function Home() {
   return(
     <div className="relative grid justify-items-center py-6">
       {/* 회색 반투명 배경 */}
-      <div className="absolute h-screen inset-0 bg-gray-300 z-10 opacity-25"></div>
+      <div className="absolute h-screen inset-0 bg-gray-500 z-10 opacity-25"></div>
 
       {/* 로고 */}
       <div className="absolute h-[80vh] inset-0 flex text-black-100 text-8xl z-20 justify-center items-center font-bold">
