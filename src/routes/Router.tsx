@@ -12,6 +12,7 @@ import Quiz from "../pages/Quiz";
 import NotFound from "../pages/NotFound";
 import RootLayout from "../layout/RootLayout";
 import InsertLoading from "../components/InsertLoading";
+import DetectionReport from "../pages/DetectionReport";
 
 const Router = createBrowserRouter([
   {
@@ -48,6 +49,10 @@ const Router = createBrowserRouter([
       {
         path: '/detection/loading',
         element: <InsertLoading text="탐지중..."/>
+      },
+      {
+        path: '/detection/report',
+        element: <DetectionReport />
       },
       {
         path: '/watermark-insert',
