@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import FileUploadPage from "../components/Upload/FileUploadPage";
-import {uploadDeepfakeVideo, DeepfakeResponse } from "../api/deepfake_api";
+import FileUploadPage from "../../components/Upload/FileUploadPage";
+import {uploadDeepfakeVideo, DeepfakeResponse } from "../../api/deepfake_api";
 
 
 function Detection() {
@@ -19,12 +19,12 @@ function Detection() {
   navigate("/detection/loading");
   
   try {
-    const prediction = await uploadDeepfakeVideo(file);
-    setResult(prediction);
+    const results = await uploadDeepfakeVideo(file);
+    setResult(results);
 
     console.log("파일 업로드 완료");
 
-    navigate("/detection/report");
+  navigate("/detection/report", {state: {results}});
       
     } catch (error) {
        console.error("업로드/예측 중 오류:", error);
@@ -35,7 +35,6 @@ function Detection() {
   };
 
   return(
-    <>
      
       <FileUploadPage 
         title="비디오"
@@ -45,7 +44,7 @@ function Detection() {
         onDone={handleDetectionInsert}
       />
       
-    </>)
+    )
 }
 
 export default Detection;
