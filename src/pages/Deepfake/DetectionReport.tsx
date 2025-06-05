@@ -20,7 +20,7 @@ export default function DetectionReport() {
     return null;
   }
 
-  const fake = +(results.average_fake_confidence*100).toFixed(0)
+  const fake = +(results.average_fake_confidence).toFixed(0)
   const real = (100-fake)
   const data = [{ name: 'Fake', value: fake }, { name: 'Real', value: real }];
 
@@ -101,7 +101,7 @@ export default function DetectionReport() {
           />
           <span className="text-xs">03:40 ~ 03:55</span>*/}
         </div>
-        <span className="text-xs flex items-center justify-center mt-5">위 영역의 딥페이크 확률 : {(results.max_confidence*100).toFixed(1)}%</span>
+        <span className="text-xs flex items-center justify-center mt-5">위 영역의 딥페이크 확률 : {(results.max_confidence).toFixed(0)}%</span>
       </div>
 
       {/* 주의 사항 */}
