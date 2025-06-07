@@ -4,13 +4,15 @@ import Signin from "../pages/Signin";
 import Login from "../pages/Login";
 import Features from "../pages/Features";
 import MyPage from "../pages/MyPage";
-import Detection from "../pages/Detection";
+import Detection from "../pages/Deepfake/Detection";
 import WatermarkInsert from "../pages/Watermark/WatermarkInsert";
 import WatermarkDetection from "../pages/Watermark/WatermarkDetection";
 import AdversarialNoise from "../pages/AdversarialNoise";
 import Quiz from "../pages/Quiz";
 import NotFound from "../pages/NotFound";
 import RootLayout from "../layout/RootLayout";
+import InsertLoading from "../components/InsertLoading";
+import DetectionReport from "../pages/Deepfake/DetectionReport";
 
 const Router = createBrowserRouter([
   {
@@ -43,6 +45,14 @@ const Router = createBrowserRouter([
       {
         path: '/detection',
         element: <Detection />
+      },
+      {
+        path: '/detection/loading',
+        element: <InsertLoading text="탐지중..."/>
+      },
+      {
+        path: '/detection/report',
+        element: <DetectionReport />
       },
       {
         path: '/watermark-insert',
