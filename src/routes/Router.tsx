@@ -11,6 +11,7 @@ import AdversarialNoise from "../pages/AdversarialNoise";
 import Quiz from "../pages/Quiz";
 import NotFound from "../pages/NotFound";
 import RootLayout from "../layout/RootLayout";
+import WatermarkSuccess from "../pages/Watermark/WatermarkSuccess";
 
 const Router = createBrowserRouter([
   {
@@ -51,6 +52,10 @@ const Router = createBrowserRouter([
       {
         path: '/watermark-detection',
         element: <WatermarkDetection />
+      },
+      {
+        path: '/watermark-success',
+        element: <WatermarkSuccess />
       },
       {
         path: '/adversarial-noise',

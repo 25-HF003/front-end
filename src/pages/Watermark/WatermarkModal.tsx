@@ -43,8 +43,10 @@ function WatermarkModal({ setIsModal, file }: Props) {
       });
       console.log(response);
       const downloadUrl = response.data.download_url;
+      // const maskGtUrl = response.data.mask_gt_url;
       <InsertLoading text="삽입중..." />
       navigate("/watermark-success", { state: { downloadUrl } });
+      // navigate("/watermark-success", { state: { downloadUrl, maskGtUrl } });
     } catch (error) {
       <InsertFail title="워터마크" link="/watermark-insert" />
       console.log(error);
