@@ -33,10 +33,10 @@ function WatermarkModal({ setIsModal, file }: Props) {
 
     const formData = new FormData();
     formData.append("image", file);
-    formData.append("watermark", text);
+    formData.append("message", text);
 
     try {
-      const response = await axios.post("http://127.0.0.1:5000/watermark", formData, {
+      const response = await axios.post("http://127.0.0.1:5000/watermark-insert", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

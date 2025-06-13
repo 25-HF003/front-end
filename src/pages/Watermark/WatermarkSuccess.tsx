@@ -5,7 +5,6 @@ function WatermarkSuccess() {
 
   const location = useLocation();
   const downloadUrl = location.state?.downloadUrl;
-  // const maskGtUrl = location.state?.maskGtUrl;
 
   const handleDownload = async () => {
     try {
@@ -45,11 +44,6 @@ function WatermarkSuccess() {
             src={`http://127.0.0.1:5000${downloadUrl}`}
             alt="워터마크 이미지"
             width={ '800px' }/>
-          {/* <img
-            src={`http://127.0.0.1:5000${maskGtUrl}`}
-            alt="gt 삽입 이미지"
-            width={ '800px' }
-            style={{ border: '1px solid white' }}/> */}
         </div>
       ) : (
       <>
