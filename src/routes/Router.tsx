@@ -14,6 +14,7 @@ import RootLayout from "../layout/RootLayout";
 import WatermarkSuccess from "../pages/Watermark/WatermarkSuccess";
 import InsertLoading from "../components/InsertLoading";
 import DetectionReport from "../pages/Deepfake/DetectionReport";
+import WatermarkReport from "../pages/Watermark/WatermarkReport";
 
 const Router = createBrowserRouter([
   {
@@ -66,6 +67,10 @@ const Router = createBrowserRouter([
       {
         path: '/watermark-success',
         element: <WatermarkSuccess />
+      },
+      {
+        path: '/watermark-report',
+        element: <WatermarkReport />
       },
       {
         path: '/adversarial-noise',

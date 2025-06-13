@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { IoCloseOutline } from "react-icons/io5";
+import { useState } from "react";
 
 interface NavProps {
   navOpen: boolean;
@@ -7,6 +8,8 @@ interface NavProps {
 }
 
 function Navbar({ navOpen, setNavOpen }: NavProps) {
+
+  const [watermarkOpen, setWatermarkOpen] = useState(false);
 
   return(
     <div className="flex bg-white-200 h-full w-[600px]">
@@ -18,7 +21,15 @@ function Navbar({ navOpen, setNavOpen }: NavProps) {
           <Link to="/features" onClick={() => setNavOpen(!navOpen)}>기능 소개</Link>
           <Link to="/detection" onClick={() => setNavOpen(!navOpen)}>딥페이크 탐지</Link>
           <Link to="/adversarial-noise" onClick={() => setNavOpen(!navOpen)}>적대적 노이즈 삽입</Link>
-          <Link to="/watermark-insert" onClick={() => setNavOpen(!navOpen)}>디지털 워터마킹 삽입</Link>
+          <div>
+            <button onClick={() => setWatermarkOpen(!watermarkOpen)}>디지털 워터마킹</button>
+            { watermarkOpen && (
+              <div className="flex flex-col text-[40px]">
+                <Link to="/watermark-insert" onClick={() => setNavOpen(!navOpen)}>삽입</Link>
+                <Link to="/watermark-detection" onClick={() => setNavOpen(!navOpen)}>탐지</Link>
+              </div>
+            )}
+          </div>
           <Link to="/quiz" onClick={() => setNavOpen(!navOpen)}>퀴즈/미션</Link>
         </div>
         <div className="flex absolute bottom-0">
