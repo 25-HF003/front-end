@@ -1,7 +1,7 @@
 import { useState } from "react";
 import FileUploadPage from "../../components/Upload/FileUploadPage";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { postWatermarkDetection } from "../../api/watermark_api";
 
 
 function WatermarkDetection() {
@@ -13,19 +13,10 @@ function WatermarkDetection() {
   const handleDone = async () => {
 
     if (!file) return;
-    
-    const formData = new FormData();
-    formData.append("image", file);
 
     try {
-        const response = await axios.post(`http://127.0.0.1:5000/watermark-detection`, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
-        console.log(response.data);
-        const data = response.data;
-        navigate("/watermark-report", { state: data });
+      const data = await postWatermarkDetection(file);
+      navigate("/watermark-report", { state: data });
     } catch (error) {
       console.log("실패", error)
     }
