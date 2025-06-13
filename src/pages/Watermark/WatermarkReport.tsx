@@ -80,7 +80,7 @@ function WatermarkReport() {
         </div>
       </div>
 
-      {acc >= 90 && (
+      {acc < 90 && (
         <>
           <WatermarkFailReport 
             uploaded={data.uploaded_image}
