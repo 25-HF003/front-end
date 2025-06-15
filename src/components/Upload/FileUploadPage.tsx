@@ -18,16 +18,17 @@ type Props = {
 
 function FileUploadPage({ title, onDone, file, setFile, accpet, isModal = false, setIsModal }: Props) {
 
+  //upload 100 => 버튼 활성화
   const [uploadDone, setUploadDone] = useState(false);
 
   useEffect(() => {
     if (file) {
       setUploadDone(false);
-      //console.log("🌀 useEffect: 파일 변경 감지 → uploadDone 초기화");
+      //console.log("useEffect: 파일 변경 감지 → uploadDone 초기화");
     }
   }, [file]);
 
-   const handleProgressDone = () => {
+  const handleProgressDone = () => {
     setUploadDone(true);
   };
 

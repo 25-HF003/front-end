@@ -1,4 +1,4 @@
-import {  useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 
 type Props = {
@@ -9,15 +9,11 @@ type Props = {
 function UploadProgressBar({ file, onProgressDone }: Props) {
 
   const [progress, setProgress] = useState(0);// 진행률
-  // const [uploaded, setUploaded] = useState(0);  // bytes
 
-  useEffect(function () {
+  useEffect(() => {
     let interval: NodeJS.Timeout;
-
     if (file) {
       setProgress(0); // 새 파일이면 초기화
-
-
       interval = setInterval(function () {
         setProgress((prev) => {
           const next = prev + 20;
@@ -25,12 +21,10 @@ function UploadProgressBar({ file, onProgressDone }: Props) {
         });
       }, 200);
     }
-
-    return function () {
-      clearInterval(interval);
-    };
+    return () => clearInterval(interval);
   }, [file]);
 
+  //upload 100=>활성화
   useEffect(() => {
     if (progress === 100 && onProgressDone) {
       onProgressDone();
@@ -40,7 +34,6 @@ function UploadProgressBar({ file, onProgressDone }: Props) {
   function formatBytes(bytes: number): string {
     return (bytes / (1024 * 1024)).toFixed(1) + " MB"; // MB 단위
   }
-
 
 
   return (
