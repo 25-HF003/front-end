@@ -1,4 +1,5 @@
-import { useState } from "react";
+import {  useState, useEffect } from "react";
+
 
 type Props = {
   file: File | null;
@@ -6,8 +7,33 @@ type Props = {
 
 function UploadProgressBar({ file }: Props) {
 
-  const [progress, setProgress] = useState(72);  // 진행률
+  const [progress, setProgress] = useState(0);// 진행률
   // const [uploaded, setUploaded] = useState(0);  // bytes
+
+  useEffect(function () {
+    let interval: NodeJS.Timeout;
+
+    if (file) {
+      setProgress(0); // 새 파일이면 초기화
+
+      interval = setInterval(function () {
+        setProgress((prev) => {
+          const next = prev + 20;
+          return next > 100 ? 100 : next;
+        });
+      }, 200);
+    }
+
+    return function () {
+      clearInterval(interval);
+    };
+  }, [file]);
+
+  function formatBytes(bytes: number): string {
+    return (bytes / (1024 * 1024)).toFixed(1) + " MB"; // MB 단위
+  }
+
+
 
   return (
     <div className="w-[50%] flex justify-center items-center">
@@ -25,7 +51,7 @@ function UploadProgressBar({ file }: Props) {
                 />
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-900">5.7 MB of 7.8MB</span>
+              <span className="text-gray-900">  {formatBytes((file.size * progress) / 100)} of {formatBytes(file.size)}</span>
               <span>Uploading... {progress}%</span>
             </div>
           </div>
