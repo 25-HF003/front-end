@@ -27,7 +27,7 @@ function Detection() {
   navigate("/detection/report", {state: {results}});
       
     } catch (error) {
-       console.error("업로드/예측 중 오류:", error);
+      console.error("업로드/예측 중 오류:", error);
       alert("서버 오류로 인해 업로드에 실패했습니다.\n" + (error as Error).message);
       navigate("/pages/NotFound")
     }
@@ -35,7 +35,7 @@ function Detection() {
   };
 
   return(
-     
+    
       <FileUploadPage 
         title="비디오"
         file={file}

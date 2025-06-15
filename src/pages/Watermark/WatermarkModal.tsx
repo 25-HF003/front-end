@@ -1,8 +1,8 @@
-import axios from "axios";
 import { useState } from "react";
 import InsertLoading from "../../components/InsertLoading";
 import InsertFail from "../../components/InsertFail";
 import { useNavigate } from "react-router-dom";
+import { postWatermarkInsert } from "../../api/watermark_api";
 
 type Props = {
   setIsModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -31,18 +31,9 @@ function WatermarkModal({ setIsModal, file }: Props) {
   const handleSubmit = async () => {
     if (!file || !text) return;
 
-    const formData = new FormData();
-    formData.append("image", file);
-    formData.append("watermark", text);
-
     try {
-      const response = await axios.post("http://127.0.0.1:5000/watermark", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      console.log(response);
-      const downloadUrl = response.data.download_url;
+      const data = await postWatermarkInsert(file, text)
+      const downloadUrl = data.download_url;
       <InsertLoading text="삽입중..." />
       navigate("/watermark-success", { state: { downloadUrl } });
     } catch (error) {
