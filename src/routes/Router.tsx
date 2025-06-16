@@ -7,7 +7,7 @@ import MyPage from "../pages/MyPage";
 import Detection from "../pages/Deepfake/Detection";
 import WatermarkInsert from "../pages/Watermark/WatermarkInsert";
 import WatermarkDetection from "../pages/Watermark/WatermarkDetection";
-import AdversarialNoise from "../pages/AdversarialNoise";
+import AdversarialNoise from "../pages/AdversarialNoise/AdversarialNoise";
 import Quiz from "../pages/Quiz";
 import NotFound from "../pages/NotFound";
 import RootLayout from "../layout/RootLayout";
@@ -15,6 +15,7 @@ import WatermarkSuccess from "../pages/Watermark/WatermarkSuccess";
 import InsertLoading from "../components/InsertLoading";
 import DetectionReport from "../pages/Deepfake/DetectionReport";
 import WatermarkReport from "../pages/Watermark/WatermarkReport";
+import NoiseResult from "../pages/AdversarialNoise/NoiseResult";
 
 const Router = createBrowserRouter([
   {
@@ -75,6 +76,10 @@ const Router = createBrowserRouter([
       {
         path: '/adversarial-noise',
         element: <AdversarialNoise />
+      },
+      {
+        path: '/adversarial-noise/result',
+        element: <NoiseResult />
       },
       {
         path: '/quiz',
