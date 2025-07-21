@@ -3,8 +3,13 @@ import Home from "../pages/Home/Home";
 import Signin from "../pages/Signin";
 import Login from "../pages/Login";
 import Features from "../pages/Features";
+<<<<<<< Updated upstream
 import MyPage from "../pages/MyPage";
 import Detection from "../pages/Detection";
+=======
+import MyPage from "../pages/Mypage/MyPage";
+import Detection from "../pages/Deepfake/Detection";
+>>>>>>> Stashed changes
 import WatermarkInsert from "../pages/Watermark/WatermarkInsert";
 import WatermarkDetection from "../pages/Watermark/WatermarkDetection";
 import AdversarialNoise from "../pages/AdversarialNoise";
