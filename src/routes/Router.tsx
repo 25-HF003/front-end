@@ -3,11 +3,7 @@ import Home from "../pages/Home/Home";
 import Signin from "../pages/Signin";
 import Login from "../pages/Login";
 import Features from "../pages/Features";
-<<<<<<< HEAD
 import MyPage from "../pages/Mypage/MyPage";
-=======
-import MyPage from "../pages/MyPage";
->>>>>>> develop
 import Detection from "../pages/Deepfake/Detection";
 import WatermarkInsert from "../pages/Watermark/WatermarkInsert";
 import WatermarkDetection from "../pages/Watermark/WatermarkDetection";
