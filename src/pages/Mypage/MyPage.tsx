@@ -1,0 +1,58 @@
+import { useState } from 'react';
+import UserInfo from './UserInfo';
+import RecordPage from './RecordPage';
+import DeepfakePanel from './DeepfakePanel';
+import NoisePanel from './NoisePanel';
+import WatermarkPanel from './WatermarkPanel';
+
+function MyPage() {
+  const [activeTab, setActiveTab] = useState('noise');
+
+    const renderTabContent = () => {
+    switch (activeTab) {
+      case 'deepfake':
+        return <DeepfakePanel />;
+      case 'noise':
+        return <NoisePanel />;
+      case 'watermark':
+        return <WatermarkPanel />;
+      default:
+        return null;
+    }
+  };
+
+  return(
+    <div className="flex min-h-screen bg-black-100 text-white-100 p-6 space-x-6">
+      <UserInfo/>
+      <div className="flex-1 bg-white-100 text-black-100 rounded-xl p-6 shadow-lg">
+        {/* 탭 메뉴 */}
+        <div className="flex space-x-6 border-b pb-2 mb-6 text-xl font-semibold">
+          <button
+            className={`pb-1 ${activeTab === 'deepfake' ? 'text-green-100 border-b-2 border-green-100' : 'text-gray-900'}`}
+            onClick={() => setActiveTab('deepfake')}
+          >
+            딥페이크
+          </button>
+          <button
+            className={`pb-1 ${activeTab === 'noise' ? 'text-green-100 border-b-2 border-pink-400' : 'text-gray-900'}`}
+            onClick={() => setActiveTab('noise')}
+          >
+            적대적 노이즈
+          </button>
+          <button
+            className={`pb-1 ${activeTab === 'watermark' ? 'text-green-100 border-b-2 border-pink-400' : 'text-gray-900'}`}
+            onClick={() => setActiveTab('watermark')}
+          >
+            디지털 워터마킹
+          </button>
+        </div>
+
+        {/* 탭 콘텐츠 */}
+        {renderTabContent()}
+      </div>
+      
+    </div> 
+  )
+}
+
+export default MyPage;
