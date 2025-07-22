@@ -124,8 +124,7 @@ function EditProfile() {
           {/* 수정 버튼 */}
           <button
             type="submit"
-            className="w-full bg-green-200 text-black-100 font-semibold py-2 rounded hover:bg-green-300"
-          >
+            className="w-full bg-green-200 text-black-100 font-semibold py-2 rounded hover:bg-green-300">
             회원 정보 수정
           </button>
 

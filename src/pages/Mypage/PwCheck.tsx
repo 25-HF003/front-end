@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import PasswordInput from "./PasswordInput";
+import PasswordInput from "../../components/Mypage/PasswordInput";
 
 function PwCheck() {
   const navigate = useNavigate();

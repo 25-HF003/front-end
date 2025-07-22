@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import UserInfo from './UserInfo';
-import RecordPage from './RecordPage';
+import RecordPage from '../../components/Mypage/RecordPage';
 import DeepfakePanel from './DeepfakePanel';
 import NoisePanel from './NoisePanel';
 import WatermarkPanel from './WatermarkPanel';
@@ -29,20 +29,17 @@ function MyPage() {
         <div className="flex space-x-6 border-b pb-2 mb-6 text-xl font-semibold">
           <button
             className={`pb-1 ${activeTab === 'deepfake' ? 'text-green-100 border-b-2 border-pink-400' : 'text-gray-900'}`}
-            onClick={() => setActiveTab('deepfake')}
-          >
+            onClick={() => setActiveTab('deepfake')}>
             딥페이크
           </button>
           <button
             className={`pb-1 ${activeTab === 'noise' ? 'text-green-100 border-b-2 border-pink-400' : 'text-gray-900'}`}
-            onClick={() => setActiveTab('noise')}
-          >
+            onClick={() => setActiveTab('noise')}>
             적대적 노이즈
           </button>
           <button
             className={`pb-1 ${activeTab === 'watermark' ? 'text-green-100 border-b-2 border-pink-400' : 'text-gray-900'}`}
-            onClick={() => setActiveTab('watermark')}
-          >
+            onClick={() => setActiveTab('watermark')}>
             디지털 워터마킹
           </button>
         </div>
