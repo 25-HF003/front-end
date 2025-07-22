@@ -12,6 +12,7 @@ function WatermarkPanel() {
       title="디지털 워터마킹 기록"
       records={watermarkRecords}
       onAddClick={() => navigate("/watermark-detection")}
+      showDownloadButton={true}
     />
   );
 }

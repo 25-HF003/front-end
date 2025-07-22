@@ -12,9 +12,10 @@ function NoisePanel() {
   const navigate = useNavigate();
     return(
     <RecordPage
-        title="적대적 노이즈 적용"
+        title="적대적 노이즈 기록"
         records={noiseRecords}
         onAddClick={() => navigate("/adversarial-noise")}
+        showDownloadButton={true}
     />
     )
 }

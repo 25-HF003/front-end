@@ -4,6 +4,7 @@ import Signin from "../pages/Signin";
 import Login from "../pages/Login";
 import Features from "../pages/Features";
 import MyPage from "../pages/Mypage/MyPage";
+import PwCheck from "../pages/Mypage/pwcheck"
 import Detection from "../pages/Deepfake/Detection";
 import WatermarkInsert from "../pages/Watermark/WatermarkInsert";
 import WatermarkDetection from "../pages/Watermark/WatermarkDetection";
@@ -44,6 +45,10 @@ const Router = createBrowserRouter([
       {
         path: '/mypage',
         element: <MyPage />
+      },
+      {
+        path: '/mypage/check',
+        element: <PwCheck />
       },
       {
         path: '/detection',
