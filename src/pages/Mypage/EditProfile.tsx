@@ -1,7 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useValidation } from "../../hooks/useValidation";
 
 function EditProfile() {
+  const navigate = useNavigate();
   const [name, setName] = useState("");
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
@@ -34,6 +37,7 @@ function EditProfile() {
     if (validId && validPw && validNickname) {
       console.log("회원 정보 수정 시도");
       // 서버로 제출
+      navigate("/mypage");
     }
   };
 
@@ -126,9 +130,9 @@ function EditProfile() {
           </button>
 
           {/* 탈퇴 */}
-          <p className="text-center text-sm text-gray-900 mt-3 cursor-pointer hover:underline">
+          <Link to="/mypage/withdraw" className="text-center text-sm text-gray-900 mt-3 cursor-pointer hover:underline block">
             회원 탈퇴하기
-          </p>
+          </Link>
         </form>
       </div>
     </div>
