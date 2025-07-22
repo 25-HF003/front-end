@@ -1,4 +1,6 @@
 import RecordPage from "./RecordPage";
+import { useNavigate } from "react-router-dom";
+
 const noiseRecords = [
     { id: 4, name: '적대적 노이즈 04', date: '2025. 3. 21. 금요일', img: '/img/user4.jpg' },
     { id: 3, name: '적대적 노이즈 03', date: '2025. 3. 21. 금요일', img: '/img/user3.jpg' },
@@ -7,11 +9,12 @@ const noiseRecords = [
 ];
 
 function NoisePanel() {
+  const navigate = useNavigate();
     return(
     <RecordPage
         title="적대적 노이즈 적용"
         records={noiseRecords}
-        onAddClick={() => console.log('노이즈 ADD')}
+        onAddClick={() => navigate("/adversarial-noise")}
     />
     )
 }
