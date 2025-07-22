@@ -6,7 +6,7 @@ import NoisePanel from './NoisePanel';
 import WatermarkPanel from './WatermarkPanel';
 
 function MyPage() {
-  const [activeTab, setActiveTab] = useState('noise');
+  const [activeTab, setActiveTab] = useState('deepfake');
 
     const renderTabContent = () => {
     switch (activeTab) {
@@ -28,7 +28,7 @@ function MyPage() {
         {/* 탭 메뉴 */}
         <div className="flex space-x-6 border-b pb-2 mb-6 text-xl font-semibold">
           <button
-            className={`pb-1 ${activeTab === 'deepfake' ? 'text-green-100 border-b-2 border-green-100' : 'text-gray-900'}`}
+            className={`pb-1 ${activeTab === 'deepfake' ? 'text-green-100 border-b-2 border-pink-400' : 'text-gray-900'}`}
             onClick={() => setActiveTab('deepfake')}
           >
             딥페이크
@@ -50,7 +50,6 @@ function MyPage() {
         {/* 탭 콘텐츠 */}
         {renderTabContent()}
       </div>
-      
     </div> 
   )
 }

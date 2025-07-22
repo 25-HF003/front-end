@@ -26,7 +26,7 @@ function RecordPage({ title, records, onAddClick, showDownloadButton = true } :R
           </button>
         </div>
 
-   {/* List */}
+    {/* List */}
         <ul className="space-y-10">
           {records.map((record) => (
             <li key={record.id} className="flex items-center space-x-4">
@@ -37,11 +37,11 @@ function RecordPage({ title, records, onAddClick, showDownloadButton = true } :R
               </div>
               <div className="space-x-2 text-xl text-gray-900">
                 <button title="삭제">
-                   <img src="/delete.svg" alt="Delete" className="w-7 h-7" />
+                  <img src="/delete.svg" alt="Delete" className="w-7 h-7" />
                 </button>
                 {showDownloadButton &&(
                   <button title="다운로드">
-                  <img src="/download.svg" alt="Download" className="w-7 h-7" />
+                    <img src="/download.svg" alt="Download" className="w-7 h-7" />
                   </button>)}
               </div>
             </li>

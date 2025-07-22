@@ -21,7 +21,7 @@ function EditProfile() {
   } = useValidation();
 
 
-  const passwordMatch = password && confirmPassword && password === confirmPassword;
+  const passwordMatch = password && confirmPassword && (password === confirmPassword);
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

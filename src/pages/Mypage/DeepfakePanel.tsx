@@ -15,8 +15,8 @@ function DeepfakePanel() {
         records={deepfakeRecords}
         onAddClick={() => navigate("/detection")}
         showDownloadButton={false}
-    />
+      />
     </div>    
-    )
+  )
 }
 export default DeepfakePanel;
