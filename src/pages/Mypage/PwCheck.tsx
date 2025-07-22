@@ -1,12 +1,16 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 
 function PwCheck() {
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("입력한 비밀번호:", password);
     // 여기에 실제 인증 로직 추가
+    navigate("/mypage/edit")
   };
 
   return (
