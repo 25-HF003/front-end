@@ -3,7 +3,10 @@ import Home from "../pages/Home/Home";
 import Signin from "../pages/Signin";
 import Login from "../pages/Login";
 import Features from "../pages/Features";
-import MyPage from "../pages/MyPage";
+import MyPage from "../pages/Mypage/MyPage";
+import PwCheck from "../pages/Mypage/PwCheck"
+import EditProfile from "../pages/Mypage/EditProfile";
+import Withdraw from "../pages/Mypage/Withdraw";
 import Detection from "../pages/Deepfake/Detection";
 import WatermarkInsert from "../pages/Watermark/WatermarkInsert";
 import WatermarkDetection from "../pages/Watermark/WatermarkDetection";
@@ -44,6 +47,18 @@ const Router = createBrowserRouter([
       {
         path: '/mypage',
         element: <MyPage />
+      },
+      {
+        path: '/mypage/check',
+        element: <PwCheck />
+      },
+      {
+        path: '/mypage/edit',
+        element: <EditProfile />
+      },
+      {
+        path: 'mypage/withdraw',
+        element: <Withdraw />
       },
       {
         path: '/detection',
