@@ -63,6 +63,7 @@ function DeepfakePanel() {
         title="딥페이크 기록"
         records={formattedRecords}
         onAddClick={() => navigate("/detection")}
+        onItemClick={(id) => navigate(`/mypage/deepfake/${id}`)}
         showDownloadButton={false}
       />
     </div>    
