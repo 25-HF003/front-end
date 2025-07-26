@@ -62,7 +62,7 @@ const Router = createBrowserRouter([
         element: <Withdraw />
       },
       {
-        path: '/mypage/deepfake/:id',
+        path: '/mypage/detection/:id',
         element: <DeepfakePanelReport />
       },
       {
