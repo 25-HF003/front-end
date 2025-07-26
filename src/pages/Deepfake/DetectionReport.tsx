@@ -11,7 +11,7 @@ export default function DetectionReport() {
   
   const navigate = useNavigate();
   const location = useLocation();
-  const results = location.state?.results;
+  const results = location.state?.results?.data;
   console.log(results)
 
   if (!results) {
@@ -20,8 +20,12 @@ export default function DetectionReport() {
     return null;
   }
 
-  const fake = +(results.average_fake_confidence).toFixed(0)
+  const averageFake = results?.averageConfidence ?? 0;
+  const fake = +averageFake.toFixed(0);
   const real = (100-fake)
+  const maxConfidence = results?.maxConfidence ?? 0;
+  const suspectImage = results?.filePath ?? null;
+
   const data = [{ name: 'Fake', value: fake }, { name: 'Real', value: real }];
 
   let message = '';
@@ -88,12 +92,15 @@ export default function DetectionReport() {
       <div className="bg-gray-100 text-black p-6 rounded-xl mb-6">
         <h3 className="text-2xl font-bold mb-4">✔️ 가장 높게 탐지된 영역</h3>
         <div className="flex items-center justify-center">
-          <img
-            src={`data:image/jpeg;base64,${results.most_suspect_image}`}
-            alt="탐지 영역1"
+          {suspectImage ? (
+            <img
+            src={suspectImage}
+            alt="탐지 영역"
             className="w-[45%] object-cover rounded-md"
           />
-          
+        ) : (
+          <p className="text-sm text-gray-600">탐지된 이미지가 없습니다.</p>
+        )}
           {/*<img
             src="/detected_face_2.png"
             alt="탐지 영역2"
@@ -101,7 +108,8 @@ export default function DetectionReport() {
           />
           <span className="text-xs">03:40 ~ 03:55</span>*/}
         </div>
-        <span className="text-xs flex items-center justify-center mt-5">위 영역의 딥페이크 확률 : {(results.max_confidence).toFixed(0)}%</span>
+        <span className="text-xs flex items-center justify-center mt-5">
+          위 영역의 딥페이크 확률 : {maxConfidence.toFixed(0)}%</span>
       </div>
 
       {/* 주의 사항 */}
