@@ -5,6 +5,7 @@ function WatermarkSuccess() {
 
   const location = useLocation();
   const downloadUrl = location.state?.downloadUrl;
+  console.log(downloadUrl);
 
   const handleDownload = async () => {
     try {
@@ -19,7 +20,8 @@ function WatermarkSuccess() {
       {downloadUrl ? (
         <div className="flex mt-8">
           <img
-            src={`http://127.0.0.1:5000${downloadUrl}`}
+            src={downloadUrl}
+            // src={`http://127.0.0.1:5000${downloadUrl}`}
             alt="워터마크 이미지"
             width={ '800px' }/>
         </div>

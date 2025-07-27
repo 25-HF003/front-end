@@ -33,7 +33,7 @@ function WatermarkModal({ setIsModal, file }: Props) {
 
     try {
       const data = await postWatermarkInsert(file, text)
-      const downloadUrl = data.download_url;
+      const downloadUrl = data.s3_url;
       <InsertLoading text="삽입중..." />
       navigate("/watermark-success", { state: { downloadUrl } });
     } catch (error) {
