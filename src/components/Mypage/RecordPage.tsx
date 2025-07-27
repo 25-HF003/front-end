@@ -11,10 +11,11 @@ type RecordListProps = {
   onAddClick: () => void;
   showDownloadButton?: boolean;
   onItemClick?: (id: number) => void;
+  onDeleteClick?: (id: number) => void;
 };
 
 
-function RecordPage({ title, records, onAddClick, showDownloadButton = true, onItemClick } :RecordListProps) {
+function RecordPage({ title, records, onAddClick, showDownloadButton = true, onItemClick, onDeleteClick} :RecordListProps) {
   return (
       <div className="flex-1 bg-white-100 text-black-100 p-5">
         {/* Header */}
@@ -39,7 +40,7 @@ function RecordPage({ title, records, onAddClick, showDownloadButton = true, onI
                 <p className="text-sm text-gray-900">{record.date}</p>
               </div>
               <div className="space-x-2 text-xl text-gray-900">
-                <button title="삭제">
+                <button title="삭제"  onClick={() => onDeleteClick?.(record.id)}>
                   <img src="/delete.svg" alt="Delete" className="w-7 h-7" />
                 </button>
                 {showDownloadButton &&(

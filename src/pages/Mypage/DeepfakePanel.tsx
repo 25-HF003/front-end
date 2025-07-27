@@ -56,6 +56,24 @@ function DeepfakePanel() {
     img: record.filePath,
   }));
 
+  const handleDelete = (id: number) => {
+  if (!window.confirm("정말 삭제하시겠습니까?")) return;
+
+  axios
+    .delete(`http://localhost:8080/deepfake/${id}`, {
+      params: {
+        userId: 1, // 실제 로그인된 유저 ID로 대체
+      },
+    })
+    .then(() => {
+      setRecords((prev) => prev.filter((r) => r.id !== id));
+    })
+    .catch(() => {
+      alert("삭제에 실패했습니다.");
+    });
+  };
+
+
 
   return(
     <div>
@@ -64,6 +82,7 @@ function DeepfakePanel() {
         records={formattedRecords}
         onAddClick={() => navigate("/detection")}
         onItemClick={(id) => navigate(`/mypage/detection/${id}`)}
+        onDeleteClick={handleDelete}
         showDownloadButton={false}
       />
     </div>    
