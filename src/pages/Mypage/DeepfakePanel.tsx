@@ -1,4 +1,5 @@
 import RecordPage from "../../components/Mypage/RecordPage";
+import ConfirmModal from "../../components/Mypage/ConfirmModal";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -16,6 +17,8 @@ function DeepfakePanel() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false);
+  const [deleteId, setDeleteId] = useState<number | null>(null);
 
   // 여기에 userId 정의 (실제로는 로그인된 유저에서 가져와야 함)
   const userId = 1; // 예시로 userId 1번 하드코딩
@@ -57,21 +60,28 @@ function DeepfakePanel() {
   }));
 
   const handleDelete = (id: number) => {
-  if (!window.confirm("정말 삭제하시겠습니까?")) return;
-
-  axios
-    .delete(`http://localhost:8080/deepfake/${id}`, {
-      params: {
-        userId: 1, // 실제 로그인된 유저 ID로 대체
-      },
-    })
-    .then(() => {
-      setRecords((prev) => prev.filter((r) => r.id !== id));
-    })
-    .catch(() => {
-      alert("삭제에 실패했습니다.");
-    });
+    setDeleteId(id);
+    setShowModal(true);
   };
+
+  const confirmDelete = () => {
+    if (deleteId === null) return;
+
+    axios
+      .delete(`http://localhost:8080/deepfake/${deleteId}`, {
+        params: { userId: 1 },// 실제 로그인된 유저 ID로 대체
+      })
+      .then(() => {
+        setRecords((prev) => prev.filter((r) => r.id !== deleteId));
+      })
+      .catch(() => {
+        alert("삭제에 실패했습니다.");
+      })
+      .finally(() => {
+        setShowModal(false);
+        setDeleteId(null);
+      });
+    };
 
 
 
@@ -85,6 +95,13 @@ function DeepfakePanel() {
         onDeleteClick={handleDelete}
         showDownloadButton={false}
       />
+      {showModal && (
+        <ConfirmModal
+          message="정말 삭제하시겠습니까?"
+          onConfirm={confirmDelete}
+          onCancel={() => setShowModal(false)}
+        />
+      )}
     </div>    
   )
 }

@@ -40,7 +40,7 @@ function RecordPage({ title, records, onAddClick, showDownloadButton = true, onI
                 <p className="text-sm text-gray-900">{record.date}</p>
               </div>
               <div className="space-x-2 text-xl text-gray-900">
-                <button title="삭제"  onClick={() => onDeleteClick?.(record.id)}>
+                <button title="삭제" onClick={() => onDeleteClick?.(record.id)}>
                   <img src="/delete.svg" alt="Delete" className="w-7 h-7" />
                 </button>
                 {showDownloadButton &&(
