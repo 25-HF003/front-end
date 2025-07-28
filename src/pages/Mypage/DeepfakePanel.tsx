@@ -59,6 +59,7 @@ function DeepfakePanel() {
     img: record.filePath,
   }));
 
+  //기록 삭제
   const handleDelete = (id: number) => {
     setDeleteId(id);
     setShowModal(true);

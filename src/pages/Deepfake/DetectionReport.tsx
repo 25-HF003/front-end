@@ -8,7 +8,7 @@ function DetectionReport() {
   
   const navigate = useNavigate();
   const location = useLocation();
-  const results = location.state?.results?.data;
+  const results = location.state?.results?.data; //데이터구조 result > data
   console.log(results);
 
   if (!results) {

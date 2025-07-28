@@ -14,6 +14,7 @@ function DeepfakePanelReport() {
   useEffect(() => {
     if (!id) return;
 
+    //딥페이크 개별 조회
     axios
       .get(`http://localhost:8080/deepfake/${id}`,{
         params: {
@@ -34,6 +35,8 @@ function DeepfakePanelReport() {
   if (loading) return <p className="text-white-100 text-center mt-10">불러오는 중...</p>;
   if (!results) return null;
 
-  return <DeepfakeReport result={results} createdAt={results.createdAt} />;
+  return (
+  <DeepfakeReport result={results} createdAt={results.createdAt} />
+  )
 }
 export default DeepfakePanelReport;

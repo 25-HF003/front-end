@@ -35,8 +35,8 @@ function RecordPage({ title, records, onAddClick, showDownloadButton = true, onI
               <img src={record.img}   alt={record.name} className="w-20 h-20 rounded-full object-cover" />
               <div className="flex-1">
                 <button 
-                onClick={() => onItemClick?.(record.id)}
-                className="font-bold text-xl">{record.name}</button>
+                  onClick={() => onItemClick?.(record.id)}
+                  className="font-bold text-xl">{record.name}</button>
                 <p className="text-sm text-gray-900">{record.date}</p>
               </div>
               <div className="space-x-2 text-xl text-gray-900">

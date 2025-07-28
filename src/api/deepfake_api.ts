@@ -1,10 +1,10 @@
 export interface DeepfakeResponse {
   id: number;
-  filePath: string;
-  result: string;
-  averageConfidence: number;
-  maxConfidence: number;
-  createdAt: string;
+  filePath: string; //이미지
+  result: string; //fake or real
+  averageConfidence: number; //영상평균딥페이크 확률
+  maxConfidence: number; //이미지 딥페이크 확률
+  createdAt: string; //생성시간
 }
 
 export interface DeepfakeResponseWrapper {
@@ -14,6 +14,7 @@ export interface DeepfakeResponseWrapper {
   data: DeepfakeResponse;
 }
 
+//딥페이크 생성
 export const uploadDeepfakeVideo = async (file: File, userId: number): Promise<DeepfakeResponse> => {
     const formData = new FormData();
     formData.append("userId", String(userId));
