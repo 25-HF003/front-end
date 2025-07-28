@@ -47,7 +47,6 @@ function Signin() {
   const onSubmit = async (data: SignupFields) => {
 
     if (!data.over14 || !data.terms || !data.privacy) {
-      console.log("모달 열기 시도"); 
       openModal("약관에 모두 동의해야 회원가입이 가능합니다.");
       return;
     }
@@ -89,7 +88,7 @@ function Signin() {
   return (
     <>
     <SignupModal isOpen={isModalOpen} message={modalMessage} onClose={closeModal} />
-    <div className="flex min-h-screen items-center justify-center bg-black-200 p-4">
+    <div className="flex min-h-screen items-center justify-center bg-black-100 p-4">
       {/* 회원가입 모달 */}
       <div className="w-full max-w-md overflow-y-auto max-h-[90vh] rounded-2xl bg-white-100 shadow-2xl p-8">
         <h2 className="text-2xl font-bold text-center mb-6">회원가입</h2>
