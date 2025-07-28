@@ -1,4 +1,6 @@
 import { useForm } from "react-hook-form";
+import { useState } from "react";
+import SignupModal from "../components/SignupModal";
 
 interface SignupFields {
   name: string;
@@ -27,6 +29,19 @@ function Signin() {
     },
   });
 
+  const [modalMessage, setModalMessage] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+   const openModal = (msg: string) => {
+    setModalMessage(msg);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setModalMessage("");
+  };
+
   const onSubmit = async (data: SignupFields) => {
     const payload = {
       name: data.name,
@@ -47,11 +62,11 @@ function Signin() {
       const result = await res.json();
 
       if (res.ok) {
-        alert(result.message);
+        openModal(result.message || "회원가입 성공!");
         // navigate("/login");
       } else {
         //const error = await res.json();
-        alert("에러: " + result.message);
+        openModal(result.message || "회원가입 실패");
       }
     } catch (err) {
       alert("서버 연결 오류");
@@ -70,6 +85,8 @@ function Signin() {
   }
 
   return (
+    <>
+     <SignupModal isOpen={isModalOpen} message={modalMessage} onClose={closeModal} />
     <div className="flex min-h-screen items-center justify-center bg-black-200 p-4">
       {/* 회원가입 모달 */}
       <div className="w-full max-w-md overflow-y-auto max-h-[90vh] rounded-2xl bg-white-100 shadow-2xl p-8">
@@ -139,12 +156,13 @@ function Signin() {
             </div>
           </div>
 
-          <button type="submit" className="w-full py-3 font-semibold bg-green-200 text-white rounded-lg">
+          <button type="submit" className="w-full py-3 font-semibold bg-green-200 text-white-100 rounded-lg">
             회원가입
           </button>
         </form>
       </div>
     </div>
+    </>
   );
 }
 
