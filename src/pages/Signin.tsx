@@ -1,8 +1,9 @@
 import { useForm } from "react-hook-form";
 import { useState } from "react";
-import SignupModal from "../components/SignupModal";
+import SignupModal from "../components/Signup/SignupModal";
+import AgreementSection from "../components/Signup/AgreementSection";
 
-interface SignupFields {
+export interface SignupFields {
   name: string;
   username: string;
   password: string;
@@ -12,6 +13,7 @@ interface SignupFields {
   over14: boolean;
   terms: boolean;
   privacy: boolean;
+  allAgree?: boolean;
 }
 
 function Signin() {
@@ -43,6 +45,12 @@ function Signin() {
   };
 
   const onSubmit = async (data: SignupFields) => {
+
+    if (!data.over14 || !data.terms || !data.privacy) {
+      console.log("모달 열기 시도"); 
+      openModal("약관에 모두 동의해야 회원가입이 가능합니다.");
+      return;
+    }
     const payload = {
       name: data.name,
       loginId: data.username,
@@ -76,17 +84,11 @@ function Signin() {
 
 
   const [over14, terms, privacy] = watch(["over14", "terms", "privacy"]);
-  const allChecked = over14 && terms && privacy;
-
-  function toggleAll (checked: boolean) {
-    setValue("over14", checked);
-    setValue("terms", checked);
-    setValue("privacy", checked);
-  }
+  
 
   return (
     <>
-     <SignupModal isOpen={isModalOpen} message={modalMessage} onClose={closeModal} />
+    <SignupModal isOpen={isModalOpen} message={modalMessage} onClose={closeModal} />
     <div className="flex min-h-screen items-center justify-center bg-black-200 p-4">
       {/* 회원가입 모달 */}
       <div className="w-full max-w-md overflow-y-auto max-h-[90vh] rounded-2xl bg-white-100 shadow-2xl p-8">
@@ -129,32 +131,15 @@ function Signin() {
           {errors.email && <p className="text-rose-500 text-sm">{errors.email.message}</p>}
 
           {/* 약관 */}
-          <div className="mt-4 border rounded-lg p-4 bg-gray-50">
-            {/* 체크박스스 */}
-            <label className="flex items-center space-x-2 mb-2 cursor-pointer">
-              <input
-                type="checkbox"
-                className="accent-green-100 h-5 w-5" 
-                checked={allChecked}
-                onChange={(e) => toggleAll(e.target.checked)}
-              />
-              <span className="font-semibold">전체 동의</span>
-            </label>
-            <div className="space-y-1 ml-6">
-              <label className="flex items-center space-x-2">
-                <input id="over14" type="checkbox" className="accent-green-100 h-4 w-4" {...register("over14", { required: true })} />
-                <span>만 14세 이상입니다. (필수)</span>
-              </label>
-              <label className="flex items-center space-x-2">
-                <input id="terms" type="checkbox" className="accent-green-100 h-4 w-4" {...register("terms", { required: true })} />
-                <span>서비스 이용약관 동의 (필수)</span>
-              </label>
-              <label className="flex items-center space-x-2">
-                <input id="privacy" type="checkbox" className="accent-green-100 h-4 w-4" {...register("privacy", { required: true })} />
-                <span>개인정보 수집 및 이용 동의 (필수)</span>
-              </label>
-            </div>
-          </div>
+          <AgreementSection
+            register={register}
+            errors={errors}
+            over14={over14}
+            terms={terms}
+            privacy={privacy}
+            setValue={setValue}
+          />
+
 
           <button type="submit" className="w-full py-3 font-semibold bg-green-200 text-white-100 rounded-lg">
             회원가입
