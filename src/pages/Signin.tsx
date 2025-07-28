@@ -27,9 +27,37 @@ function Signin() {
     },
   });
 
- function onSubmit(data: SignupFields) {
-  console.log("Signup Data", data);
- }
+  const onSubmit = async (data: SignupFields) => {
+    const payload = {
+      name: data.name,
+      loginId: data.username,
+      password: data.password,
+      passwordConfirm: data.confirmPassword,
+      nickname: data.nickname,
+      email: data.email,
+    };
+
+    try {
+      const res = await fetch("http://localhost:8080/api/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const result = await res.json();
+
+      if (res.ok) {
+        alert(result.message);
+        // navigate("/login");
+      } else {
+        //const error = await res.json();
+        alert("에러: " + result.message);
+      }
+    } catch (err) {
+      alert("서버 연결 오류");
+      console.error(err);
+    }
+  };
 
 
   const [over14, terms, privacy] = watch(["over14", "terms", "privacy"]);
