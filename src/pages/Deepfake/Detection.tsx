@@ -10,6 +10,8 @@ function Detection() {
   const [result, setResult] = useState<DeepfakeResponse | null>(null);
   const navigate = useNavigate();
  
+  // 실제 구현에선 로그인된 유저 ID를 가져와야 함
+  const userId = 1; // 예시용 하드코딩된 userId
 
   const handleDetectionInsert = async() => {
       if (!file) {
@@ -19,12 +21,12 @@ function Detection() {
   navigate("/detection/loading");
   
   try {
-    const results = await uploadDeepfakeVideo(file);
+    const results = await uploadDeepfakeVideo(file, userId);
     setResult(results);
 
-    console.log("파일 업로드 완료");
+    console.log("파일 업로드 완료", results);
 
-  navigate("/detection/report", {state: {results}});
+    navigate("/detection/report", {state: {results}});
       
     } catch (error) {
       console.error("업로드/예측 중 오류:", error);
