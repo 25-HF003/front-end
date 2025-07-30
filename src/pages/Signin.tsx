@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import SignupModal from "../components/Modal/SignupModal";
 import AgreementSection from "../components/Signup/AgreementSection";
 
@@ -33,6 +34,7 @@ function Signin() {
 
   const [modalMessage, setModalMessage] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
 
    const openModal = (msg: string) => {
     setModalMessage(msg);
@@ -70,7 +72,7 @@ function Signin() {
 
       if (res.ok) {
         openModal(result.message || "회원가입 성공!");
-        // navigate("/login");
+        navigate("/login");
       } else {
         //const error = await res.json();
         openModal(result.message || "회원가입 실패");
@@ -102,7 +104,6 @@ function Signin() {
         {/* 비밀번호 */}
           <input type="password" {...register("password", { required: "비밀번호를 입력해주세요." })} placeholder="비밀번호" className="w-full rounded-lg border p-3" />
           {errors.password && <p className="text-rose-500 text-sm">{errors.password.message}</p>}
-
         {/* 비밀번호 확인 */}
           <input
             type="password"

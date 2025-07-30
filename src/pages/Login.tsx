@@ -4,12 +4,28 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { setAccessToken } from "../features/auth/authSlice";
 import { scheduleAutoLogout } from "../utils/jwt";
+import SignupModal from "../components/Modal/SignupModal";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai"; 
 
 function Login() {
   const [loginId, setLoginId] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch(); // Redux dispatch
+
+  
+  const openModal = (msg: string) => {
+    setModalMessage(msg);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setModalMessage("");
+  };
 
   const handleLogin = async () => {
     try {
@@ -34,7 +50,7 @@ function Login() {
         // 메인 페이지로 이동
         navigate("/");
       } else {
-        alert("로그인 실패: " + result.message);
+        openModal(result.message || "로그인 실패");
       }
     } catch (err) {
       console.error("Login error:", err);
@@ -43,7 +59,10 @@ function Login() {
   };
 
 
+
   return(
+    <>
+      <SignupModal isOpen={isModalOpen} message={modalMessage} onClose={closeModal} />
         <div className="flex items-center justify-center min-h-screen">
           {/* 로그인 모달 */}
           <div className="relative bg-white-100 rounded-xl p-20 w-full max-w-lg shadow-xl text-black-100">
@@ -60,13 +79,20 @@ function Login() {
               onChange={(e) => setLoginId(e.target.value)}
               className="w-full px-4 py-2 mb-3 border rounded-md focus:outline-none focus:ring"
             />
+            <div className="relative w-full">
             <input
-              type="password"
-              placeholder="비밀번호"
+              type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring"
-            />
+              placeholder="비밀번호"
+              className="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring"  />
+            <div
+              className="absolute top-1/3 right-3 transform -translate-y-1/2 cursor-pointer"
+              onClick={() => setShowPassword((prev) => !prev)}
+            >
+                {showPassword ? <AiOutlineEyeInvisible size={20} /> : <AiOutlineEye size={20} />}
+            </div>
+            </div>
 
             {/* ID/PW 버튼 */}
             <button 
@@ -101,6 +127,7 @@ function Login() {
             </div>
           </div>
         </div>
+      </>
   )
 }
 
