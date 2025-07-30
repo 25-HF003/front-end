@@ -99,6 +99,7 @@ function DeepfakePanel() {
       {showModal && (
         <ConfirmModal
           message="정말 삭제하시겠습니까?"
+          buttonmessage="삭제"
           onConfirm={confirmDelete}
           onCancel={() => setShowModal(false)}
         />
