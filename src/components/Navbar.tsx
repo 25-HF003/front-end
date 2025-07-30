@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import { IoCloseOutline } from "react-icons/io5";
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../app/store";
 
 interface NavProps {
   navOpen: boolean;
@@ -10,6 +12,8 @@ interface NavProps {
 function Navbar({ navOpen, setNavOpen }: NavProps) {
 
   const [watermarkOpen, setWatermarkOpen] = useState(false);
+  const accessToken = useSelector((state: RootState) => state.auth.accessToken); //로그인 상태 체크
+
 
   return(
     <div className="flex bg-white-200 h-full w-[600px]">
@@ -33,9 +37,15 @@ function Navbar({ navOpen, setNavOpen }: NavProps) {
           <Link to="/quiz" onClick={() => setNavOpen(!navOpen)}>퀴즈/미션</Link>
         </div>
         <div className="flex absolute bottom-0">
-          <Link to="/login" onClick={() => setNavOpen(!navOpen)}>로그인</Link>
-          <p>/</p>
-          <Link to="/signin" onClick={() => setNavOpen(!navOpen)}>회원가입</Link>
+          {accessToken ? (
+            <Link to="/mypage" onClick={() => setNavOpen(false)}>마이페이지</Link>
+          ) : (
+          <>
+            <Link to="/login" onClick={() => setNavOpen(false)}>로그인</Link>
+            <p>/</p>
+            <Link to="/signin" onClick={() => setNavOpen(false)}>회원가입</Link>
+          </>
+        )}
         </div>
       </div>
     </div>
