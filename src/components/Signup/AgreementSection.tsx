@@ -88,7 +88,7 @@ function AgreementSection({
           <input
             type="checkbox"
             className="accent-green-100 h-4 w-4"
-            {...register("over14")} // 개별 상태 변경 시 전체 동의 체크 상태 자동 조정sc
+            {...register("over14")} // 개별 상태 변경 시 전체 동의 체크 상태 자동 조정
           />
           <span>만 14세 이상입니다. (필수)</span>
           <button type="button" onClick={() => openModal("over14")} className="text-blue-500 underline text-xs">
