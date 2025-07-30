@@ -2,7 +2,8 @@ import './index.css'
 import { RouterProvider } from 'react-router-dom'
 import Router from './routes/Router'
 import { Provider, useDispatch } from 'react-redux';
-import { store } from './app/store';
+import { PersistGate } from 'redux-persist/integration/react';
+import { store, persistor } from './app/store';
 import { useEffect } from 'react';
 import { setAccessToken } from './features/auth/authSlice';
 import { scheduleAutoLogout } from './utils/jwt';
@@ -26,8 +27,10 @@ function TokenInitializer() {
 function App() {
   return (
     <Provider store={store}>
-      <TokenInitializer />
-      <RouterProvider router={Router} />
+      <PersistGate loading={null} persistor={persistor}>
+        <TokenInitializer />
+        <RouterProvider router={Router} />
+      </PersistGate>
     </Provider>
     
   );
