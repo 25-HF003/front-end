@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../app/store"; 
 import { clearAccessToken } from "../../features/auth/authSlice";
 import { useState } from "react";
-import ConfirmModal from "../../components/Mypage/ConfirmModal";
+import ConfirmModal from "../../components/Modal/ConfirmModal";
 
 
 function UserInfo() {

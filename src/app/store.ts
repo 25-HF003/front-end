@@ -10,11 +10,11 @@ import {
   PURGE,
   REGISTER,
 } from 'redux-persist';
-import storage from 'redux-persist/lib/storage'; // localStorage 사용
+import storageSession from 'redux-persist/lib/storage/session'; // sessionStorage- 사용
 
 const persistConfig = {
   key: 'auth',
-  storage,
+  storage: storageSession,
 };
 const persistedAuthReducer = persistReducer(persistConfig, authReducer);
 

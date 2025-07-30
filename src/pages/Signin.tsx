@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useState } from "react";
-import SignupModal from "../components/Signup/SignupModal";
+import SignupModal from "../components/Modal/SignupModal";
 import AgreementSection from "../components/Signup/AgreementSection";
 
 export interface SignupFields {

@@ -1,5 +1,5 @@
 import RecordPage from "../../components/Mypage/RecordPage";
-import ConfirmModal from "../../components/Mypage/ConfirmModal";
+import ConfirmModal from "../../components/Modal/ConfirmModal";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
