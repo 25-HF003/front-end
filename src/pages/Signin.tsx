@@ -34,16 +34,20 @@ function Signin() {
 
   const [modalMessage, setModalMessage] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [redirectAfterModal, setRedirectAfterModal] = useState<string | null>(null);
   const navigate = useNavigate();
 
-   const openModal = (msg: string) => {
+  const openModal = (msg: string, redirectTo?: string) => {
     setModalMessage(msg);
+    setRedirectAfterModal(redirectTo || null);
     setIsModalOpen(true);
   };
 
-  const closeModal = () => {
+  const handleModalClose = () => {
     setIsModalOpen(false);
-    setModalMessage("");
+    if (redirectAfterModal) {
+      navigate(redirectAfterModal);
+    }
   };
 
   const onSubmit = async (data: SignupFields) => {
@@ -71,8 +75,7 @@ function Signin() {
       const result = await res.json();
 
       if (res.ok) {
-        openModal(result.message || "회원가입 성공!");
-        navigate("/login");
+        openModal(result.message || "회원가입 성공!", "/login");
       } else {
         //const error = await res.json();
         openModal(result.message || "회원가입 실패");
@@ -89,7 +92,7 @@ function Signin() {
 
   return (
     <>
-    <SignupModal isOpen={isModalOpen} message={modalMessage} onClose={closeModal} />
+    <SignupModal isOpen={isModalOpen} message={modalMessage} onClose={handleModalClose} />
     <div className="flex min-h-screen items-center justify-center bg-black-100 p-4">
       {/* 회원가입 모달 */}
       <div className="w-full max-w-lg overflow-y-auto max-h-[90vh] rounded-2xl bg-white-100 shadow-2xl p-8">
@@ -101,7 +104,6 @@ function Signin() {
         {/* 아이디 */}
           <input {...register("username", { required: "아이디를 입력해주세요." })} placeholder="아이디 - 6~20자의 영소문자 및 숫자만 가능" className="w-full rounded-lg border p-3" />
           {errors.username && <p className="text-rose-500 text-sm">{errors.username.message}</p>}
-          
         {/* 비밀번호 */}
           <input type="password" {...register("password", { required: "비밀번호를 입력해주세요." })} placeholder="비밀번호 - 8자~30자의 영대문자·소문자·숫자·특수문자 모두 포함" className="w-full rounded-lg border p-3" />
           {errors.password && <p className="text-rose-500 text-sm">{errors.password.message}</p>}
