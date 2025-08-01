@@ -28,14 +28,26 @@ function WatermarkModal({ setIsModal, file }: Props) {
     }
   }
 
+  // const handleSubmit = async () => {
+  //   if (!file || !text) return;
+
+  //   try {
+  //     const data = await postWatermarkInsert(file, text)
+  //     const downloadUrl = data.s3_url;
+  //     <InsertLoading text="삽입중..." />
+  //     navigate("/watermark-success", { state: { downloadUrl } });
+  //   } catch (error) {
+  //     <InsertFail title="워터마크" link="/watermark-insert" />
+  //     console.log(error);
+  //   }
+  // }
   const handleSubmit = async () => {
     if (!file || !text) return;
 
     try {
-      const data = await postWatermarkInsert(file, text)
-      const downloadUrl = data.s3_url;
+      const { imageUrl, filename } = await postWatermarkInsert(file, text);
       <InsertLoading text="삽입중..." />
-      navigate("/watermark-success", { state: { downloadUrl } });
+      navigate("/watermark-success", { state: { downloadUrl: imageUrl, filename } });
     } catch (error) {
       <InsertFail title="워터마크" link="/watermark-insert" />
       console.log(error);

@@ -13,31 +13,39 @@ export const postWatermarkInsert = async (file: File, text: string) => {
     },
   });
 
-  console.log(response.data)
-  return response.data;
+  // console.log(response.data)
+  // return response.data;
+
+  // base64 문자열, 파일명, 메시지 추출
+  const { image_base64, filename, message } = response.data;
+
+  // base64를 <img src=... />에 쓸 수 있게 data url 생성
+  const imageUrl = `data:image/png;base64,${image_base64}`;
+
+  return { imageUrl, filename, message };
 }
 
-export const getWatermarkImage = async (downloadUrl: string) => {
-  const urlParts = downloadUrl.split('/')
-  const originalFileName = urlParts[urlParts.length - 1];
+// export const getWatermarkImage = async (downloadUrl: string) => {
+//   const urlParts = downloadUrl.split('/')
+//   const originalFileName = urlParts[urlParts.length - 1];
 
-  const response = await axios.get(`${BASE_URL}/download-image`, {
-    params: {
-      url: downloadUrl,
-      filename: originalFileName,
-    },
-    responseType: 'blob',
-  });
+//   const response = await axios.get(`${BASE_URL}/download-image`, {
+//     params: {
+//       url: downloadUrl,
+//       filename: originalFileName,
+//     },
+//     responseType: 'blob',
+//   });
 
-  const blob = new Blob([response.data]);
-  const link = document.createElement('a');
-  link.href = window.URL.createObjectURL(blob);
-  link.download = originalFileName;  
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  window.URL.revokeObjectURL(link.href);
-}
+//   const blob = new Blob([response.data]);
+//   const link = document.createElement('a');
+//   link.href = window.URL.createObjectURL(blob);
+//   link.download = originalFileName;  
+//   document.body.appendChild(link);
+//   link.click();
+//   document.body.removeChild(link);
+//   window.URL.revokeObjectURL(link.href);
+// }
 
 export const postWatermarkDetection = async (file: File) => {
   const formData = new FormData();
