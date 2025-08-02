@@ -4,7 +4,7 @@ type ConfirmModalProps = {
   onConfirm: () => void;
   onCancel: () => void;
 };
-
+//취소+메세지버튼
 const ConfirmModal = ({ message, buttonmessage, onConfirm, onCancel }: ConfirmModalProps) => {
   return (
     <div className="fixed inset-0 bg-black-100 bg-opacity-40 flex items-center justify-center z-50">

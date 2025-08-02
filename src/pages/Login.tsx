@@ -80,18 +80,17 @@ function Login() {
               className="w-full px-4 py-2 mb-3 border rounded-md focus:outline-none focus:ring"
             />
             <div className="relative w-full">
-            <input
-              type={showPassword ? "text" : "password"}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="비밀번호"
-              className="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring"  />
-            <div
-              className="absolute top-1/3 right-3 transform -translate-y-1/2 cursor-pointer"
-              onClick={() => setShowPassword((prev) => !prev)}
-            >
-                {showPassword ? <AiOutlineEyeInvisible size={20} /> : <AiOutlineEye size={20} />}
-            </div>
+              <input
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="비밀번호"
+                className="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring"  />
+              <div
+                className="absolute top-1/3 right-3 transform -translate-y-1/2 cursor-pointer"
+                onClick={() => setShowPassword((prev) => !prev)}>
+                  {showPassword ? <AiOutlineEyeInvisible size={20} /> : <AiOutlineEye size={20} />}
+              </div>
             </div>
 
             {/* ID/PW 버튼 */}
@@ -121,7 +120,7 @@ function Login() {
                   <img src="/naver-icon.svg" alt="Naver" className="w-8 h-8" />
                 </button>
                 <button className="bg-white-100 border border-gray-200 rounded-full p-2 shadow-sm">
-                 <img src="/kakao-icon.svg" alt="Kakao" className="w-8 h-8" />
+                  <img src="/kakao-icon.svg" alt="Kakao" className="w-8 h-8" />
                 </button>
               </div>
             </div>

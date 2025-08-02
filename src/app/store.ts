@@ -10,7 +10,7 @@ import {
   PURGE,
   REGISTER,
 } from 'redux-persist';
-import storageSession from 'redux-persist/lib/storage/session'; // sessionStorage- 사용
+import storageSession from 'redux-persist/lib/storage/session'; // sessionStorage 사용
 
 const persistConfig = {
   key: 'auth',
@@ -22,7 +22,7 @@ export const store = configureStore({
   reducer: {
     auth: persistedAuthReducer,
   },
-   middleware: (getDefaultMiddleware) =>
+    middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
         // redux-persist 때문에 필요한 예외 설정

@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 import { setAccessToken } from './features/auth/authSlice';
 import { scheduleAutoLogout } from './utils/jwt';
 
-//새로고침 시 토큰 복구 및 자동 로그아웃 재예약
+//새로고침 시 로그인 토큰 복구 및 자동 로그아웃 재예약
 function TokenInitializer() {
   const dispatch = useDispatch();
 

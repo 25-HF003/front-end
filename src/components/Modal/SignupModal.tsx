@@ -5,7 +5,7 @@ interface ModalProps {
   message: string;
   onClose: () => void;
 }
-
+//확인버튼만
 const SignupModal: React.FC<ModalProps> = ({ isOpen, message, onClose }) => {
   if (!isOpen) return null;
 
@@ -15,8 +15,7 @@ const SignupModal: React.FC<ModalProps> = ({ isOpen, message, onClose }) => {
         <p className="text-lg mb-4">{message}</p>
         <button
           className="bg-green-200 text-white-100 px-4 py-2 rounded"
-          onClick={onClose}
-        >
+          onClick={onClose}>
           확인
         </button>
       </div>

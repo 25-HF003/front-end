@@ -34,7 +34,7 @@ function Signin() {
 
   const [modalMessage, setModalMessage] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [redirectAfterModal, setRedirectAfterModal] = useState<string | null>(null);
+  const [redirectAfterModal, setRedirectAfterModal] = useState<string | null>(null); //체크박스 초기화
   const navigate = useNavigate();
 
   const openModal = (msg: string, redirectTo?: string) => {
@@ -102,7 +102,7 @@ function Signin() {
           <input {...register("name", { required: "이름을 입력해주세요." })} placeholder="이름" className="w-full rounded-lg border p-3" />
           {errors.name && <p className="text-rose-500 text-sm">{errors.name.message}</p>}
         {/* 아이디 */}
-          <input {...register("username", { required: "아이디를 입력해주세요." })} placeholder="아이디 - 6~20자의 영소문자 및 숫자만 가능" className="w-full rounded-lg border p-3" />
+          <input {...register("username", { required: "아이디를 입력해주세요." })} placeholder="아이디 - 6~20자의 영소문자/숫자만 가능" className="w-full rounded-lg border p-3" />
           {errors.username && <p className="text-rose-500 text-sm">{errors.username.message}</p>}
         {/* 비밀번호 */}
           <input type="password" {...register("password", { required: "비밀번호를 입력해주세요." })} placeholder="비밀번호 - 8자~30자의 영대문자·소문자·숫자·특수문자 모두 포함" className="w-full rounded-lg border p-3" />
@@ -133,7 +133,7 @@ function Signin() {
           />
           {errors.email && <p className="text-rose-500 text-sm">{errors.email.message}</p>}
 
-          {/* 약관 */}
+        {/* 약관 */}
           <AgreementSection
             register={register}
             errors={errors}
@@ -150,7 +150,7 @@ function Signin() {
         </form>
       </div>
     </div>
-    </>
+  </>
   );
 }
 
