@@ -40,11 +40,13 @@ function Login() {
 
       const result = await response.json();
       if (result.success) {
-        const accessToken = result.data;
+        const accessToken = result.data.accessToken;
+        const refreshToken = result.data.refreshToken;
         // 전역 Redux 상태에 저장
         dispatch(setAccessToken(accessToken));
         // 토큰을 전역 상태나 localStorage에 저장 (sessionStorage)
         sessionStorage.setItem("accessToken", accessToken);
+        sessionStorage.setItem("refreshToken", refreshToken);
         scheduleAutoLogout(accessToken, dispatch); //자동 만료 예약
 
         // 메인 페이지로 이동
