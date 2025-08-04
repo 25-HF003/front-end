@@ -104,7 +104,6 @@ function Login() {
               {/* ID/PW 버튼 */}
               <button 
                 type="submit"
-                onClick={handleLogin}
                 className="w-full bg-green-100 hover:bg-green-500 text-black-100 font-semibold py-2 rounded-md mb-2">
                   로그인
               </button>
