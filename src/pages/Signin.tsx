@@ -1,6 +1,10 @@
 import { useForm } from "react-hook-form";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import SignupModal from "../components/Modal/SignupModal";
+import AgreementSection from "../components/Signup/AgreementSection";
 
-interface SignupFields {
+export interface SignupFields {
   name: string;
   username: string;
   password: string;
@@ -10,6 +14,7 @@ interface SignupFields {
   over14: boolean;
   terms: boolean;
   privacy: boolean;
+  allAgree?: boolean;
 }
 
 function Signin() {
@@ -27,36 +32,81 @@ function Signin() {
     },
   });
 
- function onSubmit(data: SignupFields) {
-  console.log("Signup Data", data);
- }
+  const [modalMessage, setModalMessage] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [redirectAfterModal, setRedirectAfterModal] = useState<string | null>(null); //체크박스 초기화
+  const navigate = useNavigate();
+
+  const openModal = (msg: string, redirectTo?: string) => {
+    setModalMessage(msg);
+    setRedirectAfterModal(redirectTo || null);
+    setIsModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+    if (redirectAfterModal) {
+      navigate(redirectAfterModal);
+    }
+  };
+
+  const onSubmit = async (data: SignupFields) => {
+
+    if (!data.over14 || !data.terms || !data.privacy) {
+      openModal("약관에 모두 동의해야 회원가입이 가능합니다.");
+      return;
+    }
+    const payload = {
+      name: data.name,
+      loginId: data.username,
+      password: data.password,
+      passwordConfirm: data.confirmPassword,
+      nickname: data.nickname,
+      email: data.email,
+    };
+
+    try {
+      const res = await fetch("http://localhost:8080/api/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const result = await res.json();
+
+      if (res.ok) {
+        openModal(result.message || "회원가입 성공!", "/login");
+      } else {
+        //const error = await res.json();
+        openModal(result.message || "회원가입 실패");
+      }
+    } catch (err) {
+      alert("서버 연결 오류");
+      console.error(err);
+    }
+  };
 
 
   const [over14, terms, privacy] = watch(["over14", "terms", "privacy"]);
-  const allChecked = over14 && terms && privacy;
-
-  function toggleAll (checked: boolean) {
-    setValue("over14", checked);
-    setValue("terms", checked);
-    setValue("privacy", checked);
-  }
+  
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-black-200 p-4">
+    <>
+    <SignupModal isOpen={isModalOpen} message={modalMessage} onClose={handleModalClose} />
+    <div className="flex min-h-screen items-center justify-center bg-black-100 p-4">
       {/* 회원가입 모달 */}
-      <div className="w-full max-w-md overflow-y-auto max-h-[90vh] rounded-2xl bg-white-100 shadow-2xl p-8">
+      <div className="w-full max-w-lg overflow-y-auto max-h-[90vh] rounded-2xl bg-white-100 shadow-2xl p-8">
         <h2 className="text-2xl font-bold text-center mb-6">회원가입</h2>
         {/* 이름 */}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <input {...register("name", { required: "이름을 입력해주세요." })} placeholder="이름" className="w-full rounded-lg border p-3" />
           {errors.name && <p className="text-rose-500 text-sm">{errors.name.message}</p>}
         {/* 아이디 */}
-          <input {...register("username", { required: "아이디를 입력해주세요." })} placeholder="아이디" className="w-full rounded-lg border p-3" />
+          <input {...register("username", { required: "아이디를 입력해주세요." })} placeholder="아이디 - 6~20자의 영소문자/숫자만 가능" className="w-full rounded-lg border p-3" />
           {errors.username && <p className="text-rose-500 text-sm">{errors.username.message}</p>}
         {/* 비밀번호 */}
-          <input type="password" {...register("password", { required: "비밀번호를 입력해주세요." })} placeholder="비밀번호" className="w-full rounded-lg border p-3" />
+          <input type="password" {...register("password", { required: "비밀번호를 입력해주세요." })} placeholder="비밀번호 - 8자~30자의 영대문자·소문자·숫자·특수문자 모두 포함" className="w-full rounded-lg border p-3" />
           {errors.password && <p className="text-rose-500 text-sm">{errors.password.message}</p>}
-
         {/* 비밀번호 확인 */}
           <input
             type="password"
@@ -69,7 +119,7 @@ function Signin() {
           {errors.confirmPassword && <p className="text-rose-500 text-sm">{errors.confirmPassword.message}</p>}
 
         {/* 닉네임 */}
-          <input {...register("nickname", { required: "닉네임을 입력해주세요." })} placeholder="닉네임" className="w-full rounded-lg border p-3" />
+          <input {...register("nickname", { required: "닉네임을 입력해주세요." })} placeholder="닉네임 - 2자~15자의 한글/영문/숫자만 가능" className="w-full rounded-lg border p-3" />
           {errors.nickname && <p className="text-rose-500 text-sm">{errors.nickname.message}</p>}
 
         {/* 이메일 */}
@@ -83,40 +133,24 @@ function Signin() {
           />
           {errors.email && <p className="text-rose-500 text-sm">{errors.email.message}</p>}
 
-          {/* 약관 */}
-          <div className="mt-4 border rounded-lg p-4 bg-gray-50">
-            {/* 체크박스스 */}
-            <label className="flex items-center space-x-2 mb-2 cursor-pointer">
-              <input
-                type="checkbox"
-                className="accent-green-100 h-5 w-5" 
-                checked={allChecked}
-                onChange={(e) => toggleAll(e.target.checked)}
-              />
-              <span className="font-semibold">전체 동의</span>
-            </label>
-            <div className="space-y-1 ml-6">
-              <label className="flex items-center space-x-2">
-                <input id="over14" type="checkbox" className="accent-green-100 h-4 w-4" {...register("over14", { required: true })} />
-                <span>만 14세 이상입니다. (필수)</span>
-              </label>
-              <label className="flex items-center space-x-2">
-                <input id="terms" type="checkbox" className="accent-green-100 h-4 w-4" {...register("terms", { required: true })} />
-                <span>서비스 이용약관 동의 (필수)</span>
-              </label>
-              <label className="flex items-center space-x-2">
-                <input id="privacy" type="checkbox" className="accent-green-100 h-4 w-4" {...register("privacy", { required: true })} />
-                <span>개인정보 수집 및 이용 동의 (필수)</span>
-              </label>
-            </div>
-          </div>
+        {/* 약관 */}
+          <AgreementSection
+            register={register}
+            errors={errors}
+            over14={over14}
+            terms={terms}
+            privacy={privacy}
+            setValue={setValue}
+          />
 
-          <button type="submit" className="w-full py-3 font-semibold bg-green-200 text-white rounded-lg">
+
+          <button type="submit" className="w-full py-3 font-semibold bg-green-200 text-white-100 rounded-lg">
             회원가입
           </button>
         </form>
       </div>
     </div>
+  </>
   );
 }
 

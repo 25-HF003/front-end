@@ -3,10 +3,14 @@ import Navbar from "./Navbar";
 import { Link } from "react-router-dom";
 import { AiOutlineMenu } from "react-icons/ai";
 import { IoMdPerson } from "react-icons/io";
+import { useSelector } from "react-redux";
+import { RootState } from "../app/store";
 
 function CommonHeader() {
 
   const [navOpen, setNavOpen] = useState(false)
+  const accessToken = useSelector((state: RootState) => state.auth.accessToken);
+
 
   return(
     <div className="relative w-full flex bg-white-200 h-[90px] items-center">
@@ -18,9 +22,16 @@ function CommonHeader() {
         )}
         <Link to="/"
           className="text-black-200 text-[32px] font-bold">DeepTruth</Link>
-        <Link to="mypage" className="absolute right-0 mx-[10px]">
-          <IoMdPerson className="w-[40px] h-[40px]"/>
-        </Link>
+        {accessToken ? (
+          <Link to="mypage" className="absolute right-0 mx-[10px]">
+            <IoMdPerson className="w-[40px] h-[40px]"/>
+          </Link>
+        ) : (
+          <Link to="login" className="absolute right-0 mx-[10px]">
+            <IoMdPerson className="w-[40px] h-[40px]"/>
+          </Link>
+        )}
+       
     </div>
   );
 }

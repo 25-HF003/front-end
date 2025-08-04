@@ -1,6 +1,23 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../app/store"; 
+import { clearAccessToken } from "../../features/auth/authSlice";
+import { useState } from "react";
+import ConfirmModal from "../../components/Modal/ConfirmModal";
+
 
 function UserInfo() {
+  const accessToken = useSelector((state: RootState) => state.auth.accessToken);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false);
+
+  const handleLogout = () => {
+    dispatch(clearAccessToken());
+    sessionStorage.removeItem("accessToken");
+    navigate("/");
+  };
+
   return (
     <div className="bg-white-100 text-black-100 w-72 p-6 rounded-xl flex flex-col items-center shadow-lg">
       {/* 프로필 */}
@@ -29,6 +46,17 @@ function UserInfo() {
         <Link to="/mypage/check" className="mt-auto pt-10">
           <button className="text-sm text-gray-400">회원정보 수정</button>
         </Link>
+        {accessToken && (
+          <button className="text-sm text-gray-400 mt-5" onClick={() => setShowModal(true)}>로그아웃</button>
+        )}
+        {showModal && (
+        <ConfirmModal
+          message=" 로그아웃 하시겠습니까?"
+          buttonmessage="로그아웃"
+          onConfirm={handleLogout}
+          onCancel={() => setShowModal(false)}
+        />
+      )}
         
     </div>
   )
