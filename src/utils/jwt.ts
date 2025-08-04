@@ -1,5 +1,7 @@
-import { clearAccessToken } from '../features/auth/authSlice';
+import { logout, setAccessToken } from "../features/auth/authSlice";
+import { refreshAccessToken } from "../features/auth/authAPI";
 
+// 토큰을 디코딩하여 만료 시간 추출
 export function parseJwt(token: string): { exp: number } | null {
   try {
     const base64Url = token.split('.')[1];
@@ -11,23 +13,30 @@ export function parseJwt(token: string): { exp: number } | null {
   }
 }
 
+// accessToken의 만료 시간에 맞춰 자동 로그아웃 또는 자동 갱신 예약
 export function scheduleAutoLogout(token: string, dispatch: any) {
   const decoded = parseJwt(token);
   if (!decoded?.exp) return;
 
-  const timeout = decoded.exp * 1000 - Date.now();
+  const timeout = decoded.exp * 1000 - Date.now() - 5000; // 5초 여유 줌
 
-  if (timeout > 0) { // 토근이 아직 유효함
-    setTimeout(() => { //예약: 시간이 지나면 로그아웃 ex)토큰 10분 남았으면 10분 뒤 자동로그아웃 예약
-      dispatch(clearAccessToken());
-      sessionStorage.removeItem('accessToken');
-      alert('세션이 만료되었습니다.');
-      window.location.href = '/login';
+  if (timeout > 0) {
+    setTimeout(async () => {
+      try {
+        const newAccessToken = await refreshAccessToken(); // 새 토큰 발급 시도
+        dispatch(setAccessToken(newAccessToken));
+        sessionStorage.setItem("accessToken", newAccessToken);
+        scheduleAutoLogout(newAccessToken, dispatch); // 새 토큰으로 재예약
+      } catch (e) {
+        dispatch(logout());
+        alert("세션이 만료되었습니다. 다시 로그인해주세요.");
+        window.location.href = "/login";
+      }
     }, timeout);
   } else {
-    // 토큰이 이미 만료됨
-    dispatch(clearAccessToken());
-    sessionStorage.removeItem('accessToken');
-    window.location.href = '/login';
+    // 이미 만료된 경우 바로 로그아웃 처리
+    dispatch(logout());
+    alert("세션이 만료되었습니다. 다시 로그인해주세요.");
+    window.location.href = "/login";
   }
 }

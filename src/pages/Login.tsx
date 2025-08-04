@@ -29,12 +29,12 @@ function Login() {
 
   const handleLogin = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/login", {
+      const response = await fetch("http://localhost:8080/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        //credentials: "include", // 쿠키 포함 (refreshToken이 쿠키로 온다면 필요)
+        credentials: "include", // 쿠키 포함 (refreshToken이 쿠키로 온다면 필요)
         body: JSON.stringify({ loginId, password }),
       });
 
@@ -45,7 +45,7 @@ function Login() {
         dispatch(setAccessToken(accessToken));
         // 토큰을 전역 상태나 localStorage에 저장 (sessionStorage)
         sessionStorage.setItem("accessToken", accessToken);
-        scheduleAutoLogout(accessToken, dispatch);
+        scheduleAutoLogout(accessToken, dispatch); //자동 만료 예약
 
         // 메인 페이지로 이동
         navigate("/");

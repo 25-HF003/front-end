@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../app/store"; 
-import { clearAccessToken } from "../../features/auth/authSlice";
+import { logout } from "../../features/auth/authSlice";
 import { useState } from "react";
 import ConfirmModal from "../../components/Modal/ConfirmModal";
 
@@ -13,8 +13,7 @@ function UserInfo() {
   const [showModal, setShowModal] = useState(false);
 
   const handleLogout = () => {
-    dispatch(clearAccessToken());
-    sessionStorage.removeItem("accessToken");
+    dispatch(logout());
     navigate("/");
   };
 
