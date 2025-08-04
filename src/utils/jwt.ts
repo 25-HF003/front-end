@@ -13,7 +13,7 @@ export function parseJwt(token: string): { exp: number } | null {
   }
 }
 
-// accessToken의 만료 시간에 맞춰 자동 로그아웃 또는 자동 갱신 예약
+// accessToken의 만료 시간에 맞춰 refreshToken 호출
 export function scheduleAutoLogout(token: string, dispatch: any) {
   const decoded = parseJwt(token);
   if (!decoded?.exp) return;

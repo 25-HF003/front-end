@@ -72,38 +72,46 @@ function Login() {
             <h1 className="text-5xl font-black text-center mb-12">DeepTruth</h1>
 
             {/* ID/PW 입력창 */}
-            <input
-              type="text"
-              placeholder="아이디"
-              value={loginId}
-              onChange={(e) => setLoginId(e.target.value)}
-              className="w-full px-4 py-2 mb-3 border rounded-md focus:outline-none focus:ring"
-            />
-            <div className="relative w-full">
+            {/* enter키로 로그인 */}
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleLogin();
+            }}>
               <input
-                type={showPassword ? "text" : "password"}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="비밀번호"
-                className="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring"  />
-              <div
-                className="absolute top-1/3 right-3 transform -translate-y-1/2 cursor-pointer"
-                onClick={() => setShowPassword((prev) => !prev)}>
-                  {showPassword ? <AiOutlineEyeInvisible size={20} /> : <AiOutlineEye size={20} />}
+                type="text"
+                placeholder="아이디"
+                value={loginId}
+                onChange={(e) => setLoginId(e.target.value)}
+                className="w-full px-4 py-2 mb-3 border rounded-md focus:outline-none focus:ring"
+              />
+              <div className="relative w-full">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="비밀번호"
+                  className="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring"  />
+                <div
+                  className="absolute top-1/3 right-3 transform -translate-y-1/2 cursor-pointer"
+                  onClick={() => setShowPassword((prev) => !prev)}>
+                    {showPassword ? <AiOutlineEyeInvisible size={20} /> : <AiOutlineEye size={20} />}
+                </div>
               </div>
-            </div>
 
-            {/* ID/PW 버튼 */}
-            <button 
-              onClick={handleLogin}
-              className="w-full bg-green-100 hover:bg-green-500 text-black-100 font-semibold py-2 rounded-md mb-2">
-                로그인
-            </button>
-            <Link to="/signin">
-              <button className="w-full bg-green-200 hover:bg-green-600 text-black-100 font-semibold py-2 rounded-md mb-4">
-                회원가입
+              {/* ID/PW 버튼 */}
+              <button 
+                type="submit"
+                onClick={handleLogin}
+                className="w-full bg-green-100 hover:bg-green-500 text-black-100 font-semibold py-2 rounded-md mb-2">
+                  로그인
               </button>
-            </Link>
+              <Link to="/signin">
+                <button className="w-full bg-green-200 hover:bg-green-600 text-black-100 font-semibold py-2 rounded-md mb-4">
+                  회원가입
+                </button>
+              </Link>
+            </form>
 
             {/* 소셜 로그인 */}
             <div className="max-w-sm w-full mx-auto p-4">  
