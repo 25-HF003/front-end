@@ -2,11 +2,11 @@ import { IoClose } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { setAccessToken } from "../features/auth/authSlice";
+import { setAccessToken, setUser } from "../features/auth/authSlice";
 import { scheduleAutoLogout } from "../utils/jwt";
 import SignupModal from "../components/Modal/SignupModal";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai"; 
-import { authAPI } from "../api/auth";
+import { api } from "../api";
 
 function Login() {
   const [loginId, setLoginId] = useState("");
@@ -30,7 +30,7 @@ function Login() {
 
     const handleLogin = async () => {
     try {
-      const result = await authAPI.login(loginId, password);
+      const result = await api.auth.login(loginId, password);
 
       if (result.success) {
         const accessToken = result.data.accessToken;
@@ -41,6 +41,10 @@ function Login() {
         sessionStorage.setItem("accessToken", accessToken);
         sessionStorage.setItem("refreshToken", refreshToken);
         scheduleAutoLogout(accessToken, dispatch); //자동 만료 예약
+
+        // 유저 정보 가져오기
+        const userInfo = await api.user.getProfile();
+        dispatch(setUser(userInfo)); // Redux에 저장
 
         // 메인 페이지로 이동
         navigate("/");

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SignupModal from "../components/Modal/SignupModal";
 import AgreementSection from "../components/Signup/AgreementSection";
-import { authAPI } from "../api/auth";
+import { api } from "../api"; 
 
 export interface SignupFields {
   name: string;
@@ -67,7 +67,7 @@ function Signin() {
     };
 
     try {
-      const result = await authAPI.signup(payload);
+      const result = await api.auth.signup(payload);
 
       if (result.success) {
         openModal(result.message || "회원가입 성공!", "/login");
