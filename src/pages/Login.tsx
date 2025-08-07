@@ -46,6 +46,7 @@ function Login() {
         const userInfo = await api.user.getProfile();
         console.log("userInfo from /profile: ", userInfo);
         dispatch(setUser(userInfo)); // Redux에 저장
+        sessionStorage.setItem("user", JSON.stringify(userInfo));
 
         // 메인 페이지로 이동
         navigate("/");

@@ -5,7 +5,7 @@ import { Provider, useDispatch } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { store, persistor } from './app/store';
 import { useEffect } from 'react';
-import { setAccessToken } from './features/auth/authSlice';
+import { setAccessToken, setUser } from './features/auth/authSlice';
 import { scheduleAutoLogout } from './utils/jwt';
 
 //새로고침 시 로그인 토큰 복구 및 자동 로그아웃 재예약
@@ -14,9 +14,14 @@ function TokenInitializer() {
 
   useEffect(() => {
     const token = sessionStorage.getItem('accessToken');
+    const user = sessionStorage.getItem('user');
+
     if (token) {
       dispatch(setAccessToken(token));
       scheduleAutoLogout(token, dispatch);
+    }
+    if (user) {
+      dispatch(setUser(JSON.parse(user)));
     }
   }, [dispatch]);
 

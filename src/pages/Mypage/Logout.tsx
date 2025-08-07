@@ -14,7 +14,7 @@ function Logout({ onLogoutComplete }: { onLogoutComplete: () => void }) {
     const refreshToken = sessionStorage.getItem("refreshToken");
 
     try {
-        // 백엔드에 로그아웃 요청 
+      // 백엔드에 로그아웃 요청 
       if (refreshToken) {
         await api.auth.logout(refreshToken);
         console.log("서버 로그아웃 성공");

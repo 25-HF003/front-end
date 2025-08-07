@@ -4,11 +4,11 @@ import { logout, setAccessToken } from "../features/auth/authSlice";
 import { refreshAccessToken } from "../features/auth/authAPI";
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:8080", // 🔁 API 서버 주소
+  baseURL: "http://localhost:8080", // API 서버 주소
   withCredentials: true,            // 쿠키 기반 인증 필요 시 true
 });
 
-// ✅ 요청 인터셉터: accessToken 자동 삽입
+// 요청 인터셉터: accessToken 자동 삽입
 axiosInstance.interceptors.request.use(
   (config) => {
     const accessToken = store.getState().auth.accessToken;
@@ -20,7 +20,7 @@ axiosInstance.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// ✅ 응답 인터셉터: accessToken 만료 시 refresh 시도
+//  응답 인터셉터: accessToken 만료 시 refresh 시도
 axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
