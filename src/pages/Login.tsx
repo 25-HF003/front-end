@@ -44,6 +44,7 @@ function Login() {
 
         // 유저 정보 가져오기
         const userInfo = await api.user.getProfile();
+        console.log("userInfo from /profile: ", userInfo);
         dispatch(setUser(userInfo)); // Redux에 저장
 
         // 메인 페이지로 이동

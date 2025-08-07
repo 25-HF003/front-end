@@ -27,8 +27,8 @@ function DeepfakePanel() {
   useEffect(() => {
     if (!userId) {
       setLoading(false);
-      return;}
-
+      return;
+    }
     api.deepfake
       .getAllByUser(userId)
       .then((data) => {
@@ -42,14 +42,22 @@ function DeepfakePanel() {
     });
   }, [userId]);
 
+  // 오래된 순으로 정렬 → 번호 붙이기
+  const recordsWithIndex = records
+  .slice()
+  .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()) // 오래된 → 최신
+  .map((record, index) => ({
+    ...record,
+    displayIndex: index + 1, // 오래된 순서 기준 번호
+  }));
 
-  //  RecordPage에 맞게 데이터 변환
-  const formattedRecords = records
+  //  RecordPage에 맞게 데이터 변환, 다시 최신순으로 정렬해서 화면에 표시
+  const formattedRecords = recordsWithIndex
   .slice()// 원본 배열 수정 방지
   .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()) // 최신순: 최신 → 오래된 순
   .map((record) => ({
     id: record.id,
-    name: `딥페이크 분석 결과 ${record.id}`,
+    name: `딥페이크 분석 결과 ${record.displayIndex}`,
     date: new Date(record.createdAt).toLocaleDateString("ko-KR", {
       year: "numeric",
       month: "long",
