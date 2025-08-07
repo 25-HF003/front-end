@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { logout } from "../../features/auth/authSlice";
 import ConfirmModal from "../../components/Modal/ConfirmModal";
+import { authAPI } from "../../api/auth";
 
 
 function Logout({ onLogoutComplete }: { onLogoutComplete: () => void }) {
@@ -14,14 +15,10 @@ function Logout({ onLogoutComplete }: { onLogoutComplete: () => void }) {
 
     try {
         // 백엔드에 로그아웃 요청 
-        const res = await fetch("http://localhost:8080/api/auth/logout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include", // 쿠키 포함
-        body: JSON.stringify({ refreshToken }), // sessionStorage에서 꺼낸 값
-      });
-      const result = await res.json();
-      console.log(result.data)
+      if (refreshToken) {
+        await authAPI.logout(refreshToken);
+        console.log("서버 로그아웃 성공");
+      }
     } catch (err) {
       console.error("서버 로그아웃 실패", err);
       // 실패해도 클라이언트에서 로그아웃은 계속 진행

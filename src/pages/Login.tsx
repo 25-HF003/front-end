@@ -6,6 +6,7 @@ import { setAccessToken } from "../features/auth/authSlice";
 import { scheduleAutoLogout } from "../utils/jwt";
 import SignupModal from "../components/Modal/SignupModal";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai"; 
+import { authAPI } from "../api/auth";
 
 function Login() {
   const [loginId, setLoginId] = useState("");
@@ -27,18 +28,10 @@ function Login() {
     setModalMessage("");
   };
 
-  const handleLogin = async () => {
+    const handleLogin = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include", // 쿠키 포함 (refreshToken이 쿠키로 온다면 필요)
-        body: JSON.stringify({ loginId, password }),
-      });
+      const result = await authAPI.login(loginId, password);
 
-      const result = await response.json();
       if (result.success) {
         const accessToken = result.data.accessToken;
         const refreshToken = result.data.refreshToken;
@@ -56,7 +49,7 @@ function Login() {
       }
     } catch (err) {
       console.error("Login error:", err);
-      alert("로그인 중 오류 발생");
+      openModal("로그인 중 오류가 발생했습니다.");
     }
   };
 
