@@ -38,7 +38,7 @@ function AgreementModal({ isOpen, onClose, title, content, onConfirm }: Agreemen
         <div className="h-64 overflow-y-auto border p-2 mb-4 whitespace-pre-wrap text-sm">
           {content}
         </div>
-         {/* 동의 체크박스 */}
+        {/* 동의 체크박스 */}
         <label className="flex items-center space-x-2 mb-4">
           <input 
             type="checkbox" 
@@ -52,7 +52,7 @@ function AgreementModal({ isOpen, onClose, title, content, onConfirm }: Agreemen
         {/* 오류 메시지 */}
         {showError && <p className="text-rose-500 text-sm mb-2">※동의해야 계속할 수 있습니다.</p>}
 
-         {/* 버튼 */}
+        {/* 버튼 */}
         <div className="text-right space-x-2">
           <button onClick={onClose} className="px-4 py-2 bg-gray-300 rounded">취소</button>
           <button
