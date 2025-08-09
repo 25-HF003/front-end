@@ -37,7 +37,6 @@ function App() {
         <RouterProvider router={Router} />
       </PersistGate>
     </Provider>
-    
   );
 }
 

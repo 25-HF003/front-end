@@ -31,8 +31,13 @@ function DeepfakePanel() {
     }
     api.deepfake
       .getAllByUser(userId)
-      .then((data) => {
-        setRecords(data || []);
+      .then((data: any) => {
+        const arr: DeepfakeRecord[] =
+        Array.isArray(data) ? data :
+        Array.isArray(data?.records) ? data.records :
+        Array.isArray(data?.content) ? data.content :
+        [];
+      setRecords(arr);
       })
       .catch(() => {
         setError("기록을 불러오지 못했습니다.");
