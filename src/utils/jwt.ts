@@ -29,14 +29,14 @@ export function scheduleAutoLogout(token: string, dispatch: any) {
         scheduleAutoLogout(newAccessToken, dispatch); // 새 토큰으로 재예약
       } catch (e) {
         dispatch(logout());
-        alert("세션이 만료되었습니다. 다시 로그인해주세요.");
-        window.location.href = "/login";
+        //alert("세션이 만료되었습니다. 다시 로그인해주세요.");
+        window.location.href = "/login?error=session_expired";
       }
     }, timeout);
   } else {
     // 이미 만료된 경우 바로 로그아웃 처리
     dispatch(logout());
-    alert("세션이 만료되었습니다. 다시 로그인해주세요.");
-    window.location.href = "/login";
+    //alert("세션이 만료되었습니다. 다시 로그인해주세요.");
+    window.location.href = "/login?error=session_expired";
   }
 }
