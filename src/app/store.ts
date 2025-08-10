@@ -15,7 +15,7 @@ import storageSession from 'redux-persist/lib/storage/session'; // sessionStorag
 const persistConfig = {
   key: 'auth',
   storage: storageSession,
-  whitelist: ['accessToken'], // persist할 필드만 명시 (불필요한 필드 방지)
+  whitelist: ['accessToken', 'user'], // persist할 필드만 명시 (불필요한 필드 방지)
 };
 const persistedAuthReducer = persistReducer(persistConfig, authReducer);
 

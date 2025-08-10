@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../../app/store";
 import FileUploadPage from "../../components/Upload/FileUploadPage";
-import {uploadDeepfakeVideo, DeepfakeResponse } from "../../api/deepfake_api";
+import { DeepfakeResponse } from "../../api/deepfake";
+import { api } from "../../api";
 
 
 function Detection() {
@@ -10,27 +13,28 @@ function Detection() {
   const [result, setResult] = useState<DeepfakeResponse | null>(null);
   const navigate = useNavigate();
  
-  // 실제 구현에선 로그인된 유저 ID를 가져와야 함
-  const userId = 1; // 예시용 하드코딩된 userId
+  // Redux에서 로그인된 유저의 userId 가져오기
+  const userId = useSelector((state: RootState) => state.auth.user?.userId);
+  console.log("userId", userId);
 
   const handleDetectionInsert = async() => {
-      if (!file) {
-      navigate("/pages/NotFound")
-      return;
+    if (!file || !userId) {
+    navigate("/pages/NotFound")
+    return;
   }
   navigate("/detection/loading");
   
   try {
-    const results = await uploadDeepfakeVideo(file, userId);
+    const results = await api.deepfake.upload(file, userId);
     setResult(results);
 
     console.log("파일 업로드 완료", results);
 
     navigate("/detection/report", {state: {results}});
       
-    } catch (error) {
+    } catch (error: any) {
       console.error("업로드/예측 중 오류:", error);
-      alert("서버 오류로 인해 업로드에 실패했습니다.\n" + (error as Error).message);
+      alert("서버 오류로 인해 업로드에 실패했습니다.\n" + (error.response?.data?.message || error.message));
       navigate("/pages/NotFound")
     }
     

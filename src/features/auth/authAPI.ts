@@ -1,11 +1,11 @@
-export const refreshAccessToken = async () => {
-  const res = await fetch("http://localhost:8080/api/auth/refresh", {
-    method: "POST",
-    credentials: "include", // 쿠키에 있는 refreshToken을 보냄
+import axios from "axios";
+
+export const refreshAccessToken = async (): Promise<string> => {
+  const res = await axios.post("http://localhost:8080/api/auth/refresh", {}, {
+    withCredentials: true, // 쿠키 포함
   });
 
-  if (!res.ok) throw new Error("리프레시 실패");
+  if (res.status !== 200) throw new Error("리프레시 실패");
 
-  const result = await res.json();
-  return result.data; // 새로운 accessToken
+  return res.data.data; // 새로운 accessToken
 };
