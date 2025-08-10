@@ -22,7 +22,7 @@ function OAuthRedirect() {
       return;
     }
 
-    // 1) 토큰 저장 (필요에 따라 localStorage로 교체 가능)
+    // 1) 토큰 저장 
     sessionStorage.setItem("accessToken", accessToken);
     sessionStorage.setItem("refreshToken", refreshToken);
     dispatch(setAccessToken(accessToken));
@@ -40,7 +40,7 @@ function OAuthRedirect() {
         navigate("/", { replace: true });
       } catch (e) {
         console.error("Failed to load profile:", e);
-        navigate("/login?error=profile_load_failed", { replace: true });
+        navigate("/login", { replace: true });
       }
     })();
   }, [dispatch, navigate]);

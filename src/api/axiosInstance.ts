@@ -11,8 +11,9 @@ const axiosInstance = axios.create({
 // 요청 인터셉터: accessToken 자동 삽입
 axiosInstance.interceptors.request.use(
   (config) => {
-    const accessToken = store.getState().auth.accessToken;
-    if (accessToken && config.headers) {
+    const accessToken = sessionStorage.getItem("accessToken") ?? store.getState().auth.accessToken;
+    if (accessToken) {
+      config.headers = config.headers ?? {};
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
     return config;
@@ -32,6 +33,9 @@ const notifyAll = (t: string) => {
 axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
+    // 네트워크 에러면 바로 리젝트
+    if (!error?.response) return Promise.reject(error);
+
     const originalRequest = error.config;
     const status = error?.response?.status;
 
@@ -79,14 +83,15 @@ axiosInstance.interceptors.response.use(
         // 원래 요청 다시 시도
         return axiosInstance(originalRequest);
       } catch (refreshError) {
-        isRefreshing = false;
         notifyAll(""); // 대기중인 요청들에 실패 알림
         // 재발급 실패 → 로그아웃 처리
         store.dispatch(logout());
         sessionStorage.clear();
-        alert("세션이 만료되었습니다. 다시 로그인해주세요.");
-        window.location.href = "/login";
+        //alert("세션이 만료되었습니다. 다시 로그인해주세요.");
+        window.location.href = "/login?error=session_expired";
         return Promise.reject(refreshError);
+      } finally {
+        isRefreshing = false; // finally에서 정리
       }
     }
 

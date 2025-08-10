@@ -1,5 +1,5 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setAccessToken, setUser } from "../features/auth/authSlice";
 import { scheduleAutoLogout } from "../utils/jwt";
@@ -14,10 +14,33 @@ function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   const navigate = useNavigate();
   const dispatch = useDispatch(); // Redux dispatch
   const location = useLocation();
-  const errorMessage = location.state?.errorMessage; // 소셜 로그인 실패 메시지
+
+  
+  // 에러 메시지 소스: (A) location.state.errorMessage (소셜 실패) (B) ?error=... (세션만료 등)
+  const incomingErrorMessage = useMemo(() => {
+    const stateMsg = (location.state as any)?.errorMessage as string | undefined;
+    const params = new URLSearchParams(location.search);
+    const error = params.get("error"); // e.g. session_expired
+    if (stateMsg) return stateMsg;
+
+    if (error === "session_expired") return "세션이 만료되었습니다. 다시 로그인해주세요.";
+    if (error === "missing_token") return "소셜 로그인에 실패했습니다. 다시 시도해주세요.";
+    if (error) return "로그인 도중 문제가 발생했습니다. 다시 시도해주세요.";
+    return undefined;
+  }, [location.state, location.search]);
+
+  // 에러 메시지 모달 표시 + URL 정리(쿼리/상태 제거)
+  useEffect(() => {
+    if (!incomingErrorMessage) return;
+    openModal(incomingErrorMessage);
+
+    // 쿼리/상태를 제거해 새로고침 시 모달이 또 뜨지 않도록 처리
+    navigate("/login", { replace: true, state: null });
+  }, [incomingErrorMessage, navigate]);
 
   
   const openModal = (msg: string) => {
@@ -30,7 +53,7 @@ function Login() {
     setModalMessage("");
   };
 
-    const handleLogin = async () => {
+  const handleLogin = async () => {
     try {
       const result = await api.auth.login(loginId, password);
 
@@ -61,13 +84,6 @@ function Login() {
     }
   };
   
-  useEffect(() => {
-    if (errorMessage) {
-      openModal(errorMessage);
-    }
-  }, [errorMessage]);
-
-
 
 
   return(
