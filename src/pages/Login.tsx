@@ -1,4 +1,3 @@
-import { IoClose } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
@@ -67,9 +66,6 @@ function Login() {
         <div className="flex items-center justify-center min-h-screen">
           {/* 로그인 모달 */}
           <div className=" bg-white-100 rounded-xl p-20 w-full max-w-lg shadow-xl text-black-100">
-            <button className="absolute top-4 right-4 text-gray-900 hover:text-black-100">
-              <IoClose size={20} />
-            </button>
             <h1 className="text-5xl font-black text-center mb-12">DeepTruth</h1>
 
             {/* ID/PW 입력창 */}
@@ -121,9 +117,11 @@ function Login() {
             <div className="mt-6 text-center">
               <p className="text-sm text-gray-500 mb-3">소셜 로그인</p>
               <div className="flex justify-center gap-4">
+                <Link to="/login/google">
                 <button className="bg-white-100 border border-gray-200 rounded-full p-2 shadow-sm">
                   <img src="/google-icon.svg" alt="Google" className="w-8 h-8" />
                 </button>
+                </Link>
                 <button className="bg-white-100 border border-gray-200 rounded-full p-2 shadow-sm">
                   <img src="/naver-icon.svg" alt="Naver" className="w-8 h-8" />
                 </button>

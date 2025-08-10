@@ -20,6 +20,8 @@ import InsertLoading from "../components/InsertLoading";
 import DetectionReport from "../pages/Deepfake/DetectionReport";
 import WatermarkReport from "../pages/Watermark/WatermarkReport";
 import NoiseResult from "../pages/AdversarialNoise/NoiseResult";
+import GoogleLogin from "../pages/SocialLogin/GoogleLogin";
+import OAuthRedirect from "../pages/SocialLogin/OAuthRedirect";
 
 const Router = createBrowserRouter([
   {
@@ -40,6 +42,14 @@ const Router = createBrowserRouter([
       {
         path: '/login',
         element: <Login />
+      },
+      {
+        path: '/login/google',
+        element: <GoogleLogin />
+      },
+      {
+        path: '/oauth2/redirect',
+        element: <OAuthRedirect />
       },
       {
         path: '/features',
