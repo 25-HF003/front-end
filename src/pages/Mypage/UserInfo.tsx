@@ -10,6 +10,7 @@ import { api } from "../../api";
 type UserProfile = {
   userId: number;
   loginId: string;
+  name: string;
   nickname: string;
   email: string;
   role: "USER" | "ADMIN";
@@ -52,7 +53,7 @@ function UserInfo() {
         <div className="text-sm w-full space-y-2">
           <div>
             <strong>이름</strong>
-            <p className="text-gray-900 mb-4 mt-2">{user.userId}</p>
+            <p className="text-gray-900 mb-4 mt-2">{user.name}</p>
           </div>
           <div>
             <strong>아이디</strong>
