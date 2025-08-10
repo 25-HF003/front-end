@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SignupModal from "../components/Modal/SignupModal";
 import AgreementSection from "../components/Signup/AgreementSection";
+import { api } from "../api"; 
 
 export interface SignupFields {
   name: string;
@@ -66,18 +67,11 @@ function Signin() {
     };
 
     try {
-      const res = await fetch("http://localhost:8080/api/auth/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+      const result = await api.auth.signup(payload);
 
-      const result = await res.json();
-
-      if (res.ok) {
+      if (result.success) {
         openModal(result.message || "회원가입 성공!", "/login");
       } else {
-        //const error = await res.json();
         openModal(result.message || "회원가입 실패");
       }
     } catch (err) {

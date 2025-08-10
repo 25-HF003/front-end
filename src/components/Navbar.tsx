@@ -23,7 +23,11 @@ function Navbar({ navOpen, setNavOpen }: NavProps) {
             onClick={() => setNavOpen(!navOpen)} />
         <div className="flex flex-col mt-[100px] gap-y-[20px] ">
           <Link to="/features" onClick={() => setNavOpen(!navOpen)}>기능 소개</Link>
-          <Link to="/detection" onClick={() => setNavOpen(!navOpen)}>딥페이크 탐지</Link>
+          {accessToken ? (
+            <Link to="/detection" onClick={() => setNavOpen(!navOpen)}>딥페이크 탐지</Link>
+          ) : (
+            <Link to="login" onClick={() => setNavOpen(!navOpen)}>딥페이크 탐지</Link>
+          )}
           <Link to="/adversarial-noise" onClick={() => setNavOpen(!navOpen)}>적대적 노이즈 삽입</Link>
           <div>
             <button onClick={() => setWatermarkOpen(!watermarkOpen)}>디지털 워터마킹</button>

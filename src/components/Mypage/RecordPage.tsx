@@ -30,29 +30,33 @@ function RecordPage({ title, records, onAddClick, showDownloadButton = true, onI
 
     {/* List */}
         <ul className="space-y-10">
-          {records.map((record) => (
-            <li key={record.id} className="flex items-center space-x-4">
-              <img src={record.img}   alt={record.name} className="w-20 h-20 rounded-full object-cover" />
-              <div className="flex-1">
-                <button 
-                  onClick={() => onItemClick?.(record.id)}
-                  className="font-bold text-xl">{record.name}</button>
-                <p className="text-sm text-gray-900">{record.date}</p>
-              </div>
-              <div className="space-x-2 text-xl text-gray-900">
-                <button title="삭제" onClick={() => onDeleteClick?.(record.id)}>
-                  <img src="/delete.svg" alt="Delete" className="w-7 h-7" />
-                </button>
-                {showDownloadButton &&(
-                  <button title="다운로드">
-                    <img src="/download.svg" alt="Download" className="w-7 h-7" />
-                  </button>)}
-              </div>
-            </li>
-          ))}
+          {records.length === 0 ? (
+            <li className="text-gray-900 text-center text-lg mt-10">기록이 없습니다.</li>
+          ) : (
+            records.map((record) => (
+              <li key={record.id} className="flex items-center space-x-4">
+                <img src={record.img}   alt={record.name} className="w-20 h-20 rounded-full object-cover" />
+                <div className="flex-1">
+                  <button 
+                    onClick={() => onItemClick?.(record.id)}
+                    className="font-bold text-xl">{record.name}</button>
+                  <p className="text-sm text-gray-900">{record.date}</p>
+                </div>
+                <div className="space-x-2 text-xl text-gray-900">
+                  <button title="삭제" onClick={() => onDeleteClick?.(record.id)}>
+                    <img src="/delete.svg" alt="Delete" className="w-7 h-7" />
+                  </button>
+                  {showDownloadButton &&(
+                    <button title="다운로드">
+                      <img src="/download.svg" alt="Download" className="w-7 h-7" />
+                    </button>)}
+                </div>
+              </li>
+            ))
+          )}
         </ul>
       </div>
-  )
+  );
 }
 
 export default RecordPage;

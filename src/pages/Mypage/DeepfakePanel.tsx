@@ -2,7 +2,9 @@ import RecordPage from "../../components/Mypage/RecordPage";
 import ConfirmModal from "../../components/Modal/ConfirmModal";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import { useSelector } from "react-redux";
+import { RootState } from "../../app/store";
+import { api } from "../../api";
 
 
 type DeepfakeRecord = {
@@ -20,33 +22,47 @@ function DeepfakePanel() {
   const [showModal, setShowModal] = useState(false);
   const [deleteId, setDeleteId] = useState<number | null>(null);
 
-  // 여기에 userId 정의 (실제로는 로그인된 유저에서 가져와야 함)
-  const userId = 1; // 예시로 userId 1번 하드코딩
+  const userId = useSelector((state: RootState) => state.auth.user?.userId); // 로그인된 유저 ID 사용
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:8080/deepfake?userId=${userId}`)
-      .then((res) => {
-        setRecords(res.data.data || []);
-        setLoading(false);
+    if (!userId) {
+      setLoading(false);
+      return;
+    }
+    api.deepfake
+      .getAllByUser(userId)
+      .then((data: any) => {
+        const arr: DeepfakeRecord[] =
+        Array.isArray(data) ? data :
+        Array.isArray(data?.records) ? data.records :
+        Array.isArray(data?.content) ? data.content :
+        [];
+      setRecords(arr);
       })
       .catch(() => {
         setError("기록을 불러오지 못했습니다.");
-        setLoading(false);
-      });
-  }, []);
+      })
+      .finally(() => {
+        setLoading(false); //  성공/실패 관계없이 로딩 종료
+    });
+  }, [userId]);
 
-  //  로딩/에러 처리
-  if (loading) return <p className="text-center mt-10">불러오는 중...</p>;
-  if (error) return <p className="text-center text-red-500">{error}</p>;
+  // 오래된 순으로 정렬 → 번호 붙이기
+  const recordsWithIndex = records
+  .slice()
+  .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()) // 오래된 → 최신
+  .map((record, index) => ({
+    ...record,
+    displayIndex: index + 1, // 오래된 순서 기준 번호
+  }));
 
-  //  RecordPage에 맞게 데이터 변환
-  const formattedRecords = records
+  //  RecordPage에 맞게 데이터 변환, 다시 최신순으로 정렬해서 화면에 표시
+  const formattedRecords = recordsWithIndex
   .slice()// 원본 배열 수정 방지
   .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()) // 최신순: 최신 → 오래된 순
   .map((record) => ({
     id: record.id,
-    name: `딥페이크 분석 결과 ${record.id}`,
+    name: `딥페이크 분석 결과 ${record.displayIndex}`,
     date: new Date(record.createdAt).toLocaleDateString("ko-KR", {
       year: "numeric",
       month: "long",
@@ -66,12 +82,10 @@ function DeepfakePanel() {
   };
 
   const confirmDelete = () => {
-    if (deleteId === null) return;
+    if (deleteId === null || !userId) return;
 
-    axios
-      .delete(`http://localhost:8080/deepfake/${deleteId}`, {
-        params: { userId: 1 },// 실제 로그인된 유저 ID로 대체
-      })
+    api.deepfake
+      .deleteById(deleteId, userId)
       .then(() => {
         setRecords((prev) => prev.filter((r) => r.id !== deleteId));
       })
@@ -96,6 +110,15 @@ function DeepfakePanel() {
         onDeleteClick={handleDelete}
         showDownloadButton={false}
       />
+
+      {/* 에러/로딩 상태 메시지 (리스트 아래에 보여짐) */}
+      {loading && (
+        <p className="text-center mt-4 text-gray-900">불러오는 중...</p>
+      )}
+      {!loading && error && (
+        <p className="text-center mt-4 text-red-500">{error}</p>
+      )}
+
       {showModal && (
         <ConfirmModal
           message="정말 삭제하시겠습니까?"
