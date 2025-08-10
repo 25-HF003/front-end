@@ -1,11 +1,12 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setAccessToken, setUser } from "../features/auth/authSlice";
 import { scheduleAutoLogout } from "../utils/jwt";
 import SignupModal from "../components/Modal/SignupModal";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai"; 
 import { api } from "../api";
+import SocialButtons from "./SocialLogin/SocialButtons";
 
 function Login() {
   const [loginId, setLoginId] = useState("");
@@ -15,6 +16,8 @@ function Login() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch(); // Redux dispatch
+  const location = useLocation();
+  const errorMessage = location.state?.errorMessage; // 소셜 로그인 실패 메시지
 
   
   const openModal = (msg: string) => {
@@ -57,6 +60,13 @@ function Login() {
       openModal("로그인 중 오류가 발생했습니다.");
     }
   };
+  
+  useEffect(() => {
+    if (errorMessage) {
+      openModal(errorMessage);
+    }
+  }, [errorMessage]);
+
 
 
 
@@ -113,23 +123,7 @@ function Login() {
             <div className="max-w-sm w-full mx-auto p-4">  
               <div className="w-full h-px bg-gray-300"/>
             </div>
-
-            <div className="mt-6 text-center">
-              <p className="text-sm text-gray-500 mb-3">소셜 로그인</p>
-              <div className="flex justify-center gap-4">
-                <Link to="/login/google">
-                <button className="bg-white-100 border border-gray-200 rounded-full p-2 shadow-sm">
-                  <img src="/google-icon.svg" alt="Google" className="w-8 h-8" />
-                </button>
-                </Link>
-                <button className="bg-white-100 border border-gray-200 rounded-full p-2 shadow-sm">
-                  <img src="/naver-icon.svg" alt="Naver" className="w-8 h-8" />
-                </button>
-                <button className="bg-white-100 border border-gray-200 rounded-full p-2 shadow-sm">
-                  <img src="/kakao-icon.svg" alt="Kakao" className="w-8 h-8" />
-                </button>
-              </div>
-            </div>
+            <SocialButtons />
           </div>
         </div>
       </>

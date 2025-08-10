@@ -20,34 +20,70 @@ axiosInstance.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
+// -------- 응답 인터셉터: 401 → 1회만 리프레시 --------
+let isRefreshing = false;
+let waiters: Array<(t: string) => void> = [];
+const notifyAll = (t: string) => {
+  waiters.forEach((resolve) => resolve(t));
+  waiters = [];
+};
+
 //  응답 인터셉터: accessToken 만료 시 refresh 시도
 axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+    const status = error?.response?.status;
+
+    // 리프레시 요청 자체가 실패했으면 바로 종료
+    if (originalRequest?.url?.includes("/auth/refresh")) {
+      store.dispatch(logout());
+      sessionStorage.clear();
+      window.location.href = "/login";
+      return Promise.reject(error);
+    }
 
     // accessToken 만료 시 재발급 시도 (401 Unauthorized)
     if (
-      error.response?.status === 401 &&
+      status === 401 &&
       !originalRequest._retry // 무한 루프 방지
     ) {
       originalRequest._retry = true;
 
+      // 이미 누군가 리프레시 중이면 새 토큰 기다렸다가 재시도
+      if (isRefreshing) {
+        const newAT = await new Promise<string>((resolve) => waiters.push(resolve));
+        if (!newAT) {
+          // 리프레시 실패 케이스 전파
+          return Promise.reject(error);
+        }
+        originalRequest.headers.Authorization = `Bearer ${newAT}`;
+        return axiosInstance(originalRequest);
+      }
+
       try {
+        isRefreshing = true;
         // 새 accessToken 발급 시도
         const newAccessToken = await refreshAccessToken();
+        // 상태/스토리지 갱신
         store.dispatch(setAccessToken(newAccessToken));
         sessionStorage.setItem("accessToken", newAccessToken);
 
+        isRefreshing = false;
+        notifyAll(newAccessToken);
+
         // 새 토큰으로 헤더 다시 설정
-        axiosInstance.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;
+        //axiosInstance.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
 
         // 원래 요청 다시 시도
         return axiosInstance(originalRequest);
       } catch (refreshError) {
+        isRefreshing = false;
+        notifyAll(""); // 대기중인 요청들에 실패 알림
         // 재발급 실패 → 로그아웃 처리
         store.dispatch(logout());
+        sessionStorage.clear();
         alert("세션이 만료되었습니다. 다시 로그인해주세요.");
         window.location.href = "/login";
         return Promise.reject(refreshError);

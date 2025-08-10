@@ -5,7 +5,7 @@ import { setAccessToken, setUser } from "../../features/auth/authSlice";
 import { scheduleAutoLogout } from "../../utils/jwt";
 import { api } from "../../api";
 
-export default function OAuthRedirect() {
+function OAuthRedirect() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -15,7 +15,10 @@ export default function OAuthRedirect() {
     const refreshToken = params.get("refreshToken");
 
     if (!accessToken || !refreshToken) {
-      navigate("/login?error=missing_token", { replace: true });
+      navigate("/login", { 
+        replace: true,
+        state: { errorMessage: "소셜 로그인에 실패했습니다. 다시 시도해주세요."},
+      });
       return;
     }
 
@@ -34,7 +37,7 @@ export default function OAuthRedirect() {
         const userInfo = await api.user.getProfile(); // Authorization 헤더는 axios 인터셉터에서 주입
         dispatch(setUser(userInfo));
         sessionStorage.setItem("user", JSON.stringify(userInfo));
-        navigate("/", { replace: true }); // 원하는 랜딩 경로로 변경 가능
+        navigate("/", { replace: true });
       } catch (e) {
         console.error("Failed to load profile:", e);
         navigate("/login?error=profile_load_failed", { replace: true });
@@ -46,8 +49,9 @@ export default function OAuthRedirect() {
     <div className="flex items-center justify-center min-h-screen">
       <div className="text-center">
         <h2 className="text-2xl font-bold mb-2">로그인 처리 중…</h2>
-        <p className="text-gray-500">계정 정보를 불러오고 있습니다.</p>
+        <p className="text-gray-900">계정 정보를 불러오고 있습니다.</p>
       </div>
     </div>
   );
 }
+export default OAuthRedirect;
