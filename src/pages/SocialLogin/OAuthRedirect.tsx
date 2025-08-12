@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setAccessToken, setUser } from "../../features/auth/authSlice";
@@ -8,11 +8,21 @@ import { api } from "../../api";
 function OAuthRedirect() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const ranRef = useRef(false);
 
   useEffect(() => {
+    if (ranRef.current) return;     //  StrictMode 2회 실행 방지
+    ranRef.current = true;
+
     const params = new URLSearchParams(window.location.search);
-    const accessToken = params.get("accessToken");
-    const refreshToken = params.get("refreshToken");
+    let accessToken = params.get("accessToken");
+    let refreshToken = params.get("refreshToken");
+
+    if (!accessToken || !refreshToken) {
+      // 혹시 첫 실행에서 저장됐는데 쿼리만 사라진 경우 대비
+      accessToken = sessionStorage.getItem("accessToken") || "";
+      refreshToken = sessionStorage.getItem("refreshToken") || "";
+    }
 
     if (!accessToken || !refreshToken) {
       navigate("/login", { 
