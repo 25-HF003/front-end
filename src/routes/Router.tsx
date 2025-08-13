@@ -2,6 +2,10 @@ import { createBrowserRouter } from "react-router-dom";
 import Home from "../pages/Home/Home";
 import Signin from "../pages/Signin";
 import Login from "../pages/Login";
+import GoogleLogin from "../pages/SocialLogin/GoogleLogin";
+import OAuthRedirect from "../pages/SocialLogin/OAuthRedirect";
+import NaverLogin from "../pages/SocialLogin/NaverLogin";
+import KakaoLogin from "../pages/SocialLogin/KakaoLogin";
 import Features from "../pages/Features";
 import MyPage from "../pages/Mypage/MyPage";
 import PwCheck from "../pages/Mypage/PwCheck"
@@ -20,6 +24,7 @@ import InsertLoading from "../components/InsertLoading";
 import DetectionReport from "../pages/Deepfake/DetectionReport";
 import WatermarkReport from "../pages/Watermark/WatermarkReport";
 import NoiseResult from "../pages/AdversarialNoise/NoiseResult";
+
 
 const Router = createBrowserRouter([
   {
@@ -40,6 +45,22 @@ const Router = createBrowserRouter([
       {
         path: '/login',
         element: <Login />
+      },
+      {
+        path: '/login/google',
+        element: <GoogleLogin />
+      },
+      {
+        path: '/login/naver',
+        element: <NaverLogin />
+      },
+      {
+        path: '/login/kakao',
+        element: <KakaoLogin />
+      },
+      {
+        path: '/oauth2/redirect',
+        element: <OAuthRedirect />
       },
       {
         path: '/features',
