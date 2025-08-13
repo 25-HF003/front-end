@@ -1,7 +1,7 @@
 import { useLocation } from "react-router-dom";
 import { PieChart, Pie, Cell } from 'recharts';
 import WatermarkFailReport from "./WatermarkFailReport";
-import ReportNotice from "../../components/ReportNotice";
+import ReportNotice from "../../components/Report/ReportNotice";
 
 function WatermarkReport() {
 

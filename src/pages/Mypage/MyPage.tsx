@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import UserInfo from './UserInfo';
 import RecordPage from '../../components/Mypage/RecordPage';
-import DeepfakePanel from './DeepfakePanel';
-import NoisePanel from './NoisePanel';
-import WatermarkPanel from './WatermarkPanel';
+import DeepfakePanel from './Panel/DeepfakePanel';
+import NoisePanel from './Panel/NoisePanel';
+import WatermarkPanel from './Panel/WatermarkPanel';
 
 function MyPage() {
   const [activeTab, setActiveTab] = useState('deepfake');

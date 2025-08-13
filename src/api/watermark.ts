@@ -11,7 +11,11 @@ export const watermarkAPI = {
     const res = await axiosInstance.get("/api/watermark", {
       params: { page, size, sort },
     });
-    return res.data.data; // ResponseDTO.data(Page<WatermarkDTO>)
+    return res.data.data; 
+  },
+  getById: async (id: number) => {
+    const res = await axiosInstance.get(`/api/watermark/${id}`);
+    return res.data.data;
   },
   deleteById: async (id: number) => {
     const res = await axiosInstance.delete(`/api/watermark/${id}`);

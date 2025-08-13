@@ -1,9 +1,9 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { RootState } from "../../app/store";
-import DeepfakeReport from "../../components/DeepfakeReport";
-import { api } from "../../api";
+import { RootState } from "../../../app/store";
+import DeepfakeReport from "../../../components/Report/DeepfakeReport";
+import { api } from "../../../api";
 
 
 function DeepfakePanelReport() {
