@@ -94,7 +94,7 @@ function WatermarkPanel() {
   const confirmDelete = () => {
     if (deleteId === null) return;
 
-    api.deepfake
+    api.watermark
       .deleteById(deleteId)
       .then(() => {
         setRecords((prev) => prev.filter((r) => r.id !== deleteId));

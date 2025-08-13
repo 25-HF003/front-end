@@ -7,12 +7,14 @@ export interface WatermarkResponse {
 }
 
 export const watermarkAPI = {
-     // 전체 조회
-    getAllByUser: async (page = 0, size = 15, sort = "createdAt,desc") => {
+  getAllByUser: async (page = 0, size = 15, sort = "createdAt,desc") => {
     const res = await axiosInstance.get("/api/watermark", {
       params: { page, size, sort },
     });
     return res.data.data; // ResponseDTO.data(Page<WatermarkDTO>)
   },
-
+  deleteById: async (id: number) => {
+    const res = await axiosInstance.delete(`/api/watermark/${id}`);
+    return res.data;
+  },
 }
