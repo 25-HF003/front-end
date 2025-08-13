@@ -13,14 +13,14 @@ function DeepfakePanelReport() {
   const [results, setResults] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const userId = useSelector((state: RootState) => state.auth.user?.userId);
+  const isLoggedIn = useSelector((state: RootState) => !!state.auth.accessToken);
   
   useEffect(() => {
-    if (!id || !userId) return;
+    if (!id || ! isLoggedIn) return;
 
     //딥페이크 개별 조회
     api.deepfake
-      .getById(Number(id), userId)
+      .getById(Number(id))
       .then((data) => {
         setResults(data);
         setLoading(false);
@@ -30,7 +30,7 @@ function DeepfakePanelReport() {
         alert("개별 딥페이크 정보를 불러오는 데 실패했습니다.");
         navigate("/pages/NotFound");
       });
-  }, [id, userId, navigate]);
+  }, [id,  isLoggedIn, navigate]);
 
   if (loading) return <p className="text-white-100 text-center mt-10">불러오는 중...</p>;
   if (!results) return null;
