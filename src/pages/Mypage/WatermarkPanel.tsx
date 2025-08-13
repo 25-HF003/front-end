@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import RecordPage from "../../components/Mypage/RecordPage";
+import ConfirmModal from "../../components/Modal/ConfirmModal";
 import { useNavigate } from "react-router-dom";
 import { RootState } from "../../app/store";
 import { useSelector } from "react-redux";
@@ -84,14 +85,57 @@ function WatermarkPanel() {
     img: record.watermarkedFilePath,
   }));
 
+  //기록 삭제
+  const handleDelete = (id: number) => {
+    setDeleteId(id);
+    setShowModal(true);
+  };
+
+  const confirmDelete = () => {
+    if (deleteId === null) return;
+
+    api.deepfake
+      .deleteById(deleteId)
+      .then(() => {
+        setRecords((prev) => prev.filter((r) => r.id !== deleteId));
+      })
+      .catch(() => {
+        alert("삭제에 실패했습니다.");
+      })
+      .finally(() => {
+        setShowModal(false);
+        setDeleteId(null);
+      });
+    };
+
     
     return (
-    <RecordPage
-      title="디지털 워터마킹 기록"
-      records={formattedRecords}
-      onAddClick={() => navigate("/watermark-detection")}
-      showDownloadButton={true}
-    />
+    <>
+      <RecordPage
+        title="디지털 워터마킹 기록"
+        records={formattedRecords}
+        onAddClick={() => navigate("/watermark-detection")}
+        onDeleteClick={handleDelete}
+        showDownloadButton={true}
+      />
+
+      {/* 에러/로딩 상태 메시지 (리스트 아래에 보여짐) */}
+      {loading && (
+        <p className="text-center mt-4 text-gray-900">불러오는 중...</p>
+      )}
+      {!loading && error && (
+        <p className="text-center mt-4 text-red-500">{error}</p>
+      )}
+
+      {showModal && (
+        <ConfirmModal
+          message="정말 삭제하시겠습니까?"
+          buttonmessage="삭제"
+          onConfirm={confirmDelete}
+          onCancel={() => setShowModal(false)}
+        />
+      )}
+    </>
   );
 }
 export default WatermarkPanel;

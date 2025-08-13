@@ -34,7 +34,7 @@ function DeepfakePanel() {
     (async () => {
       try {
         // userId 없이 전체 조회
-        const data = await api.deepfake.getAllByUser();
+        const data = await api.deepfake.getAllByUser(0, 15, "createdAt,desc");
         const arr: DeepfakeRecord[] = Array.isArray(data)
           ? data
           : Array.isArray(data?.records)
