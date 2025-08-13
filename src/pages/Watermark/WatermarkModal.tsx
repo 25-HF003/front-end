@@ -38,9 +38,9 @@ function WatermarkModal({ setIsModal, file }: Props) {
     if (!file || !text || !userId) return;
 
     try {
-      const { imageUrl, filename } = await postWatermarkInsert(userId, file, text);
+      const { imageUrl, fileName } = await postWatermarkInsert(userId, file, text);
       <InsertLoading text="삽입중..." />
-      navigate("/watermark-success", { state: { downloadUrl: imageUrl, filename } });
+      navigate("/watermark-success", { state: { downloadUrl: imageUrl, fileName } });
     } catch (error) {
       <InsertFail title="워터마크" link="/watermark-insert" />
       console.log(error);

@@ -4,12 +4,10 @@ function WatermarkSuccess() {
 
   const location = useLocation();
   const downloadUrl = location.state?.downloadUrl;
-  console.log(downloadUrl);
+  const filename = location.state?.fileName;
 
 const handleDownload = async () => {
   if (!downloadUrl) return;
-
-  const filename = 'deeptruth_watermark.png';
 
   try {
     const response = await fetch(downloadUrl, { mode: 'cors' });
