@@ -3,6 +3,8 @@ import InsertLoading from "../../components/InsertLoading";
 import InsertFail from "../../components/InsertFail";
 import { useNavigate } from "react-router-dom";
 import { postWatermarkInsert } from "../../api/watermark_api";
+import { useSelector } from "react-redux";
+import { RootState } from "../../app/store";
 
 type Props = {
   setIsModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -10,6 +12,10 @@ type Props = {
 }
 
 function WatermarkModal({ setIsModal, file }: Props) {
+
+  // userId 가져오기
+  const userId = useSelector((state: RootState) => state.auth.user?.userId);
+  // console.log("userId", userId);
 
   const [text, setText] = useState("");
 
@@ -28,24 +34,11 @@ function WatermarkModal({ setIsModal, file }: Props) {
     }
   }
 
-  // const handleSubmit = async () => {
-  //   if (!file || !text) return;
-
-  //   try {
-  //     const data = await postWatermarkInsert(file, text)
-  //     const downloadUrl = data.s3_url;
-  //     <InsertLoading text="삽입중..." />
-  //     navigate("/watermark-success", { state: { downloadUrl } });
-  //   } catch (error) {
-  //     <InsertFail title="워터마크" link="/watermark-insert" />
-  //     console.log(error);
-  //   }
-  // }
   const handleSubmit = async () => {
-    if (!file || !text) return;
+    if (!file || !text || !userId) return;
 
     try {
-      const { imageUrl, filename } = await postWatermarkInsert(file, text);
+      const { imageUrl, filename } = await postWatermarkInsert(userId, file, text);
       <InsertLoading text="삽입중..." />
       navigate("/watermark-success", { state: { downloadUrl: imageUrl, filename } });
     } catch (error) {
