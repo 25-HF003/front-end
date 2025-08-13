@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
 import RecordPage from "../../../components/Mypage/RecordPage";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { RootState } from "../../../app/store";
 import { useSelector } from "react-redux";
@@ -24,16 +24,15 @@ function WatermarkPanel() {
   const isLoggedIn = useSelector((state: RootState) => !!state.auth.accessToken);  // 로그인 여부만 확인(토큰은 axiosInstance 인터셉터가 알아서 처리)
 
   useEffect(() => {
-      if (!isLoggedIn) {
-        setLoading(false);
-        setError("로그인이 필요합니다.");
-        return;
-      }
+    if (!isLoggedIn) {
+      setLoading(false);
+      setError("로그인이 필요합니다.");
+      return;
+    }
       (async () => {
         try {
           // 서버는 토큰으로 유저 식별 → userId를 프론트에서 보낼 필요 X
           const data = await api.watermark.getAllByUser(0, 15, "createdAt,desc");
-
           // 백엔드 페이지 응답 형태 대비
           // data가 배열이거나 data.content가 배열일 수 있으니 안전하게 처리
           const list: any[] = Array.isArray(data)
@@ -47,7 +46,6 @@ function WatermarkPanel() {
             watermarkedFilePath: item.watermarkedFilePath ?? item.filePath ?? "",
             createdAt: item.createdAt ?? "",
           }));
-
           setRecords(mapped);
         } catch (e) {
           setError("기록을 불러오지 못했습니다.");
