@@ -3,6 +3,7 @@ import axiosInstance from "./axiosInstance";
 export interface WatermarkResponse {
     id: number;
     watermarkedFilePath: string;
+    fileName: string;
     createdAt: string;
 }
 

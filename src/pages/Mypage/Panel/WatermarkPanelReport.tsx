@@ -18,7 +18,7 @@ function WatermarkPanelReport() {
   useEffect(() => {
     if (!id || ! isLoggedIn) return;
 
-    //딥페이크 개별 조회
+    //워터마크 개별 조회
     api.watermark
       .getById(Number(id))
       .then((data) => {

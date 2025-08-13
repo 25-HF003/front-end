@@ -1,6 +1,7 @@
 type Props={
   result: {
     watermarkedFilePath: string;
+    fileName: string;
     //createdAt: string;
   };
   confirmMessage?: string | null;
@@ -9,6 +10,7 @@ type Props={
 function WatermarkSuccessReport({ result, confirmMessage }: Props) {
 
   const image = result?.watermarkedFilePath ?? null;
+  const filename = result?.fileName ?? null;
   //s3 image URL -> blob로 다운로드 가능 형태로 변경
   const handleDownload = async () => {
     if (!image) return;
@@ -22,7 +24,7 @@ function WatermarkSuccessReport({ result, confirmMessage }: Props) {
 
       const link = document.createElement("a");
       link.href = window.URL.createObjectURL(blob);;
-      link.download = `${image}`;
+      link.download = `${filename}`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
