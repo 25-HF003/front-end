@@ -1,12 +1,12 @@
-import { IoClose } from "react-icons/io5";
-import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setAccessToken, setUser } from "../features/auth/authSlice";
 import { scheduleAutoLogout } from "../utils/jwt";
 import SignupModal from "../components/Modal/SignupModal";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai"; 
 import { api } from "../api";
+import SocialButtons from "./SocialLogin/SocialButtons";
 
 function Login() {
   const [loginId, setLoginId] = useState("");
@@ -14,8 +14,33 @@ function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   const navigate = useNavigate();
   const dispatch = useDispatch(); // Redux dispatch
+  const location = useLocation();
+
+  
+  // 에러 메시지 소스: (A) location.state.errorMessage (소셜 실패) (B) ?error=... (세션만료 등)
+  const incomingErrorMessage = useMemo(() => {
+    const stateMsg = (location.state as any)?.errorMessage as string | undefined;
+    const params = new URLSearchParams(location.search);
+    const error = params.get("error"); // e.g. session_expired
+    if (stateMsg) return stateMsg;
+
+    if (error === "session_expired") return "세션이 만료되었습니다. 다시 로그인해주세요.";
+    //if (error === "missing_token") return "소셜 로그인에 실패했습니다. 다시 시도해주세요.";
+    if (error) return "로그인 도중 문제가 발생했습니다. 다시 시도해주세요.";
+    return undefined;
+  }, [location.state, location.search]);
+
+  // 에러 메시지 모달 표시 + URL 정리(쿼리/상태 제거)
+  useEffect(() => {
+    if (!incomingErrorMessage) return;
+    openModal(incomingErrorMessage);
+
+    // 쿼리/상태를 제거해 새로고침 시 모달이 또 뜨지 않도록 처리
+    navigate("/login", { replace: true, state: null });
+  }, [incomingErrorMessage, navigate]);
 
   
   const openModal = (msg: string) => {
@@ -28,7 +53,7 @@ function Login() {
     setModalMessage("");
   };
 
-    const handleLogin = async () => {
+  const handleLogin = async () => {
     try {
       const result = await api.auth.login(loginId, password);
 
@@ -58,7 +83,7 @@ function Login() {
       openModal("로그인 중 오류가 발생했습니다.");
     }
   };
-
+  
 
 
   return(
@@ -67,9 +92,6 @@ function Login() {
         <div className="flex items-center justify-center min-h-screen">
           {/* 로그인 모달 */}
           <div className=" bg-white-100 rounded-xl p-20 w-full max-w-lg shadow-xl text-black-100">
-            <button className="absolute top-4 right-4 text-gray-900 hover:text-black-100">
-              <IoClose size={20} />
-            </button>
             <h1 className="text-5xl font-black text-center mb-12">DeepTruth</h1>
 
             {/* ID/PW 입력창 */}
@@ -117,21 +139,7 @@ function Login() {
             <div className="max-w-sm w-full mx-auto p-4">  
               <div className="w-full h-px bg-gray-300"/>
             </div>
-
-            <div className="mt-6 text-center">
-              <p className="text-sm text-gray-500 mb-3">소셜 로그인</p>
-              <div className="flex justify-center gap-4">
-                <button className="bg-white-100 border border-gray-200 rounded-full p-2 shadow-sm">
-                  <img src="/google-icon.svg" alt="Google" className="w-8 h-8" />
-                </button>
-                <button className="bg-white-100 border border-gray-200 rounded-full p-2 shadow-sm">
-                  <img src="/naver-icon.svg" alt="Naver" className="w-8 h-8" />
-                </button>
-                <button className="bg-white-100 border border-gray-200 rounded-full p-2 shadow-sm">
-                  <img src="/kakao-icon.svg" alt="Kakao" className="w-8 h-8" />
-                </button>
-              </div>
-            </div>
+            <SocialButtons />
           </div>
         </div>
       </>

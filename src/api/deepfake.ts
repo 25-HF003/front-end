@@ -11,7 +11,7 @@ export interface DeepfakeResponse {
 
 export const deepfakeAPI = {
   getAllByUser: async (userId: number) => {
-    const res = await axiosInstance.get("/deepfake", {
+    const res = await axiosInstance.get("/api/deepfake", {
       params: { userId },
     });
     return res.data.data;
@@ -21,19 +21,19 @@ export const deepfakeAPI = {
     formData.append("userId", String(userId));
     formData.append("file", file);
 
-    const res = await axiosInstance.post("/deepfake", formData, {
+    const res = await axiosInstance.post("/api/deepfake", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
     return res.data.data;
   },
   getById: async (id: number, userId: number) => {
-    const res = await axiosInstance.get(`/deepfake/${id}`, {
+    const res = await axiosInstance.get(`/api/deepfake/${id}`, {
       params: { userId },
     });
     return res.data.data;
   },
   deleteById: async (id: number, userId: number) => {
-    const res = await axiosInstance.delete(`/deepfake/${id}`, {
+    const res = await axiosInstance.delete(`/api/deepfake/${id}`, {
       params: { userId },
     });
     return res.data;
