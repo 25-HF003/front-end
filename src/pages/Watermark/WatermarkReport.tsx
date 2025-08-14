@@ -6,17 +6,22 @@ import ReportNotice from "../../components/ReportNotice";
 function WatermarkReport() {
 
   const location = useLocation();
-  const data = location.state;
+  const data = location.state?.data;
   console.log(data);
-  const acc = parseFloat(data.bit_accuracy);
+  // const acc = Number(data.bitAccuracy);
+  const acc = parseFloat(data.bitAccuracy);
 
   const chart = [
-    { name: '정상', value: (data.bit_accuracy) }, 
+    { name: '정상', value: (acc) }, 
+    // { name: '정상', value: (data.bitAccuracy) }, 
   ];
 
-  if (data.bit_accuracy < 100) {
-  chart.push({ name: '훼손', value: 100 - data.bit_accuracy });
-}
+  // if (data.bitAccuracy < 100) {
+  //   chart.push({ name: '훼손', value: 100 - data.bitAccuracy });
+  // }
+  if (acc < 100) {
+    chart.push({ name: '훼손', value: 100 - acc });
+  }
 
   const COLORS = ['#000000', '#FFFFFF'];
 
@@ -27,8 +32,8 @@ function WatermarkReport() {
 
         {/* 헤더 */}
         <div className="border-b border-black-100 text-[20px] font-bold p-4 flex flex-col gap-3">
-          <h1>분석된 파일: <span className="font-medium">"{data.uploaded_image}"</span> </h1>
-          <h1>분석 날짜: <span className="font-medium">{data.detected_at}</span></h1>
+          <h1>분석된 파일: <span className="font-medium">"{data.artifactId}"</span> </h1>
+          <h1>분석 날짜: <span className="font-medium">{data.detectedAt}</span></h1>
         </div>
 
         {/* 그래프, 결과 */}
@@ -54,7 +59,8 @@ function WatermarkReport() {
 
             {/* 차트 중앙 */}
             <div className="absolute text-center">
-              <p className="text-[50px] font-bold">{data.bit_accuracy}%</p>
+              <p className="text-[50px] font-bold">{acc}%</p>
+              {/* <p className="text-[50px] font-bold">{data.bitAccuracy}%</p> */}
             </div>
           </div>
 
@@ -83,8 +89,8 @@ function WatermarkReport() {
       {acc < 90 && (
         <>
           <WatermarkFailReport 
-            uploaded={data.uploaded_image}
-            masked={data.mask_gt}
+            uploaded={data.uploadedImageBase64}
+            // masked={data.mask_gt}
           />
           <ReportNotice />
         </>

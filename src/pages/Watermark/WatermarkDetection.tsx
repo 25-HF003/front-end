@@ -2,6 +2,8 @@ import { useState } from "react";
 import FileUploadPage from "../../components/Upload/FileUploadPage";
 import { useNavigate } from "react-router-dom";
 import { postWatermarkDetection } from "../../api/watermark_api";
+import { useSelector } from "react-redux";
+import { RootState } from "../../app/store";
 
 
 function WatermarkDetection() {
@@ -10,9 +12,12 @@ function WatermarkDetection() {
 
   const navigate = useNavigate();
 
+  const isLoggedIn = useSelector((state: RootState) => !!state.auth.accessToken); 
+  console.log("isLoggedIn", isLoggedIn);
+
   const handleDone = async () => {
 
-    if (!file) return;
+    if (!file || !isLoggedIn) return;
 
     try {
       const data = await postWatermarkDetection(file);
