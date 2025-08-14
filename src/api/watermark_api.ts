@@ -9,23 +9,22 @@ export const postWatermarkInsert = async (userId: number, file: File, text: stri
     params: { userId },
   });
 
-  const { watermarkedFilePath, fileName } = response.data.data ?? response.data;
+  const { s3WatermarkedKey, fileName } = response.data.data ?? response.data;
+  console.log(s3WatermarkedKey)
 
   // base64를 <img src=... />에 쓸 수 있게 data url 생성
-  const imageUrl = `${watermarkedFilePath}`;
+  const imageUrl = `${s3WatermarkedKey}`;
 
   return { imageUrl, fileName };
 }
 
 export const postWatermarkDetection = async (file: File) => {
   const formData = new FormData();
-  formData.append("image", file);
+  formData.append("file", file);
 
-  const response = await axiosInstance.post("/watermark-detection", formData,{
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  })
+  const response = await axiosInstance.post("/api/watermark/detection", formData)
+
+  console.log(response.data);
 
   return response.data;
 }

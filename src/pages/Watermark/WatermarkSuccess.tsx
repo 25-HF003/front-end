@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 function WatermarkSuccess() {
 
@@ -32,7 +32,7 @@ const handleDownload = async () => {
           <img
             src={downloadUrl}
             alt="워터마크 이미지"
-            width={ '800px' }/>
+            width={ '700px' }/>
         </div>
       ) : (
       <>
@@ -45,7 +45,10 @@ const handleDownload = async () => {
           className="w-[355px] h-[57px] rounded-[50px] bg-green-200 text-[20px]">
           다운로드
         </button>
-      <p>마이페이지에서도 확인 가능합니다.</p>
+      <p>
+        <Link to="/mypage">마이페이지</Link>
+        에서도 확인 가능합니다.
+      </p>
     </div>
   );
 }
