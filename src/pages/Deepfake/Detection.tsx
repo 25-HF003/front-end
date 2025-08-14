@@ -5,6 +5,8 @@ import { RootState } from "../../app/store";
 import FileUploadPage from "../../components/Upload/FileUploadPage";
 import { DeepfakeResponse } from "../../api/deepfake";
 import { api } from "../../api";
+import DeepfakeSettings from "../../components/Upload/deepfake/DeepfakeSetting";
+import { Mode, DetectionOptions } from '../../components/Upload/deepfake/DetectionOptions'
 
 
 function Detection() {
@@ -43,8 +45,14 @@ function Detection() {
     
   };
 
+  const handleChange = (mode: Mode, options: DetectionOptions) => {
+    // TODO: 분석 버튼 클릭 시 이 값들을 함께 전송
+    // console.log({ mode, options });
+  };
+
   return(
-    
+    <div className="max-w-3xl mx-auto space-y-6">
+      <DeepfakeSettings onChange={handleChange} />
       <FileUploadPage 
         title="비디오"
         file={file}
@@ -52,8 +60,8 @@ function Detection() {
         accpet="video/*"
         onDone={handleDetectionInsert}
       />
-      
-    )
+    </div> 
+  )
 }
 
 export default Detection;
