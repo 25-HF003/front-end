@@ -7,7 +7,7 @@ interface OptionsPanelProps {
 }
 
 export default function OptionsPanel({ value, onChange }: OptionsPanelProps) {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const secId = useId();
 
   const set = <K extends keyof DetectionOptions>(k: K, v: DetectionOptions[K]) =>

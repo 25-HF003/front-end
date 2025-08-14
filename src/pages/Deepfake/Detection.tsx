@@ -7,6 +7,8 @@ import { DeepfakeResponse } from "../../api/deepfake";
 import { api } from "../../api";
 import DeepfakeSettings from "../../components/Upload/deepfake/DeepfakeSetting";
 import { Mode, DetectionOptions } from '../../components/Upload/deepfake/DetectionOptions'
+import DeepfakeFileUpload from "../../components/Upload/deepfake/DeepfakeFileUpload";
+
 
 
 function Detection() {
@@ -60,14 +62,22 @@ function Detection() {
 
   return(
     <div className="max-w-3xl mx-auto space-y-6">
+      {/*
       <FileUploadPage 
         title="비디오"
         file={file}
         setFile={setFile}
         accpet="video/*"
         onDone={handleDetectionInsert}
-        containerClassName="w-[90vw] max-w-[1100px] min-h-[720px] p-6"
+      />*/ }
+      <DeepfakeFileUpload
+        title="비디오"
+        file={file}
+        setFile={setFile}
+        accpet="video/*"
+        onDone={handleDetectionInsert}
         settingsNode={<DeepfakeSettings onChange={(m, o) => { setMode(m); setOptions(o); }} />}
+    
       />
     </div> 
   )
