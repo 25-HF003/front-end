@@ -4,12 +4,12 @@ import OptionsPanel from './OptionPanel';
 import { DetectionOptions, Mode } from './DetectionOptions';
 
 const defaultOptions: DetectionOptions = {
-  use_tta: false,
-  use_illum: false,
-  smooth_window: 60,
-  min_face: 80,
-  sample_count: 60,
-  detector: 'auto',
+  use_tta: true,
+  use_illum: true,
+  smooth_window: 5,
+  min_face: 64,
+  sample_count: 15,
+  detector: 'Auto',
 };
 
 interface DeepfakeSettingsProps {

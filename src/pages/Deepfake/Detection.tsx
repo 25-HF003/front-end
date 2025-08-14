@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../app/store";
-import FileUploadPage from "../../components/Upload/FileUploadPage";
 import { DeepfakeResponse } from "../../api/deepfake";
 import { api } from "../../api";
 import DeepfakeSettings from "../../components/Upload/deepfake/DeepfakeSetting";
@@ -23,7 +22,7 @@ function Detection() {
     smooth_window: 60,
     min_face: 80,
     sample_count: 60,
-    detector: 'auto',
+    detector: 'Auto',
   });
 
     const onDone = () => {

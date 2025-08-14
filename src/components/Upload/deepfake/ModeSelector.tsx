@@ -18,11 +18,11 @@ function ModeSelector({ value, onChange }: ModeSelectorProps) {
         />
         <span
           className={`w-4 h-4 rounded-full border-2 ${
-            value === 'basic' ? 'border-green-100 bg-green-100' : 'border-gray-900'
+            value === 'basic' ? 'border-green-200 bg-green-200' : 'border-gray-900'
           }`}
           aria-hidden
         />
-        <span className="text-2xl font-medium">기본모드</span>
+        <span className="text-3xl font-semibold">기본모드</span>
         {value === 'basic' ? (
           <span className="ml-1 mr-20 text-[10px] px-1.5 py-0.5 rounded bg-emerald-100 text-green-200">ON</span>
         ) : (
@@ -40,11 +40,11 @@ function ModeSelector({ value, onChange }: ModeSelectorProps) {
         />
         <span
           className={`w-4 h-4 rounded-full ml-20 border-2 ${
-            value === 'advanced' ? 'border-green-100 bg-green-100' : 'border-gray-900'
+            value === 'advanced' ? 'border-green-200 bg-green-200' : 'border-gray-900'
           }`}
           aria-hidden
         />
-        <span className="text-2xl font-medium">세부모드</span>
+        <span className="text-3xl font-semibold">세부모드</span>
         {value === 'advanced' && (
           <span className="ml-1 text-[10px] px-1.5 py-0.5 rounded bg-emerald-100 text-green-200">ON</span>
         )}
