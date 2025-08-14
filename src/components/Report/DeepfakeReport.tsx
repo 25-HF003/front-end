@@ -108,7 +108,9 @@ function DeepfakeReport({ result, createdAt }: Props) {
       </div>
 
       {/* 주의 사항 */}
-      <ReportNotice />
+      {fake > 50 && (
+        <ReportNotice />
+      )}
     </div>
   );
 }

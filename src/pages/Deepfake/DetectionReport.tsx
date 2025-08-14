@@ -1,6 +1,6 @@
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import DeepfakeReport from "../../components/DeepfakeReport";
+import DeepfakeReport from "../../components/Report/DeepfakeReport";
 import { useEffect } from "react";
 
 

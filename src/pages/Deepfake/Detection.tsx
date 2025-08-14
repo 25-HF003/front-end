@@ -14,18 +14,21 @@ function Detection() {
   const navigate = useNavigate();
  
   // Redux에서 로그인된 유저의 userId 가져오기
-  const userId = useSelector((state: RootState) => state.auth.user?.userId);
-  console.log("userId", userId);
+  //const userId = useSelector((state: RootState) => state.auth.user?.userId);
+  //console.log("userId", userId);
+
+  const isLoggedIn = useSelector((state: RootState) => !!state.auth.accessToken);  // 로그인 여부만 확인(토큰은 axiosInstance 인터셉터가 알아서 처리)
+  console.log("isLoggedIn", isLoggedIn);
 
   const handleDetectionInsert = async() => {
-    if (!file || !userId) {
+    if (!file || !isLoggedIn) {
     navigate("/pages/NotFound")
     return;
   }
   navigate("/detection/loading");
   
   try {
-    const results = await api.deepfake.upload(file, userId);
+    const results = await api.deepfake.upload(file);
     setResult(results);
 
     console.log("파일 업로드 완료", results);
