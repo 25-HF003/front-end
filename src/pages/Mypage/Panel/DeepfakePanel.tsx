@@ -1,10 +1,10 @@
-import RecordPage from "../../components/Mypage/RecordPage";
-import ConfirmModal from "../../components/Modal/ConfirmModal";
+import RecordPage from "../../../components/Mypage/RecordPage";
+import ConfirmModal from "../../../components/Modal/ConfirmModal";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { RootState } from "../../app/store";
-import { api } from "../../api";
+import { RootState } from "../../../app/store";
+import { api } from "../../../api";
 
 
 type DeepfakeRecord = {
@@ -22,30 +22,34 @@ function DeepfakePanel() {
   const [showModal, setShowModal] = useState(false);
   const [deleteId, setDeleteId] = useState<number | null>(null);
 
-  const userId = useSelector((state: RootState) => state.auth.user?.userId); // 로그인된 유저 ID 사용
+  //const userId = useSelector((state: RootState) => state.auth.user?.userId); // 로그인된 유저 ID 사용
+  const isLoggedIn = useSelector((state: RootState) => !!state.auth.accessToken);  // 로그인 여부만 확인(토큰은 axiosInstance 인터셉터가 알아서 처리)
 
   useEffect(() => {
-    if (!userId) {
+    if (!isLoggedIn) {
       setLoading(false);
+      setError("로그인이 필요합니다.");
       return;
     }
-    api.deepfake
-      .getAllByUser(userId)
-      .then((data: any) => {
-        const arr: DeepfakeRecord[] =
-        Array.isArray(data) ? data :
-        Array.isArray(data?.records) ? data.records :
-        Array.isArray(data?.content) ? data.content :
-        [];
-      setRecords(arr);
-      })
-      .catch(() => {
+    (async () => {
+      try {
+        // userId 없이 전체 조회
+        const data = await api.deepfake.getAllByUser(0, 15, "createdAt,desc");
+        const arr: DeepfakeRecord[] = Array.isArray(data)
+          ? data
+          : Array.isArray(data?.records)
+          ? data.records
+          : Array.isArray(data?.content)
+          ? data.content
+          : [];
+        setRecords(arr);
+      } catch {
         setError("기록을 불러오지 못했습니다.");
-      })
-      .finally(() => {
-        setLoading(false); //  성공/실패 관계없이 로딩 종료
-    });
-  }, [userId]);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, [isLoggedIn]);
 
   // 오래된 순으로 정렬 → 번호 붙이기
   const recordsWithIndex = records
@@ -82,10 +86,10 @@ function DeepfakePanel() {
   };
 
   const confirmDelete = () => {
-    if (deleteId === null || !userId) return;
+    if (deleteId === null) return;
 
     api.deepfake
-      .deleteById(deleteId, userId)
+      .deleteById(deleteId)
       .then(() => {
         setRecords((prev) => prev.filter((r) => r.id !== deleteId));
       })

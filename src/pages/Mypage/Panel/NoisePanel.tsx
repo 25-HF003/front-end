@@ -1,4 +1,4 @@
-import RecordPage from "../../components/Mypage/RecordPage";
+import RecordPage from "../../../components/Mypage/RecordPage";
 import { useNavigate } from "react-router-dom";
 
 const noiseRecords = [
