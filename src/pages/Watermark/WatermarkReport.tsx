@@ -1,5 +1,5 @@
 import { useLocation } from "react-router-dom";
-import { PieChart, Pie, Cell } from 'recharts';
+import { PieChart, Pie, Cell, Label } from 'recharts';
 import WatermarkFailReport from "./WatermarkFailReport";
 import ReportNotice from "../../components/Report/ReportNotice";
 
@@ -7,18 +7,12 @@ function WatermarkReport() {
 
   const location = useLocation();
   const data = location.state?.data;
-  console.log(data);
-  // const acc = Number(data.bitAccuracy);
   const acc = parseFloat(data.bitAccuracy);
 
   const chart = [
     { name: '정상', value: (acc) }, 
-    // { name: '정상', value: (data.bitAccuracy) }, 
   ];
 
-  // if (data.bitAccuracy < 100) {
-  //   chart.push({ name: '훼손', value: 100 - data.bitAccuracy });
-  // }
   if (acc < 100) {
     chart.push({ name: '훼손', value: 100 - acc });
   }
@@ -39,7 +33,7 @@ function WatermarkReport() {
         {/* 그래프, 결과 */}
         <div className="bg-white-200 text-black p-6 rounded-xl mb-6 flex gap-6 flex justify-evenly">
           {/* 그래프 */}
-          <div className="relative w-[500px] h-[500px] mr-20 flex items-center justify-center">
+          <div className="w-[500px] h-[500px] mr-20 flex items-center justify-center">
             <PieChart width={500} height={500}>
               <Pie
                 data={chart}
@@ -54,14 +48,15 @@ function WatermarkReport() {
               {chart.map((_, index) => (
                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
               ))}
+              {/* 차트 중앙 퍼센트 값 */}
+              <Label 
+                value={`${acc}%`}
+                position="center"
+                fontSize={50}
+                fontWeight="bold"
+                fill="#00060D" />
               </Pie>
             </PieChart>
-
-            {/* 차트 중앙 */}
-            <div className="absolute text-center">
-              <p className="text-[50px] font-bold">{acc}%</p>
-              {/* <p className="text-[50px] font-bold">{data.bitAccuracy}%</p> */}
-            </div>
           </div>
 
           {/* 1번째 결과 */}
