@@ -13,15 +13,12 @@ type Props = {
 
 function WatermarkModal({ setIsModal, file }: Props) {
 
-  // userId 가져오기
-  const userId = useSelector((state: RootState) => state.auth.user?.userId);
-  // console.log("userId", userId);
-
   const [text, setText] = useState("");
 
   // const [isLoading, setIsLoading] = useState(false);
   // const [isError, setIsError] = useState(false);
 
+  const isLoggedIn = useSelector((state: RootState) => !!state.auth.accessToken); 
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,10 +32,16 @@ function WatermarkModal({ setIsModal, file }: Props) {
   }
 
   const handleSubmit = async () => {
-    if (!file || !text || !userId) return;
+    if (!isLoggedIn) {
+      alert("로그인이 필요합니다.");
+      navigate("/login");
+      return;
+    }
+
+    if (!file || !text) return;
 
     try {
-      const { imageUrl, fileName } = await postWatermarkInsert(userId, file, text);
+      const { imageUrl, fileName } = await postWatermarkInsert(file, text);
       <InsertLoading text="삽입중..." />
       navigate("/watermark-success", { state: { downloadUrl: imageUrl, fileName } });
     } catch (error) {
