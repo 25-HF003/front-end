@@ -26,7 +26,7 @@ function WatermarkReport() {
 
         {/* 헤더 */}
         <div className="border-b border-black-100 text-[20px] font-bold p-4 flex flex-col gap-3">
-          <h1>분석된 파일: <span className="font-medium">"{data.artifactId}"</span> </h1>
+          <h1>분석된 파일: <span className="font-medium">"{data.basename}"</span> </h1>
           <h1>분석 날짜: <span className="font-medium">{data.detectedAt}</span></h1>
         </div>
 
