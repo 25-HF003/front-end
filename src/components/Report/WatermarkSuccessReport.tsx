@@ -1,6 +1,6 @@
 type Props={
   result: {
-    watermarkedFilePath: string;
+    s3WatermarkedKey: string;
     fileName: string;
     //createdAt: string;
   };
@@ -9,19 +9,18 @@ type Props={
 
 function WatermarkSuccessReport({ result, confirmMessage }: Props) {
 
-  const image = result?.watermarkedFilePath ?? null;
+  const image = result?.s3WatermarkedKey ?? null;
+  console.log(image);
   const filename = result?.fileName ?? null;
   //s3 image URL -> blob로 다운로드 가능 형태로 변경
   const handleDownload = async () => {
     if (!image) return;
 
     try{
-      const res  = await fetch(image)
+      const res = await fetch(image, { mode: 'cors' });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
       const blob = await res.blob();
-      //const objectUrl = window.URL.createObjectURL(blob);
-
       const link = document.createElement("a");
       link.href = window.URL.createObjectURL(blob);;
       link.download = `${filename}`;
@@ -29,7 +28,8 @@ function WatermarkSuccessReport({ result, confirmMessage }: Props) {
       link.click();
       document.body.removeChild(link);
       window.URL.revokeObjectURL(link.href);
-    } catch (err) {
+    } 
+    catch (err) {
       console.error("다운로드 실패:", err);
     }
   }
@@ -40,7 +40,6 @@ function WatermarkSuccessReport({ result, confirmMessage }: Props) {
         <div className="flex mt-8">
           <img
             src={image}
-            // src={`http://127.0.0.1:5000${downloadUrl}`}
             alt="워터마크 이미지"
             width={ '800px' }/>
         </div>
