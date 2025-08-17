@@ -83,14 +83,56 @@ function NoisePanel() {
     img: record.originalFilePath,
   }));
 
+  //기록 삭제
+  const handleDelete = (id: number) => {
+    setDeleteId(id);
+    setShowModal(true);
+  };
+
+  const confirmDelete = () => {
+    if (deleteId === null) return;
+
+    api.noise
+      .deleteById(deleteId)
+      .then(() => {
+        setRecords((prev) => prev.filter((r) => r.noiseId !== deleteId));
+      })
+      .catch(() => {
+        alert("삭제에 실패했습니다.");
+      })
+      .finally(() => {
+        setShowModal(false);
+        setDeleteId(null);
+      });
+    };
+
     
     return(
+    <>
     <RecordPage
         title="적대적 노이즈 기록"
         records={formattedRecords}
         onAddClick={() => navigate("/adversarial-noise")}
-        showDownloadButton={true}
+        onDeleteClick={handleDelete}
+        showDownloadButton={false}
     />
+    {/* 에러/로딩 상태 메시지 (리스트 아래에 보여짐) */}
+      {loading && (
+        <p className="text-center mt-4 text-gray-900">불러오는 중...</p>
+      )}
+      {!loading && error && (
+        <p className="text-center mt-4 text-red-500">{error}</p>
+      )}
+
+      {showModal && (
+        <ConfirmModal
+          message="기록을 삭제할 경우,\n복구가 불가합니다.\n정말 삭제하시겠습니까?"
+          buttonmessage="삭제"
+          onConfirm={confirmDelete}
+          onCancel={() => setShowModal(false)}
+        />
+      )}
+    </>
     )
 }
 export default NoisePanel;
