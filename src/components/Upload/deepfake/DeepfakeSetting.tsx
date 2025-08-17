@@ -3,7 +3,7 @@ import ModeSelector from './ModeSelector';
 import OptionsPanel from './OptionPanel';
 import { DetectionOptions, Mode } from './DetectionOptions';
 
-const defaultOptions: DetectionOptions = {
+const defaultOptions: DetectionOptions = { //세부모드 기존 기본세팅
   use_tta: true,
   use_illum: true,
   smooth_window: 5,
@@ -16,7 +16,7 @@ interface DeepfakeSettingsProps {
   onChange?: (mode: Mode, options: DetectionOptions) => void; // 부모(페이지)로 값 전달
 }
 
-export default function DeepfakeSettings({ onChange }: DeepfakeSettingsProps) {
+function DeepfakeSettings({ onChange }: DeepfakeSettingsProps) {
   const [mode, setMode] = useState<Mode>('basic');
   const [opts, setOpts] = useState<DetectionOptions>(defaultOptions);
 
@@ -38,4 +38,4 @@ export default function DeepfakeSettings({ onChange }: DeepfakeSettingsProps) {
     </div>
   );
 }
-//
+export default DeepfakeSettings;

@@ -7,7 +7,7 @@ interface OptionsPanelProps {
   onChange: (next: DetectionOptions) => void;
 }
 
-export default function OptionsPanel({ value, onChange }: OptionsPanelProps) {
+function OptionsPanel({ value, onChange }: OptionsPanelProps) {
   const [open, setOpen] = useState(false);
   const secId = useId();
 
@@ -141,3 +141,4 @@ export default function OptionsPanel({ value, onChange }: OptionsPanelProps) {
     </section>
   );
 }
+export default OptionsPanel;
