@@ -16,7 +16,7 @@ function CommonHeader() {
     <div className="relative w-full flex bg-white-200 h-[90px] items-center">
         <AiOutlineMenu className="w-[40px] h-[40px] mx-[10px]" onClick={() => setNavOpen(!navOpen)} />
         {navOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-50">
+          <div className="fixed z-50 inset-0 bg-black bg-opacity-50">
             <Navbar navOpen={navOpen} setNavOpen={setNavOpen} />
           </div>
         )}

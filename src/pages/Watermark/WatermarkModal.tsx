@@ -3,6 +3,8 @@ import InsertLoading from "../../components/InsertLoading";
 import InsertFail from "../../components/InsertFail";
 import { useNavigate } from "react-router-dom";
 import { postWatermarkInsert } from "../../api/watermark_api";
+import { useSelector } from "react-redux";
+import { RootState } from "../../app/store";
 
 type Props = {
   setIsModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -16,6 +18,7 @@ function WatermarkModal({ setIsModal, file }: Props) {
   // const [isLoading, setIsLoading] = useState(false);
   // const [isError, setIsError] = useState(false);
 
+  const isLoggedIn = useSelector((state: RootState) => !!state.auth.accessToken); 
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,26 +31,19 @@ function WatermarkModal({ setIsModal, file }: Props) {
     }
   }
 
-  // const handleSubmit = async () => {
-  //   if (!file || !text) return;
-
-  //   try {
-  //     const data = await postWatermarkInsert(file, text)
-  //     const downloadUrl = data.s3_url;
-  //     <InsertLoading text="삽입중..." />
-  //     navigate("/watermark-success", { state: { downloadUrl } });
-  //   } catch (error) {
-  //     <InsertFail title="워터마크" link="/watermark-insert" />
-  //     console.log(error);
-  //   }
-  // }
   const handleSubmit = async () => {
+    if (!isLoggedIn) {
+      alert("로그인이 필요합니다.");
+      navigate("/login");
+      return;
+    }
+
     if (!file || !text) return;
 
     try {
-      const { imageUrl, filename } = await postWatermarkInsert(file, text);
+      const { imageUrl, fileName } = await postWatermarkInsert(file, text);
       <InsertLoading text="삽입중..." />
-      navigate("/watermark-success", { state: { downloadUrl: imageUrl, filename } });
+      navigate("/watermark-success", { state: { downloadUrl: imageUrl, fileName } });
     } catch (error) {
       <InsertFail title="워터마크" link="/watermark-insert" />
       console.log(error);
