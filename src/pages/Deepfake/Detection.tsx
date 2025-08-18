@@ -2,9 +2,12 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../app/store";
-import FileUploadPage from "../../components/Upload/FileUploadPage";
 import { DeepfakeResponse } from "../../api/deepfake";
 import { api } from "../../api";
+import DeepfakeSettings from "../../components/Upload/deepfake/DeepfakeSetting";
+import { Mode, DetectionOptions } from '../../components/Upload/deepfake/DetectionOptions'
+import DeepfakeFileUpload from "../../components/Upload/deepfake/DeepfakeFileUpload";
+
 
 
 function Detection() {
@@ -12,6 +15,19 @@ function Detection() {
   const [file, setFile] = useState<File | null>(null);
   const [result, setResult] = useState<DeepfakeResponse | null>(null);
   const navigate = useNavigate();
+  const [mode, setMode] = useState<Mode>("basic");
+  const [options, setOptions] = useState<DetectionOptions>({
+    use_tta: false,
+    use_illum: false,
+    smooth_window: 60,
+    min_face: 80,
+    sample_count: 60,
+    detector: 'Auto',
+  });
+
+    const onDone = () => {
+    // file, mode, options 로 API 호출
+  };
  
   // Redux에서 로그인된 유저의 userId 가져오기
   //const userId = useSelector((state: RootState) => state.auth.user?.userId);
@@ -44,16 +60,26 @@ function Detection() {
   };
 
   return(
-    
+    <div className="max-w-3xl mx-auto space-y-6">
+      {/*
       <FileUploadPage 
         title="비디오"
         file={file}
         setFile={setFile}
         accpet="video/*"
         onDone={handleDetectionInsert}
+      />*/ }
+      <DeepfakeFileUpload
+        title="비디오"
+        file={file}
+        setFile={setFile}
+        accpet="video/*"
+        onDone={handleDetectionInsert}
+        settingsNode={<DeepfakeSettings onChange={(m, o) => { setMode(m); setOptions(o); }} />}
+    
       />
-      
-    )
+    </div> 
+  )
 }
 
 export default Detection;

@@ -9,7 +9,7 @@ const ConfirmModal = ({ message, buttonmessage, onConfirm, onCancel }: ConfirmMo
   return (
     <div className="fixed inset-0 bg-black-100 bg-opacity-40 flex items-center justify-center z-50">
       <div className="bg-white-100 p-6 rounded-lg w-80 shadow-lg text-center">
-        <p className="text-lg font-semibold mb-4 text-black-100">{message}</p>
+        <p className="text-lg font-semibold mb-4 text-black-100 whitespace-pre-line">{message}</p>
         <div className="flex justify-center gap-4">
           <button
             onClick={onCancel}
