@@ -3,9 +3,10 @@ import { useState } from "react";
 type Props = {
   onFileSelect: (file: File) => void;
   accpet: string; // ex) "image/*, video/*"
+  containerClassName?: string;
 }
 
-function FileUploader({ onFileSelect, accpet }: Props) {
+function FileUploader({ onFileSelect, accpet, containerClassName }: Props) {
 
   const [dragActive, setDragActive] = useState(false);
 
@@ -44,7 +45,7 @@ function FileUploader({ onFileSelect, accpet }: Props) {
   };
 
   return(
-    <div className="w-[50%] h-[50%] flex flex-col justify-center items-center bg-gray-300 ">
+    <div className={`flex flex-col justify-center items-center bg-gray-300 ${containerClassName ?? "w-[50%] h-[50%]"}`}>
       <div
         className={`w-[100%] h-[100%] flex flex-col justify-center items-center gap-7 
           ${dragActive ? 'bg-gray-500' : 'bg-gray-300'}`}

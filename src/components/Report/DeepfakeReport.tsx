@@ -1,4 +1,4 @@
-import { PieChart, Pie, Cell } from "recharts";
+import { PieChart, Pie, Cell, Label } from "recharts";
 import ReportNotice from "./ReportNotice";
 
 const COLORS = ["#3D3D42", "#FFFFFF"]; // gray, white
@@ -14,9 +14,10 @@ interface Props {
   createdAt?: string; // 2. 바깥에서 별도로 받는 createdAt
 }
 
+
 function DeepfakeReport({ result, createdAt }: Props) {
   const averageFake = result?.averageConfidence ?? 0;
-  const fake = +averageFake.toFixed(0);
+  const fake = +(averageFake*100).toFixed(0);
   const real = 100 - fake;
   const maxConfidence = result?.maxConfidence ?? 0;
   const suspectImage = result?.filePath ?? null;
@@ -60,14 +61,33 @@ function DeepfakeReport({ result, createdAt }: Props) {
               {data.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
               ))}
+              {/* 차트 중앙 퍼센트 값 */}
+              <Label
+                position="center"
+                content={({ viewBox }) => {
+                  if (viewBox && "cx" in viewBox && "cy" in viewBox){
+                    const { cx, cy } = viewBox;
+                    return (
+                      <text x={cx} y={cy} textAnchor="middle" dominantBaseline="middle">
+                        <tspan fontSize="24" fontWeight="bold" fill="#00060D">
+                          {fake}%
+                        </tspan>
+                        <tspan x={cx} dy="1.4em" fontSize="14" fill="#757575">
+                          Fake 가능성
+                        </tspan>
+                      </text>
+                    );
+                  }
+                }}
+              />
             </Pie>
           </PieChart>
 
-          {/*도넛차트 안 글자 */}
+          {/* 도넛차트 안 글자
           <div className="absolute text-center">
             <p className="text-2xl font-bold text-black-200">{fake}%</p>
             <p className="text-sm text-gray-600">Fake 가능성</p>
-          </div>
+          </div> */}
         </div>
 
         {/*분석결과 */}
@@ -103,7 +123,7 @@ function DeepfakeReport({ result, createdAt }: Props) {
           <span className="text-xs">03:40 ~ 03:55</span>*/}
         </div>
         <span className="text-lg flex items-center justify-center mt-5">
-          위 영역의 딥페이크 확률 : {maxConfidence.toFixed(0)}%
+          위 영역의 딥페이크 확률 : {(maxConfidence*100).toFixed(0)}%
         </span>
       </div>
 

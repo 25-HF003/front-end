@@ -20,6 +20,7 @@ function DetectionReport() {
   }, [results, navigate]);
 
   if (!results) return null;
+  console.log("result: " ,results);
   
   return <DeepfakeReport result={results} />;
 }

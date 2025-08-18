@@ -125,7 +125,7 @@ function DeepfakePanel() {
 
       {showModal && (
         <ConfirmModal
-          message="정말 삭제하시겠습니까?"
+          message={"기록을 삭제할 경우,\n복구가 불가합니다.\n정말 삭제하시겠습니까?"}
           buttonmessage="삭제"
           onConfirm={confirmDelete}
           onCancel={() => setShowModal(false)}
