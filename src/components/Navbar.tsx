@@ -28,25 +28,13 @@ function Navbar({ navOpen, setNavOpen }: NavProps) {
           ) : (
             <Link to="login" onClick={() => setNavOpen(!navOpen)}>딥페이크 탐지</Link>
           )}
-          {accessToken ? (
-            <Link to="/adversarial-noise" onClick={() => setNavOpen(!navOpen)}>적대적 노이즈 삽입</Link>
-          ) : (
-            <Link to="login" onClick={() => setNavOpen(!navOpen)}>적대적 노이즈 삽입</Link>
-          )}
+          <Link to="/adversarial-noise" onClick={() => setNavOpen(!navOpen)}>적대적 노이즈 삽입</Link>
           <div>
             <button onClick={() => setWatermarkOpen(!watermarkOpen)}>디지털 워터마킹</button>
             { watermarkOpen && (
               <div className="flex flex-col text-[40px]">
-                {accessToken ? (
-                  <Link to="/watermark-insert" onClick={() => setNavOpen(!navOpen)}>삽입</Link>
-                ) : (
-                  <Link to="login" onClick={() => setNavOpen(!navOpen)}>삽입</Link>
-                )}
-                {accessToken ? (
-                  <Link to="/watermark-detection" onClick={() => setNavOpen(!navOpen)}>탐지</Link>
-                ) : (
-                  <Link to="login" onClick={() => setNavOpen(!navOpen)}>탐지</Link>
-                )}
+                <Link to="/watermark-insert" onClick={() => setNavOpen(!navOpen)}>삽입</Link>
+                <Link to="/watermark-detection" onClick={() => setNavOpen(!navOpen)}>탐지</Link>
               </div>
             )}
           </div>

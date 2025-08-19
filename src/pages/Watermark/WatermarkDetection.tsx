@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FileUploadPage from "../../components/Upload/FileUploadPage";
 import { useNavigate } from "react-router-dom";
 import { postWatermarkDetection } from "../../api/watermark_api";
@@ -13,6 +13,13 @@ function WatermarkDetection() {
   const navigate = useNavigate();
 
   const isLoggedIn = useSelector((state: RootState) => !!state.auth.accessToken); 
+
+  useEffect(() => {
+      if (!isLoggedIn) {
+        navigate("/login");
+      }
+    }, [isLoggedIn, navigate]);
+  
 
   const handleDone = async () => {
     if (!isLoggedIn) {
