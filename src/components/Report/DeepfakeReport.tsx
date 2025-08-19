@@ -1,5 +1,7 @@
 import { PieChart, Pie, Cell, Label } from "recharts";
 import ReportNotice from "./ReportNotice";
+import { IoClose } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
 
 const COLORS = ["#3D3D42", "#FFFFFF"]; // gray, white
 
@@ -22,6 +24,8 @@ function DeepfakeReport({ result, createdAt }: Props) {
   const maxConfidence = result?.maxConfidence ?? 0;
   const suspectImage = result?.filePath ?? null;
 
+  const navigate = useNavigate();
+
   const data = [
     { name: "Fake", value: fake },
     { name: "Real", value: real },
@@ -33,8 +37,17 @@ function DeepfakeReport({ result, createdAt }: Props) {
   else if (fake <= 80) message = "딥페이크 가능성이 높음";
   else message = "딥페이크 가능성이 매우 높음";
 
+  const handleClose = () => {
+    navigate(-1); // 이전 페이지로 이동
+  }
+
   return (
-    <div className="min-h-screen px-20 py-10 mx-20">
+    <div className="relative min-h-screen px-20 py-10 mx-20">
+      <button 
+        onClick={handleClose}
+        className="absolute top-4 right-1 text-white-100 hover:text-gray-50">
+          <IoClose size={30} />
+      </button>
       {/* 헤더 */}
       <div className="bg-white-200 p-6 rounded-xl mb-6">
         <h2 className="text-3xl font-semibold mb-3">딥페이크 탐지</h2>

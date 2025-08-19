@@ -53,7 +53,8 @@ function Detection() {
       
     } catch (error: any) {
       console.error("업로드/예측 중 오류:", error);
-      alert("서버 오류로 인해 업로드에 실패했습니다.\n" + (error.response?.data?.message || error.message));
+      console.log(error.response?.data?.message || error.message);
+      alert("서버 오류로 인해 업로드에 실패했습니다.");
       navigate("/pages/NotFound")
     }
     
