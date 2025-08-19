@@ -7,6 +7,7 @@ import SignupModal from "../components/Modal/SignupModal";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai"; 
 import { api } from "../api";
 import SocialButtons from "./SocialLogin/SocialButtons";
+import axios from "axios";
 
 function Login() {
   const [loginId, setLoginId] = useState("");
@@ -54,10 +55,19 @@ function Login() {
   };
 
   const handleLogin = async () => {
+    // 1) 프론트 선검증 (즉시 리턴)
+    if (!loginId.trim()) {
+      openModal("아이디를 입력해주세요.");
+      return;
+    }
+    if (!password.trim()) {
+      openModal("비밀번호를 입력해주세요.");
+      return;
+    }
     try {
       const result = await api.auth.login(loginId, password);
 
-      if (result.success) {
+      if (result?.success) {
         const accessToken = result.data.accessToken;
         const refreshToken = result.data.refreshToken;
         // 전역 Redux 상태에 저장
@@ -76,11 +86,18 @@ function Login() {
         // 메인 페이지로 이동
         navigate("/");
       } else {
-        openModal(result.message || "로그인 실패");
+        openModal(result?.message || "로그인 실패");
       }
-    } catch (err) {
-      console.error("Login error:", err);
-      openModal("로그인 중 오류가 발생했습니다.");
+    } catch (err: unknown) {
+        if (axios.isAxiosError(err)){
+          const serverMsg = 
+            err.response?.data?.message
+          openModal(serverMsg || "로그인 중 오류가 발생했습니다.");
+        } else {
+          console.error("Login error:", err);
+          openModal("로그인 중 오류가 발생했습니다.");
+        }
+     
     }
   };
   

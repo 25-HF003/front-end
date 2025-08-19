@@ -3,7 +3,7 @@ import ModeSelector from './ModeSelector';
 import OptionsPanel from './OptionPanel';
 import { DetectionOptions, Mode } from './DetectionOptions';
 
-const defaultOptions: DetectionOptions = { //세부모드 기존 기본세팅
+const defaultOptions: DetectionOptions = { //정밀모드 기존 기본세팅
   use_tta: true,
   use_illum: true,
   smooth_window: 5,
@@ -31,7 +31,7 @@ function DeepfakeSettings({ onChange }: DeepfakeSettingsProps) {
         <ModeSelector value={mode} onChange={setMode} />
       </div>
 
-      {/* 세부모드일 때만 옵션 보이기 */}
+      {/* 정밀모드일 때만 옵션 보이기 */}
       {mode === 'advanced' && (
         <OptionsPanel value={opts} onChange={setOpts} />
       )}
