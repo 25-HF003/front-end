@@ -22,6 +22,6 @@ function DetectionReport() {
   if (!results) return null;
   console.log("result: " ,results);
   
-  return <DeepfakeReport result={results} />;
+  return <DeepfakeReport result={results} showDownloadButton={false}/>;
 }
 export default DetectionReport;

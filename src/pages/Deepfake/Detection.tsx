@@ -24,10 +24,6 @@ function Detection() {
     sample_count: 60,
     detector: 'Auto',
   });
-
-    const onDone = () => {
-    // file, mode, options 로 API 호출
-  };
  
   // Redux에서 로그인된 유저의 userId 가져오기
   //const userId = useSelector((state: RootState) => state.auth.user?.userId);

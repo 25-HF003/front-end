@@ -12,17 +12,32 @@ interface Props {
     filePath: string;
     result: string;
     createdAt?: string; // 1. result 안에 있는 createdAt
+    mode?: 'PRECISION' | 'DEFAULT' | string;
+    useTta?: boolean;
+    useIllum?: boolean;
+    detector?: 'AUTO' | 'DLIB' | 'DNN' | string;
+    smoothWindow?: number;
+    minFace?: number;
+    sampleCount?: number
   };
   createdAt?: string; // 2. 바깥에서 별도로 받는 createdAt
+  showDownloadButton?: boolean;
 }
 
 
-function DeepfakeReport({ result, createdAt }: Props) {
+function DeepfakeReport({ result, createdAt, showDownloadButton = true }: Props) {
   const averageFake = result?.averageConfidence ?? 0;
   const fake = +(averageFake*100).toFixed(0);
   const real = 100 - fake;
   const maxConfidence = result?.maxConfidence ?? 0;
   const suspectImage = result?.filePath ?? null;
+  const mode = result?.mode ?? 'DEFAULT';
+  const useTta = result?.useTta ?? false;
+  const useIllum = result?.useIllum ?? false;
+  const detector = result?.detector ?? 'AUTO';
+  const smoothWindow = result?.smoothWindow ?? 0;
+  const minFace = result?.minFace ?? 0;
+  const sampleCount = result?.sampleCount ?? 0;
 
   const navigate = useNavigate();
 
@@ -41,19 +56,72 @@ function DeepfakeReport({ result, createdAt }: Props) {
     navigate(-1); // 이전 페이지로 이동
   }
 
+  let modemessage = "";
+  if (mode === 'DEFAULT') modemessage="기본모드";
+  else modemessage = "정밀모드"
+
+  let tf = "";
+  (true ? tf="ON" : tf="OFF");
+
+
   return (
     <div className="relative min-h-screen px-20 py-10 mx-20">
-      <button 
+      {showDownloadButton && (
+        <button 
         onClick={handleClose}
         className="absolute top-4 right-1 text-white-100 hover:text-gray-50">
           <IoClose size={30} />
       </button>
+      )}
       {/* 헤더 */}
       <div className="bg-white-200 p-6 rounded-xl mb-6">
         <h2 className="text-3xl font-semibold mb-3">딥페이크 탐지</h2>
         <p className="text-sm">
           분석 날짜: {createdAt ? new Date(createdAt).toLocaleString("ko-KR") : new Date().toLocaleString("ko-KR")} | 영상 분석
         </p>
+        <div className="w-full my-[1%] border-t border-black-100"></div>
+        <p className="text-base mb-1">
+          {modemessage}
+        </p>
+        <div className="flex w-full">
+          <label className="inline-flex items-center gap-1 cursor-pointer">
+            <span className="text-base">TTA</span>
+            {useTta === true ? (
+              <span className="text-[10px] mr-4 px-1.5 py-0.5 rounded bg-emerald-100 text-green-200">ON</span>
+            ) : (
+              <span className="text-[10px] mr-4 px-1.5 py-0.5 rounded bg-gray-900 text-gray-50">OFF</span>
+            )}
+          </label>
+
+          <label className="inline-flex items-center gap-1 cursor-pointer">
+            <span className="text-base">조명보정</span>
+            {useIllum === true ? (
+              <span className="text-[10px] mr-4 px-1.5 py-0.5 rounded bg-emerald-100 text-green-200">ON</span>
+            ) : (
+              <span className="text-[10px] mr-4 px-1.5 py-0.5 rounded bg-gray-900 text-gray-50">OFF</span>
+            )}
+          </label>
+
+          <label className="inline-flex items-center gap-1 cursor-pointer">
+            <span className="text-base">시각적 스무딩 적용 프레임 수</span>
+              <span className="text-[11px] mr-4 px-1.5 py-0.5 rounded bg-white-100 text-green-200">{smoothWindow}</span>
+          </label>
+
+          <label className="inline-flex items-center gap-1 cursor-pointer">
+            <span className="text-base">검출할 최소 얼굴 크기</span>
+              <span className="text-[11px] mr-4 px-1.5 py-0.5 rounded bg-white-100 text-green-200">{minFace}</span>
+          </label>
+
+          <label className="inline-flex items-center gap-1 cursor-pointer">
+            <span className="text-base">샘플 이미지 수</span>
+              <span className="text-[11px] mr-4 px-1.5 py-0.5 rounded bg-white-100 text-green-200">{sampleCount}</span>
+          </label>
+
+          <label className="inline-flex items-center gap-1 cursor-pointer">
+            <span className="text-base">TTA 프리셋</span>
+              <span className="text-[10px] mr-4 px-1.5 py-0.5 rounded bg-white-100 text-green-200">{detector}</span>
+          </label>
+        </div>
       </div>
 
       {/* 그래프+결과 */}
