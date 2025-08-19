@@ -69,10 +69,11 @@ function UserInfo() {
             <strong>포인트</strong>
             <p className="text-gray-900 mb-4 mt-2">50점</p>
           </div>
+          <Link to="/mypage/check" className="mt-auto pt-10">
+            <button className="text-sm text-gray-400 mt-20 ml-20">회원정보 수정</button>
+          </Link>
         </div>
-        <Link to="/mypage/check" className="mt-auto pt-10">
-          <button className="text-sm text-gray-400">회원정보 수정</button>
-        </Link>
+        
         {/*로그아웃 */}
         {accessToken && <Logout onLogoutComplete={() => setLogoutCompleteModal(true)}/>}
           <SignupModal
