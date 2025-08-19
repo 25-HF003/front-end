@@ -1,3 +1,6 @@
+import { IoClose } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
+
 type Props={
   result: {
     s3WatermarkedKey: string;
@@ -9,6 +12,7 @@ type Props={
 
 function WatermarkSuccessReport({ result, confirmMessage }: Props) {
 
+  const navigate = useNavigate();
   const image = result?.s3WatermarkedKey ?? null;
   console.log(image);
   const filename = result?.fileName ?? null;
@@ -34,8 +38,17 @@ function WatermarkSuccessReport({ result, confirmMessage }: Props) {
     }
   }
 
+  const handleClose = () => {
+    navigate(-1); // 이전 페이지로 이동
+  }
+
   return(
-    <div className="w-full h-full flex flex-col justify-center items-center gap-7 text-white-100">
+    <div className="relative w-full h-full flex flex-col justify-center items-center gap-7 text-white-100">
+      <button 
+        onClick={handleClose}
+        className="absolute top-4 right-4 text-white-100 hover:text-gray-50">
+          <IoClose size={30} />
+      </button>
       {image ? (
         <div className="flex mt-8">
           <img
