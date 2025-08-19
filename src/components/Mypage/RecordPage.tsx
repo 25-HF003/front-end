@@ -30,10 +30,10 @@ function RecordPage({ title, records, onAddClick, showDownloadButton = true, onI
 
     {/* List */}
         <ul className="space-y-10">
-          {records.length === 0 ? (
+         {/*  {records.length === 0 ? (
             <li className="text-gray-900 text-center text-lg mt-10">기록이 없습니다.</li>
-          ) : (
-            records.map((record) => (
+          ) : (*/}
+            {records.map((record) => (
               <li key={record.id} className="flex items-center space-x-4">
                 <img src={record.img}   alt={record.name} className="w-20 h-20 rounded-full object-cover" />
                 <div className="flex-1">
@@ -53,7 +53,7 @@ function RecordPage({ title, records, onAddClick, showDownloadButton = true, onI
                 </div>
               </li>
             ))
-          )}
+          }
         </ul>
       </div>
   );
