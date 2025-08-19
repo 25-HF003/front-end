@@ -60,9 +60,6 @@ function DeepfakeReport({ result, createdAt, showDownloadButton = true }: Props)
   if (mode === 'DEFAULT') modemessage="기본모드";
   else modemessage = "정밀모드"
 
-  let tf = "";
-  (true ? tf="ON" : tf="OFF");
-
 
   return (
     <div className="relative min-h-screen px-20 py-10 mx-20">
