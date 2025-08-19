@@ -1,8 +1,8 @@
 import axiosInstance from "./axiosInstance";
 
 export interface WatermarkResponse {
-    id: number;
-    watermarkedFilePath: string;
+    watermarkId: number;
+    s3WatermarkedKey: string;
     fileName: string;
     createdAt: string;
 }

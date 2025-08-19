@@ -8,8 +8,8 @@ import { api } from "../../../api";
 
 
 type WatermarkRecord = {
-  id: number;
-  watermarkedFilePath: string;
+  watermarkId: number;
+  s3WatermarkedKey: string;
   createdAt: string;
 };
 
@@ -42,8 +42,8 @@ function WatermarkPanel() {
             : [];
 
           const mapped: WatermarkRecord[] = list.map((item: any) => ({
-            id: item.id ?? item.watermarkId ?? 0,
-            watermarkedFilePath: item.watermarkedFilePath ?? item.filePath ?? "",
+            watermarkId: item.watermarkId,
+            s3WatermarkedKey: item.s3WatermarkedKey ?? item.filePath ?? "",
             createdAt: item.createdAt ?? "",
           }));
           setRecords(mapped);
@@ -69,7 +69,7 @@ function WatermarkPanel() {
   .slice()// 원본 배열 수정 방지
   .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()) // 최신순: 최신 → 오래된 순
   .map((record) => ({
-    id: record.id,
+    id: record.watermarkId,
     name: `워터마크 삽입 결과 ${record.displayIndex}`,
     date: new Date(record.createdAt).toLocaleDateString("ko-KR", {
       year: "numeric",
@@ -80,7 +80,7 @@ function WatermarkPanel() {
       minute: "2-digit",
       hour12: false,
     }),
-    img: record.watermarkedFilePath,
+    img: record.s3WatermarkedKey,
   }));
 
   //기록 삭제
@@ -95,7 +95,7 @@ function WatermarkPanel() {
     api.watermark
       .deleteById(deleteId)
       .then(() => {
-        setRecords((prev) => prev.filter((r) => r.id !== deleteId));
+        setRecords((prev) => prev.filter((r) => r.watermarkId !== deleteId));
       })
       .catch(() => {
         alert("삭제에 실패했습니다.");
@@ -128,7 +128,7 @@ function WatermarkPanel() {
 
       {showModal && (
         <ConfirmModal
-          message="정말 삭제하시겠습니까?"
+          message="기록을 삭제할 경우,\n워터마크 탐지가 불가하고\n복구할 수 없습니다.\n정말 삭제하시겠습니까?"
           buttonmessage="삭제"
           onConfirm={confirmDelete}
           onCancel={() => setShowModal(false)}

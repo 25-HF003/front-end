@@ -4,9 +4,8 @@ import InsertFail from "../../components/InsertFail";
 import InsertLoading from "../../components/InsertLoading";
 
 function WatermarkInsert() {
-
   const [file, setFile] = useState<File | null>(null);
-  const [isSModal, setIsModal] = useState(false);
+  const [isModal, setIsModal] = useState(false);
 
   const handleDone = () => {
     setIsModal(true);
@@ -22,7 +21,7 @@ function WatermarkInsert() {
         setFile={setFile}
         accpet="image/*"
         onDone={handleDone}
-        isModal={isSModal} 
+        isModal={isModal} 
         setIsModal={setIsModal}
         />
     </>)
