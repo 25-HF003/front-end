@@ -1,16 +1,10 @@
-import axios from "axios";
-
-const BASE_URL = "http://localhost:5001";
+import axiosInstance from "./axiosInstance";
 
 export const postNoiseImage = async (file: File) => {
   const formData = new FormData();
   formData.append('file', file);
 
-  const response = await axios.post(`${BASE_URL}/upload`, formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    }
-  });
+  const response = await axiosInstance.post(`/api/noise`, formData);
 
   return response.data;
 }
