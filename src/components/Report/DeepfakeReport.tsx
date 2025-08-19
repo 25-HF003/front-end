@@ -24,12 +24,14 @@ interface Props {
   showDownloadButton?: boolean;
 }
 
+function shrinkValue(x: number): number {
+  const alpha = 1.8;  // 지수 조절 (값이 클수록 더 많이 눌림)
+  return Math.pow(x, alpha)*100;
+}
 
 function DeepfakeReport({ result, createdAt, showDownloadButton = true }: Props) {
-  const averageFake = result?.averageConfidence ?? 0;
-  const fake = +(averageFake*100).toFixed(0);
-  const real = 100 - fake;
-  const maxConfidence = result?.maxConfidence ?? 0;
+  const averageFakeinit = result?.averageConfidence ?? 0;
+  const maxConfidenceinit = result?.maxConfidence ?? 0;
   const suspectImage = result?.filePath ?? null;
   const mode = result?.mode ?? 'DEFAULT';
   const useTta = result?.useTta ?? false;
@@ -38,6 +40,11 @@ function DeepfakeReport({ result, createdAt, showDownloadButton = true }: Props)
   const smoothWindow = result?.smoothWindow ?? 0;
   const minFace = result?.minFace ?? 0;
   const sampleCount = result?.sampleCount ?? 0;
+
+  const averageFake = shrinkValue(averageFakeinit);
+  const maxConfidence = shrinkValue(maxConfidenceinit);
+  const fake = +(averageFake).toFixed(0);
+  const real = 100 - fake;
 
   const navigate = useNavigate();
 
@@ -201,7 +208,7 @@ function DeepfakeReport({ result, createdAt, showDownloadButton = true }: Props)
           <span className="text-xs">03:40 ~ 03:55</span>*/}
         </div>
         <span className="text-lg flex items-center justify-center mt-5">
-          위 영역의 딥페이크 확률 : {(maxConfidence*100).toFixed(0)}%
+          위 영역의 딥페이크 확률 : {(maxConfidence).toFixed(0)}%
         </span>
       </div>
 
