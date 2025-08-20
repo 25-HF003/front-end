@@ -44,7 +44,7 @@ function ModeSelector({ value, onChange }: ModeSelectorProps) {
           }`}
           aria-hidden
         />
-        <span className="text-3xl font-semibold">세부모드</span>
+        <span className="text-3xl font-semibold">정밀모드</span>
         {value === 'advanced' && (
           <span className="ml-1 text-[10px] px-1.5 py-0.5 rounded bg-emerald-100 text-green-200">ON</span>
         )}

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FileUploadPage from "../../components/Upload/FileUploadPage";
 import { postNoiseImage } from "../../api/noise_api";
 import { useNavigate } from "react-router-dom";
@@ -11,6 +11,12 @@ function AdversarialNoise() {
   const navigate = useNavigate();
 
   const isLoggedIn = useSelector((state: RootState) => !!state.auth.accessToken);
+
+  useEffect(() => {
+      if (!isLoggedIn) {
+        navigate("/login");
+      }
+  }, [isLoggedIn, navigate]);
 
   const handleNoiseInsert = async () => {
     try {

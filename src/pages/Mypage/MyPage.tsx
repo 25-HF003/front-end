@@ -1,12 +1,36 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from "react-router-dom";
 import UserInfo from './UserInfo';
-import RecordPage from '../../components/Mypage/RecordPage';
 import DeepfakePanel from './Panel/DeepfakePanel';
 import NoisePanel from './Panel/NoisePanel';
 import WatermarkPanel from './Panel/WatermarkPanel';
 
+type Tab = "deepfake" | "noise" | "watermark";
+
 function MyPage() {
-  const [activeTab, setActiveTab] = useState('deepfake');
+
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // URL(tab) → 세션스토리지 → 기본값 순으로 초기 탭 결정
+  const initialTab = useMemo<Tab>(() => {
+    const fromUrl = searchParams.get("tab") as Tab | null;
+    if (fromUrl === "deepfake" || fromUrl === "noise" || fromUrl === "watermark") {
+      return fromUrl;
+    }
+    const fromSS = sessionStorage.getItem("mypage.tab") as Tab | null;
+    return (fromSS === "deepfake" || fromSS === "noise" || fromSS === "watermark")
+      ? fromSS
+      : "deepfake";
+  }, [searchParams]);
+
+  const [activeTab, setActiveTab] = useState<Tab>(initialTab);
+
+  // 탭 변경 시 URL과 세션스토리지에 동기화
+  useEffect(() => {
+    sessionStorage.setItem("mypage.tab", activeTab);
+    setSearchParams({ tab: activeTab }, { replace: true });
+  }, [activeTab, setSearchParams]);
+
 
     const renderTabContent = () => {
     switch (activeTab) {
