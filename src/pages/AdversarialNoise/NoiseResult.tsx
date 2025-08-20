@@ -58,7 +58,7 @@ function NoiseResult() {
       </div>
 
       {/* 통계 정보 */}
-      <div className="w-[1200px] flex flex-col items-center justify-center mt-5 p-5 gap-5 rounded-[10px]" style={{ backgroundColor: '#e3f2fd'}}>
+      <div className="w-[1200px] flex flex-col items-center justify-center mt-5 p-5 gap-5 rounded-[10px] bg-blue-100">
         <h1 className="font-bold">📊 상세 통계</h1>
         <div className="flex justify-center w-[100%] gap-5">
           <div className="w-[10%] bg-white-100 rounded-[10px] p-5 ">
