@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../app/store";
@@ -36,6 +36,13 @@ function Detection() {
   const isLoggedIn = useSelector((state: RootState) => !!state.auth.accessToken);  // 로그인 여부만 확인(토큰은 axiosInstance 인터셉터가 알아서 처리)
   console.log("isLoggedIn", isLoggedIn);
 
+  useEffect(() => {
+    if (!isLoggedIn) {
+      navigate("/login");
+    }
+  }, [isLoggedIn, navigate]);
+
+
   const handleDetectionInsert = async() => {
     if (!file || !isLoggedIn) {
     navigate("/pages/NotFound")
@@ -53,7 +60,8 @@ function Detection() {
       
     } catch (error: any) {
       console.error("업로드/예측 중 오류:", error);
-      alert("서버 오류로 인해 업로드에 실패했습니다.\n" + (error.response?.data?.message || error.message));
+      console.log(error.response?.data?.message || error.message);
+      alert("서버 오류로 인해 업로드에 실패했습니다.");
       navigate("/pages/NotFound")
     }
     
