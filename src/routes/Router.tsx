@@ -17,7 +17,7 @@ import Detection from "../pages/Deepfake/Detection";
 import WatermarkInsert from "../pages/Watermark/WatermarkInsert";
 import WatermarkDetection from "../pages/Watermark/WatermarkDetection";
 import AdversarialNoise from "../pages/AdversarialNoise/AdversarialNoise";
-import Quiz from "../pages/Quiz";
+import Quiz from "../pages/Quiz/Quiz";
 import NotFound from "../pages/NotFound";
 import RootLayout from "../layout/RootLayout";
 import WatermarkSuccess from "../pages/Watermark/WatermarkSuccess";
