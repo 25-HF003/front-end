@@ -10,5 +10,5 @@ export interface DetectionOptions {
 }
 
 export interface NoiseOptions {
-  level : '1' | '2' | '3' | '4' ;
+  level : 1 | 2 | 3 | 4 ;
 }

@@ -14,7 +14,7 @@ function NoiseOptionPanel({ value, onChange }: OptionsPanelProps) {
     onChange({ ...value, [k]: v });
 
   const Select = ({ label, value, options, onChange }:{
-    label: string; value: string; options: {value:string; label:string}[]; onChange:(v:string)=>void; 
+    label: string; value: number; options: {value:number; label:string}[]; onChange:(v:number)=>void; 
   }) => {
       const [openSel, setOpenSel] = useState(false);
       return (
@@ -74,10 +74,10 @@ function NoiseOptionPanel({ value, onChange }: OptionsPanelProps) {
               label="강도 단계"
               value={value.level}
               options={[
-                { value: '1', label: '1' },
-                { value: '2', label: '2' },
-                { value: '3', label: '3' },
-                { value: '4', label: '4' },
+                { value: 1, label: '1' },
+                { value: 2, label: '2' },
+                { value: 3, label: '3' },
+                { value: 4, label: '4' },
               ]}
               onChange={(v) => set('level', v as NoiseOptions['level'])}
             />

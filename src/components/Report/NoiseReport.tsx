@@ -1,5 +1,6 @@
+import { ReactElement } from "react";
 import { IoArrowBack } from "react-icons/io5";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 type Props={
   data: {
@@ -21,7 +22,7 @@ type Props={
     confidenceDrop: string;
     styleTransform: string;
   };
-  confirmMessage?: string | null;
+  confirmMessage?: ReactElement | null;
   showXButton?: boolean;
 }
 
@@ -38,7 +39,7 @@ function NoiseReport({ data, confirmMessage, showXButton = true }: Props) {
       const blob = await response.blob();
       const link = document.createElement("a");
       link.href = window.URL.createObjectURL(blob);;
-      link.download = ``;
+      link.download = data.fileName;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -123,7 +124,7 @@ function NoiseReport({ data, confirmMessage, showXButton = true }: Props) {
           onClick={handleDownload}>
           노이즈 삽입 이미지 다운로드
         </button>
-        <p>{confirmMessage}</p>
+        {confirmMessage}
       </div>
     </div>
   );

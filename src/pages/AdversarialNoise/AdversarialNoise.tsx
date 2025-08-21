@@ -14,7 +14,7 @@ function AdversarialNoise() {
   const navigate = useNavigate();
   const [mode, setMode] = useState<Mode>("basic");
   const [options, setOptions] = useState<NoiseOptions>({
-    level: '2',
+    level: 2,
   });
 
   const isLoggedIn = useSelector((state: RootState) => !!state.auth.accessToken);

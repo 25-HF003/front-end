@@ -4,7 +4,7 @@ import NoiseOptionPanel from './NoiseOptionPanel';
 import { Mode, NoiseOptions } from '../deepfake/ModeOptions'
 
 const defaultOptions: NoiseOptions = { //정밀모드 기본세팅
-  level: '2',
+  level: 2,
 };
 
 interface NoiseSettingProps {
