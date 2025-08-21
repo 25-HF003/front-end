@@ -36,7 +36,7 @@ function NoisePanelReport() {
   if (!results) return null;
 
   return (
-    <NoiseReport data={results} confirmMessage={null} />
+    <NoiseReport data={results} confirmMessage={null} showXButton={true} />
   )
 }
 export default NoisePanelReport;

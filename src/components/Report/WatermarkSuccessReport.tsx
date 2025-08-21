@@ -1,4 +1,4 @@
-import { IoClose } from "react-icons/io5";
+import { IoArrowBack } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 
 type Props={
@@ -46,8 +46,8 @@ function WatermarkSuccessReport({ result, confirmMessage }: Props) {
     <div className="relative w-full h-full flex flex-col justify-center items-center gap-7 text-white-100">
       <button 
         onClick={handleClose}
-        className="absolute top-4 right-4 text-white-100 hover:text-gray-50">
-          <IoClose size={30} />
+        className="absolute top-4 left-5 text-white-100 hover:text-gray-50">
+          <IoArrowBack size={60} />
       </button>
       {image ? (
         <div className="flex mt-8">
