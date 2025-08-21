@@ -143,8 +143,7 @@ function Quiz() {
       {/* 결과 */}
       {result !== null && openModal && (
         <QuizAnswer 
-          answer={result} 
-          openModal={openModal} 
+          answer={result}
           setOpenModal={setOpenModal} />
       )}
     </div>
