@@ -13,6 +13,7 @@ import EditProfile from "../pages/Mypage/EditProfile";
 import Withdraw from "../pages/Mypage/Withdraw";
 import DeepfakePanelReport from "../pages/Mypage/Panel/DeepfakePanelReport";
 import WatermarkPanelReport from "../pages/Mypage/Panel/WatermarkPanelReport";
+import NoisePanelReport from "../pages/Mypage/Panel/NoisePanelReport";
 import Detection from "../pages/Deepfake/Detection";
 import WatermarkInsert from "../pages/Watermark/WatermarkInsert";
 import WatermarkDetection from "../pages/Watermark/WatermarkDetection";
@@ -90,6 +91,10 @@ const Router = createBrowserRouter([
       {
         path: '/mypage/watermark/:id',
         element: <WatermarkPanelReport />
+      },
+      {
+        path: '/mypage/noise/:id',
+        element: <NoisePanelReport />
       },
       {
         path: '/detection',

@@ -63,10 +63,6 @@ function DeepfakeReport({ result, createdAt, showDownloadButton = true }: Props)
     navigate(-1); // 이전 페이지로 이동
   }
 
-  let modemessage = "";
-  if (mode === 'DEFAULT') modemessage="기본모드";
-  else modemessage = "정밀모드"
-
 
   return (
     <div className="relative min-h-screen px-20 py-10 mx-20">
@@ -85,7 +81,7 @@ function DeepfakeReport({ result, createdAt, showDownloadButton = true }: Props)
         </p>
         <div className="w-full my-[1%] border-t border-black-100"></div>
         <p className="text-base mb-1">
-          {modemessage}
+          {(mode === 'DEFAULT') ? "기본모드" : "정밀모드"}
         </p>
         <div className="flex w-full">
           <label className="inline-flex items-center gap-1 cursor-pointer">

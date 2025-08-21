@@ -2,8 +2,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../app/store";
-import WatermarkReport from "../../../components/Report/WatermarkSuccessReport";
 import { api } from "../../../api";
+import NoiseReport from "../../../components/Report/NoiseReport";
 
 
 function NoisePanelReport() {
@@ -35,8 +35,8 @@ function NoisePanelReport() {
   if (loading) return <p className="text-white-100 text-center mt-10">불러오는 중...</p>;
   if (!results) return null;
 
-  return (<></>
-    //<WatermarkReport result={results} confirmMessage={null} />
+  return (
+    <NoiseReport data={results} confirmMessage={null} />
   )
 }
 export default NoisePanelReport;
