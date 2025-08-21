@@ -4,8 +4,8 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../app/store";
 import { DeepfakeResponse } from "../../api/deepfake";
 import { api } from "../../api";
-import DeepfakeSettings from "../../components/Upload/deepfake/DeepfakeSetting";
-import { Mode, DetectionOptions } from '../../components/Upload/deepfake/DetectionOptions'
+import DeepfakeSetting from "../../components/Upload/deepfake/DeepfakeSetting";
+import { Mode, DetectionOptions } from '../../components/Upload/deepfake/ModeOptions'
 import DeepfakeFileUpload from "../../components/Upload/deepfake/DeepfakeFileUpload";
 
 
@@ -17,11 +17,11 @@ function Detection() {
   const navigate = useNavigate();
   const [mode, setMode] = useState<Mode>("basic");
   const [options, setOptions] = useState<DetectionOptions>({
-    use_tta: false,
-    use_illum: false,
-    smooth_window: 60,
-    min_face: 80,
-    sample_count: 60,
+    use_tta: true,
+    use_illum: true,
+    smooth_window: 5,
+    min_face: 64,
+    sample_count: 15,
     detector: 'Auto',
   });
  
@@ -93,7 +93,7 @@ function Detection() {
         setFile={setFile}
         accpet="video/*"
         onDone={handleDetectionInsert}
-        settingsNode={<DeepfakeSettings onChange={(m, o) => { setMode(m); setOptions(o); }} />}
+        settingsNode={<DeepfakeSetting onChange={(m, o) => { setMode(m); setOptions(o); }} />}
     
       />
     </div> 

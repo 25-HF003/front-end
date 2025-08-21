@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import ModeSelector from './ModeSelector';
-import OptionsPanel from './OptionPanel';
-import { DetectionOptions, Mode } from './DetectionOptions';
+import OptionPanel from './OptionPanel';
+import { DetectionOptions, Mode } from './ModeOptions';
 
 const defaultOptions: DetectionOptions = { //정밀모드 기존 기본세팅
   use_tta: true,
@@ -12,11 +12,11 @@ const defaultOptions: DetectionOptions = { //정밀모드 기존 기본세팅
   detector: 'Auto',
 };
 
-interface DeepfakeSettingsProps {
+interface DeepfakeSettingProps {
   onChange?: (mode: Mode, options: DetectionOptions) => void; // 부모(페이지)로 값 전달
 }
 
-function DeepfakeSettings({ onChange }: DeepfakeSettingsProps) {
+function DeepfakeSetting({ onChange }: DeepfakeSettingProps) {
   const [mode, setMode] = useState<Mode>('basic');
   const [opts, setOpts] = useState<DetectionOptions>(defaultOptions);
 
@@ -28,14 +28,14 @@ function DeepfakeSettings({ onChange }: DeepfakeSettingsProps) {
     <div className="border-b p-2">
       {/* 모드 선택 */}
       <div className="mb-4">
-        <ModeSelector value={mode} onChange={setMode} />
+        <ModeSelector value={mode} onChange={setMode} basicname='기본모드'/>
       </div>
 
       {/* 정밀모드일 때만 옵션 보이기 */}
       {mode === 'advanced' && (
-        <OptionsPanel value={opts} onChange={setOpts} />
+        <OptionPanel value={opts} onChange={setOpts} />
       )}
     </div>
   );
 }
-export default DeepfakeSettings;
+export default DeepfakeSetting;

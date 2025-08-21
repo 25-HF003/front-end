@@ -1,5 +1,5 @@
 import { useId, useState } from 'react';
-import { DetectionOptions } from './DetectionOptions';
+import { DetectionOptions } from './ModeOptions';
 import RadixSlider from './RadixSlider';
 import TooltipInfo from '../../Modal/TooltipInfo';
 

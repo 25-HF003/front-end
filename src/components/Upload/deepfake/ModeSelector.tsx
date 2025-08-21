@@ -1,11 +1,12 @@
-import { Mode } from './DetectionOptions';
+import { Mode } from './ModeOptions';
 
 interface ModeSelectorProps {
   value: Mode;
   onChange: (m: Mode) => void;
+  basicname: string;
 }
 
-function ModeSelector({ value, onChange }: ModeSelectorProps) {
+function ModeSelector({ value, onChange, basicname }: ModeSelectorProps) {
   return (
     <div className="flex items-center justify-center gap-6">
       <label className="inline-flex items-center gap-2 cursor-pointer">
@@ -22,7 +23,7 @@ function ModeSelector({ value, onChange }: ModeSelectorProps) {
           }`}
           aria-hidden
         />
-        <span className="text-3xl font-semibold">기본모드</span>
+        <span className="text-3xl font-semibold">{basicname}</span>
         {value === 'basic' ? (
           <span className="ml-1 mr-20 text-[10px] px-1.5 py-0.5 rounded bg-emerald-100 text-green-200">ON</span>
         ) : (
