@@ -46,7 +46,9 @@ function UserInfo() {
   return (
     <div className="bg-white-100 text-black-100 w-72 p-6 rounded-xl flex flex-col items-center shadow-lg">
       {/* 프로필 */}
-      <div className="w-32 h-32 bg-gray-300 rounded-full mb-4" />
+      <div className="w-32 h-32 mb-4">
+        <img src="/img/Explorer.jpg" alt="감별사" className="rounded-full"/>
+      </div>
         <h2 className="text-lg font-bold">{user.nickname}</h2>
         <p className="text-sm text-green-100">{user.role === "ADMIN" ? "관리자" : "감별사"}</p>
         <hr className="my-4 w-full border-t" />
@@ -65,12 +67,13 @@ function UserInfo() {
           </div>
           <div>
             <strong>포인트</strong>
-            <p className="text-gray-900 mb-4 mt-2">230점</p>
+            <p className="text-gray-900 mb-4 mt-2">50점</p>
           </div>
+          <Link to="/mypage/check" className="mt-auto pt-10">
+            <button className="text-sm text-gray-400 mt-20 ml-20">회원정보 수정</button>
+          </Link>
         </div>
-        <Link to="/mypage/check" className="mt-auto pt-10">
-          <button className="text-sm text-gray-400">회원정보 수정</button>
-        </Link>
+        
         {/*로그아웃 */}
         {accessToken && <Logout onLogoutComplete={() => setLogoutCompleteModal(true)}/>}
           <SignupModal

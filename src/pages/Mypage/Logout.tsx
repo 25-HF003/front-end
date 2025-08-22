@@ -34,7 +34,7 @@ function Logout({ onLogoutComplete }: { onLogoutComplete: () => void }) {
 
   return (
     <>
-      <button className="text-sm text-gray-400 mt-5" onClick={() => setShowConfirmModal(true)}>
+      <button className="text-sm text-gray-400 mt-auto" onClick={() => setShowConfirmModal(true)}>
         로그아웃
       </button>
 

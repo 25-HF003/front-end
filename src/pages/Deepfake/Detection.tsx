@@ -24,10 +24,6 @@ function Detection() {
     sample_count: 60,
     detector: 'Auto',
   });
-
-    const onDone = () => {
-    // file, mode, options 로 API 호출
-  };
  
   // Redux에서 로그인된 유저의 userId 가져오기
   //const userId = useSelector((state: RootState) => state.auth.user?.userId);
@@ -51,13 +47,27 @@ function Detection() {
   navigate("/detection/loading");
   
   try {
-    const results = await api.deepfake.upload(file);
+    // UI 상태 → API 옵션 매핑
+    if (mode === "advanced") {
+      const optionsForApi: any = {
+      mode: "PRECISION",
+      useTta:     options.use_tta,
+      useIllum:   options.use_illum,
+      detector:   options.detector?.toUpperCase(), // 'Auto' -> 'AUTO'
+      smoothWindow: options.smooth_window,
+      minFace:      options.min_face,
+      sampleCount:  options.sample_count,
+    };
+    const results = await api.deepfake.upload(file, optionsForApi);
     setResult(results);
-
-    console.log("파일 업로드 완료", results);
-
     navigate("/detection/report", {state: {results}});
-      
+    } else {
+        const results = await api.deepfake.upload(file);
+        setResult(results);
+
+        console.log("파일 업로드 완료", results);
+        navigate("/detection/report", {state: {results}});
+      }
     } catch (error: any) {
       console.error("업로드/예측 중 오류:", error);
       console.log(error.response?.data?.message || error.message);

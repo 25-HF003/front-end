@@ -1,6 +1,7 @@
 import { useId, useState } from 'react';
 import { DetectionOptions } from './DetectionOptions';
 import RadixSlider from './RadixSlider';
+import TooltipInfo from '../../Modal/TooltipInfo';
 
 interface OptionsPanelProps {
   value: DetectionOptions;
@@ -14,11 +15,12 @@ function OptionsPanel({ value, onChange }: OptionsPanelProps) {
   const set = <K extends keyof DetectionOptions>(k: K, v: DetectionOptions[K]) =>
     onChange({ ...value, [k]: v });
 
-  const Toggle = ({ label, checked, onToggle }:{
-    label: string; checked: boolean; onToggle: (v: boolean) => void;
+  const Toggle = ({ label, checked, onToggle, message }:{
+    label: string; checked: boolean; onToggle: (v: boolean)=> void; message: string;
   }) => (
     <div className="flex items-center justify-between py-2">
-      <span className="text-lg">{label}</span>
+      <span className="text-lg ">{label}</span>
+      <div className="mr-auto ml-2"><TooltipInfo message={message}/></div>
       <button
         type="button"
         role="switch"
@@ -30,14 +32,15 @@ function OptionsPanel({ value, onChange }: OptionsPanelProps) {
     </div>
   );
 
-  const Select = ({ label, value, options, onChange }:{
-    label: string; value: string; options: {value:string; label:string}[]; onChange:(v:string)=>void;
+  const Select = ({ label, value, options, onChange, message }:{
+    label: string; value: string; options: {value:string; label:string}[]; onChange:(v:string)=>void; message: string;
   }) => {
     const [openSel, setOpenSel] = useState(false);
     return (
       <div className="py-2">
         <div className="flex items-center justify-between text-lg">
           <span>{label}</span>
+          <div className="mr-auto ml-2"><TooltipInfo message={message}/></div>
           <button
             type="button"
             className="inline-flex items-center gap-1 px-2 py-1 border rounded-md text-lg"
@@ -77,7 +80,7 @@ function OptionsPanel({ value, onChange }: OptionsPanelProps) {
         aria-expanded={open}
         aria-controls={secId}
         onClick={() => setOpen((s) => !s)}>
-          <span className="text-xl font-medium">상세옵션</span>
+          <span className="text-xl font-medium mr-1">상세옵션</span>
           <svg width="20" height="20" viewBox="0 0 20 20" className={`transition ${open ? 'rotate-180' : ''}`}>
             <path d="M5 7l5 6 5-6" fill="none" stroke="currentColor" strokeWidth="2" />
           </svg>
@@ -88,8 +91,18 @@ function OptionsPanel({ value, onChange }: OptionsPanelProps) {
         <div id={secId} className="mt-3 space-y-2 border-t">
           {/* 토글 2개 */}
           <div className='mt-3'/>
-            <Toggle label="TTA" checked={value.use_tta} onToggle={(v) => set('use_tta', v)}/>
-          <Toggle label="조명보정" checked={value.use_illum} onToggle={(v) => set('use_illum', v)} />
+          <Toggle 
+            label="TTA (Test Time Augmentation)" 
+            checked={value.use_tta} 
+            onToggle={(v) => set('use_tta', v)} 
+            message='영상의 일부를 여러 방식으로 변형해 여러 번 검사한 뒤 더 정확한 결과를 내는 방식입니다.'
+          />
+          <Toggle 
+            label="조명보정" 
+            checked={value.use_illum} 
+            onToggle={(v) => set('use_illum', v)} 
+            message='영상 속 얼굴이 어두워지거나 밝아질 때 자동으로 보정을 해서 더 안정적으로 검출할 수 있습니다.'
+          />
           
           {/* 슬라이더 3개 */}
           <RadixSlider
@@ -101,6 +114,7 @@ function OptionsPanel({ value, onChange }: OptionsPanelProps) {
             decimals={0}
             onChange={(v) => set('smooth_window', v)}
             className="py-2"
+            message='검출 결과가 프레임마다 균일하게 지정한 개수만큼 묶어서 평균내어 더 부드럽게 보여줍니다.'
           />
 
           <RadixSlider
@@ -112,6 +126,7 @@ function OptionsPanel({ value, onChange }: OptionsPanelProps) {
             decimals={0}
             onChange={(v) => set('min_face', v)}
             className="py-2"
+            message='너무 작은 얼굴은 무시하고 설정한 크기 이상의 얼굴만 검출합니다.'
           />
 
           <RadixSlider
@@ -123,6 +138,7 @@ function OptionsPanel({ value, onChange }: OptionsPanelProps) {
             decimals={0}
             onChange={(v) => set('sample_count', v)}
             className="py-2"
+            message='영상에서 몇 장의 이미지를 뽑아 분석할지 정합니다. 많이 뽑을수록 정확해지지만 시간이 더 걸립니다.'
           />
 
           {/* 드롭다운 */}
@@ -135,6 +151,10 @@ function OptionsPanel({ value, onChange }: OptionsPanelProps) {
               { value: 'Dnn', label: 'Dnn' },
             ]}
             onChange={(v) => set('detector', v as DetectionOptions['detector'])}
+            message='얼굴 검출 방식을 고르는 옵션입니다.\n
+                      · Auto: 먼저 Dlib을 쓰고 실패하면 DNN으로 자동 전환 \n
+                      · Dlib: 빠르지만 회전/가림이 심하면 탐지율 저하 \n
+                      · DNN: 좀 더 느리지만 다양한 각도/표정/조명에서도 높은 정확도'
           />
         </div>
       )}

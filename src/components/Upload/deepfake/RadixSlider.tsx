@@ -1,4 +1,5 @@
 import * as Slider from '@radix-ui/react-slider';
+import TooltipInfo from '../../Modal/TooltipInfo';
 
 type Props = {
   label?: string;
@@ -10,6 +11,7 @@ type Props = {
   onChange: (v: number) => void;
   className?: string;      // 바깥 여백 등 Tailwind 오버라이드
   decimals?: number;       // 표기 소수 자릿수 (기본 1)
+  message: string;
 };
 
 export default function RadixSlider({
@@ -22,12 +24,14 @@ export default function RadixSlider({
   onChange,
   className,
   decimals = 0,
+  message,
 }: Props) {
   return (
     <div className={className}>
       {label && (
         <div className="flex justify-between text-lg mb-1">
           <span>{label}</span>
+          <div className="mr-auto ml-2"><TooltipInfo message={message}/></div>
           <span className="tabular-nums">
             {value.toFixed(decimals)}{unit ?? ''}
           </span>
