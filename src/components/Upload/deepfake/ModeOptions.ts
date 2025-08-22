@@ -8,3 +8,7 @@ export interface DetectionOptions {
   sample_count: number;             // 슬라이더3 (샘플 이미지 수)
   detector: 'Auto' | 'Dlib' | 'Dnn' ; // 드롭다운
 }
+
+export interface NoiseOptions {
+  level : 1 | 2 | 3 | 4 ;
+}

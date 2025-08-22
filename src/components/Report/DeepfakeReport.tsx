@@ -1,6 +1,6 @@
 import { PieChart, Pie, Cell, Label } from "recharts";
 import ReportNotice from "./ReportNotice";
-import { IoClose } from "react-icons/io5";
+import { IoArrowBack } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 
 const COLORS = ["#3D3D42", "#FFFFFF"]; // gray, white
@@ -21,7 +21,7 @@ interface Props {
     sampleCount?: number
   };
   createdAt?: string; // 2. 바깥에서 별도로 받는 createdAt
-  showDownloadButton?: boolean;
+  showXButton?: boolean;
 }
 
 function shrinkValue(x: number): number {
@@ -29,7 +29,7 @@ function shrinkValue(x: number): number {
   return Math.pow(x, alpha)*100;
 }
 
-function DeepfakeReport({ result, createdAt, showDownloadButton = true }: Props) {
+function DeepfakeReport({ result, createdAt, showXButton = true }: Props) {
   const averageFakeinit = result?.averageConfidence ?? 0;
   const maxConfidenceinit = result?.maxConfidence ?? 0;
   const suspectImage = result?.filePath ?? null;
@@ -63,29 +63,25 @@ function DeepfakeReport({ result, createdAt, showDownloadButton = true }: Props)
     navigate(-1); // 이전 페이지로 이동
   }
 
-  let modemessage = "";
-  if (mode === 'DEFAULT') modemessage="기본모드";
-  else modemessage = "정밀모드"
-
 
   return (
-    <div className="relative min-h-screen px-20 py-10 mx-20">
-      {showDownloadButton && (
+    <div className="relative min-h-screen px-20 py-10">
+      {showXButton && (
         <button 
-        onClick={handleClose}
-        className="absolute top-4 right-1 text-white-100 hover:text-gray-50">
-          <IoClose size={30} />
-      </button>
+          onClick={handleClose}
+          className="absolute top-10 left-3 text-white-100 hover:text-gray-50">
+            <IoArrowBack size={60} />
+        </button>
       )}
       {/* 헤더 */}
-      <div className="bg-white-200 p-6 rounded-xl mb-6">
+      <div className="bg-white-200 p-6 rounded-xl mb-6 mx-20">
         <h2 className="text-3xl font-semibold mb-3">딥페이크 탐지</h2>
         <p className="text-sm">
           분석 날짜: {createdAt ? new Date(createdAt).toLocaleString("ko-KR") : new Date().toLocaleString("ko-KR")} | 영상 분석
         </p>
         <div className="w-full my-[1%] border-t border-black-100"></div>
         <p className="text-base mb-1">
-          {modemessage}
+          {(mode === 'DEFAULT') ? "기본모드" : "정밀모드"}
         </p>
         <div className="flex w-full">
           <label className="inline-flex items-center gap-1 cursor-pointer">
@@ -129,7 +125,7 @@ function DeepfakeReport({ result, createdAt, showDownloadButton = true }: Props)
       </div>
 
       {/* 그래프+결과 */}
-      <div className="bg-white-200 text-black-100 p-6 rounded-xl mb-6 flex gap-6  justify-center items-center">
+      <div className="bg-white-200 text-black-100 p-6 rounded-xl mb-6 mx-20 flex gap-6  justify-center items-center">
         {/*파이차트 */}
         <div className="relative w-[300px] h-[300px] mr-20 flex items-center justify-center">
           <PieChart width={300} height={300}>
@@ -188,7 +184,7 @@ function DeepfakeReport({ result, createdAt, showDownloadButton = true }: Props)
       </div>
 
       {/* 탐지된 영역 */}
-      <div className="bg-gray-100 text-black p-6 rounded-xl mb-6">
+      <div className="bg-gray-100 text-black p-6 rounded-xl mb-6 mx-20">
         <h3 className="text-2xl font-bold mb-4">✔️ 가장 높게 탐지된 영역</h3>
         <div className="flex items-center justify-center">
           {suspectImage ? (
@@ -214,7 +210,9 @@ function DeepfakeReport({ result, createdAt, showDownloadButton = true }: Props)
 
       {/* 주의 사항 */}
       {fake > 50 && (
-        <ReportNotice />
+        <div className="mx-20">
+          <ReportNotice />
+        </div>
       )}
     </div>
   );

@@ -1,13 +1,5 @@
 import axiosInstance from "./axiosInstance";
 
-export interface NoiseResponse {
-    noiseId: number;
-    originalFilePath: string;
-    processedFilePath: string;
-    epsilon: number;
-    createdAt: string;
-}
-
 export const noiseAPI = {
     getAllByUser: async (page = 0, size = 15, sort = "createdAt,desc") => {
       const res = await axiosInstance.get("/api/noise/history", {

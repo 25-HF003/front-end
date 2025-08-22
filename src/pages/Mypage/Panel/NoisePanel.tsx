@@ -7,53 +7,51 @@ import { RootState } from "../../../app/store";
 import { api } from "../../../api";
 
 type NoiseRecord = {
-    noiseId: number;
-    originalFilePath: string;
-    createdAt: string;
+  noiseId: number;
+  originalFilePath: string;
+  createdAt: string;
 }
 
 function NoisePanel() {
-    const [records, setRecords] = useState<NoiseRecord[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState("");
-    const navigate = useNavigate();
-    const [showModal, setShowModal] = useState(false);
-    const [deleteId, setDeleteId] = useState<number | null>(null);
+  const [records, setRecords] = useState<NoiseRecord[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false);
+  const [deleteId, setDeleteId] = useState<number | null>(null);
   const isLoggedIn = useSelector((state: RootState) => !!state.auth.accessToken);  // 로그인 여부만 확인(토큰은 axiosInstance 인터셉터가 알아서 처리)
 
-
-
   useEffect(() => {
-      if (!isLoggedIn) {
-        setLoading(false);
-        setError("로그인이 필요합니다.");
-        return;
-      }
-        (async () => {
-          try {
-            // 서버는 토큰으로 유저 식별 → userId를 프론트에서 보낼 필요 X
-            const data = await api.noise.getAllByUser(0, 15, "createdAt,desc");
-            // 백엔드 페이지 응답 형태 대비
-            // data가 배열이거나 data.content가 배열일 수 있으니 안전하게 처리
-            const list: any[] = Array.isArray(data)
-              ? data
-              : Array.isArray(data?.content)
-              ? data.content
-              : [];
+    if (!isLoggedIn) {
+      setLoading(false);
+      setError("로그인이 필요합니다.");
+      return;
+    }
+      (async () => {
+        try {
+          // 서버는 토큰으로 유저 식별 → userId를 프론트에서 보낼 필요 X
+          const data = await api.noise.getAllByUser(0, 15, "createdAt,desc");
+          // 백엔드 페이지 응답 형태 대비
+          // data가 배열이거나 data.content가 배열일 수 있으니 안전하게 처리
+          const list: any[] = Array.isArray(data)
+            ? data
+            : Array.isArray(data?.content)
+            ? data.content
+            : [];
   
-            const mapped: NoiseRecord[] = list.map((item: any) => ({
-              noiseId: item.noiseId,
-              originalFilePath: item.originalFilePath ?? item.processedFilePath ?? "",
-              createdAt: item.createdAt ?? "",
-            }));
-            setRecords(mapped);
-          } catch (e) {
-            setError("기록을 불러오지 못했습니다.");
-          } finally {
-            setLoading(false); //  성공/실패 관계없이 로딩 종료
-          }
-        })();
-      }, [isLoggedIn]);
+          const mapped: NoiseRecord[] = list.map((item: any) => ({
+            noiseId: item.noiseId,
+            originalFilePath: item.originalFilePath ?? item.processedFilePath ?? "",
+            createdAt: item.createdAt ?? "",
+          }));
+          setRecords(mapped);
+        } catch (e) {
+          setError("기록을 불러오지 못했습니다.");
+        } finally {
+          setLoading(false); //  성공/실패 관계없이 로딩 종료
+        }
+      })();
+    }, [isLoggedIn]);
 
   // 오래된 순으로 정렬 → 번호 붙이기
   const recordsWithIndex = records
@@ -113,6 +111,7 @@ function NoisePanel() {
         title="적대적 노이즈 기록"
         records={formattedRecords}
         onAddClick={() => navigate("/adversarial-noise")}
+        onItemClick={(id) => navigate(`/mypage/noise/${id}`)}
         onDeleteClick={handleDelete}
         showDownloadButton={false}
     />

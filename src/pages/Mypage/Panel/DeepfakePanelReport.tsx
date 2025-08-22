@@ -36,7 +36,7 @@ function DeepfakePanelReport() {
   if (!results) return null;
 
   return (
-    <DeepfakeReport result={results} createdAt={results.createdAt} showDownloadButton={true}/>
+    <DeepfakeReport result={results} createdAt={results.createdAt} showXButton={true}/>
   )
 }
 export default DeepfakePanelReport;
