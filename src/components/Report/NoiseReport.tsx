@@ -33,6 +33,12 @@ function NoiseReport({ data, confirmMessage, showXButton = true }: Props) {
   const originalImage = data.originalImageBase64;
   const NoisedImage = data.processedImageBase64;
 
+  // 신뢰도 값 계산
+  const originalConfidenceNum = parseFloat(data.originalConfidence);
+  const adversarialConfidenceNum = parseFloat(data.adversarialConfidence);
+  const confidenceDrop = ((originalConfidenceNum - adversarialConfidenceNum) * 100).toFixed(1) + '%';
+
+
   const handleDownload = async () => {
     try {
       const response = await fetch(NoisedImage, { mode: "cors" });
@@ -95,23 +101,29 @@ function NoiseReport({ data, confirmMessage, showXButton = true }: Props) {
       <div className="w-[1200px] flex flex-col items-center justify-center mt-5 p-5 gap-5 rounded-[10px] bg-blue-100">
         <h1 className="font-bold text-2xl">📊 상세 통계</h1>
         <div className="flex justify-center w-[100%] gap-5 text-center">
-          <div className="w-[10%] bg-white-100 rounded-[10px] p-5">
+          <div className="w-[15%] bg-white-100 rounded-[10px] p-5">
             <p>결과</p>
-            <p className="font-bold text-[20px] mt-5">{data.attackSuccess ? '공격 성공' : '공격 실패'}</p>
+            <p className="font-bold text-[20px] mt-3">{data.attackSuccess ? '공격 성공' : '공격 실패'}</p>
           </div>
-          <div className="w-[20%] bg-white-100 rounded-[10px] p-5">
+          <div className="w-[40%] bg-white-100 rounded-[10px] p-5">
             <p>분류 변화</p>
-            <p className="font-bold text-[20px] mt-2">{data.originalPrediction}</p>
-            <p className="font-bold text-[20px]">→{data.adversarialPrediction}</p>
-          </div>
-          <div className="w-[10%] bg-white-100 rounded-[10px] p-5">
-            <p>신뢰도 변화</p>
-            <p className="font-bold text-[20px] mt-5">{data.confidenceDrop || '0%'}</p>
+            <div className="flex items-center justify-center">
+              <p className="font-bold text-[20px] mt-3">{data.originalPrediction}</p>
+              <p className="font-bold text-[20px] mt-3">{'\u00A0'}→ {data.adversarialPrediction}</p>
+            </div>
           </div>
           <div className="w-[15%] bg-white-100 rounded-[10px] p-5">
+            <p>신뢰도 변화</p>
+            <p className="font-bold text-[20px] mt-3">
+              {data.attackSuccess ? '-' : confidenceDrop}
+            </p>
+          </div>
+          <div className="w-[20%] bg-white-100 rounded-[10px] p-5">
             <p>적대적 노이즈 강도</p>
-            <p className="font-bold text-[20px] mt-5">{data.modeDescription}</p>
-            {(data.mode === 'precision') && <p className="font-bold text-[20px] ">{data.level}</p>}
+            <div className="flex justify-center items-center mt-3 gap-2">
+              <p className="font-bold text-[20px]">{data.modeDescription}</p>
+              {(data.mode === 'precision') && <p className="font-bold text-[20px] ">{data.level}</p>}
+            </div>
           </div>
         </div>
       </div>

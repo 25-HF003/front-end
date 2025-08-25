@@ -34,7 +34,10 @@ function AdversarialNoise() {
       
       if (!file) return;
 
-      const data = await postNoiseImage(file);
+      const Nmode = mode === 'basic' ? 'auto' : 'precision';
+      const Nlevel = options.level;
+
+      const data = await postNoiseImage(file, Nmode, Nlevel);
       console.log(data);
       navigate('/adversarial-noise/result', { state: data });
     } catch(error) {
