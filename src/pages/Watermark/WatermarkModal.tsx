@@ -1,10 +1,11 @@
 import { useState } from "react";
-import InsertLoading from "../../components/InsertLoading";
 import InsertFail from "../../components/InsertFail";
 import { useNavigate } from "react-router-dom";
 import { postWatermarkInsert } from "../../api/watermark_api";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/store";
+import { v4 as uuidv4 } from 'uuid';
+import { failTask, finishTask, startTask } from "../../features/task/taskSlice";
 
 type Props = {
   setIsModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -12,18 +13,18 @@ type Props = {
 }
 
 function WatermarkModal({ setIsModal, file }: Props) {
+  const dispatch = useDispatch();
 
   const [text, setText] = useState("");
-
-  // const [isLoading, setIsLoading] = useState(false);
-  // const [isError, setIsError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const isLoggedIn = useSelector((state: RootState) => !!state.auth.accessToken); 
   const navigate = useNavigate();
 
+  // 워터마크 메시지 입력
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
-
     const byteLength = new TextEncoder().encode(inputValue).length;
 
     if (byteLength <= 32) {
@@ -31,6 +32,7 @@ function WatermarkModal({ setIsModal, file }: Props) {
     }
   }
 
+  // 워터마크 등록
   const handleSubmit = async () => {
     if (!isLoggedIn) {
       alert("로그인이 필요합니다.");
@@ -40,14 +42,26 @@ function WatermarkModal({ setIsModal, file }: Props) {
 
     if (!file || !text) return;
 
-    try {
-      const { imageUrl, fileName } = await postWatermarkInsert(file, text);
-      <InsertLoading text="삽입중..." />
-      navigate("/watermark-success", { state: { downloadUrl: imageUrl, fileName } });
-    } catch (error) {
-      <InsertFail title="워터마크" link="/watermark-insert" />
-      console.log(error);
-    }
+    const taskId = uuidv4();
+    dispatch(startTask(taskId));
+    setIsLoading(true);
+
+    navigate("/watermark-insert/loading", { state: { taskId, successRedirect: "/watermark-success" } });
+
+    postWatermarkInsert(file, text, taskId)
+      .then((resultInfo) => {
+        dispatch(finishTask({resultInfo}))
+      })
+      .catch((error) => {
+        console.log(error);
+        dispatch(failTask(error))
+        setIsError(true);
+        setIsLoading(false);
+      })
+  };
+
+  if (isError) {
+    return <InsertFail title="워터마크" link="/watermark-insert" />
   }
 
   return(

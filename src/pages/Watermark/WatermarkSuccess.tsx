@@ -3,14 +3,15 @@ import { Link, useLocation } from "react-router-dom";
 function WatermarkSuccess() {
 
   const location = useLocation();
-  const downloadUrl = location.state?.downloadUrl;
-  const filename = location.state?.fileName;
+  const result = location.state?.resultInfo
+  const imageUrl = result.s3WatermarkedKey;
+  const filename = result.fileName;
 
 const handleDownload = async () => {
-  if (!downloadUrl) return;
+  if (!imageUrl) return;
 
   try {
-    const response = await fetch(downloadUrl, { mode: 'cors' });
+    const response = await fetch(imageUrl, { mode: 'cors' });
     const blob = await response.blob();
 
     const link = document.createElement('a');
@@ -27,10 +28,10 @@ const handleDownload = async () => {
 
   return(
     <div className="w-full h-full flex flex-col justify-center items-center gap-7 text-white-100">
-      {downloadUrl ? (
+      {imageUrl ? (
         <div className="flex mt-8">
           <img
-            src={downloadUrl}
+            src={imageUrl}
             alt="워터마크 이미지"
             width={ '700px' }/>
         </div>
