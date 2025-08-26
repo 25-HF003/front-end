@@ -122,6 +122,9 @@ function WatermarkPanel() {
       {loading && (
         <p className="text-center mt-4 text-gray-900">불러오는 중...</p>
       )}
+      {!loading && records.length === 0 && (
+        <p className="text-gray-900 text-center text-lg mt-10">기록이 없습니다.</p>
+      )}
       {!loading && error && (
         <p className="text-center mt-4 text-red-500">{error}</p>
       )}

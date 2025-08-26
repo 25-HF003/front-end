@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import SignupModal from "../components/Modal/SignupModal";
 import AgreementSection from "../components/Signup/AgreementSection";
 import { api } from "../api"; 
+import axios from "axios";
 
 export interface SignupFields {
   name: string;
@@ -74,9 +75,15 @@ function Signin() {
       } else {
         openModal(result.message || "회원가입 실패");
       }
-    } catch (err) {
-      alert("서버 연결 오류");
-      console.error(err);
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)){
+        const serverMsg = err.response?.data?.message
+        openModal(serverMsg || "회원가입 중 오류가 발생했습니다.");
+        console.log(serverMsg);
+      } else {
+        console.error("Signin error:", err);
+        openModal("회원가입 중 오류가 발생했습니다.");
+      }
     }
   };
 
