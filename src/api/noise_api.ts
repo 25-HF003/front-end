@@ -4,10 +4,12 @@ export const postNoiseImage = async (
   file: File,
   mode: string,               // "auto" | "precision"
   level: number | undefined,  // 1~4 (precision일 때만), 그 외에는 undefined
+  taskId: string,
 ) => {
   const formData = new FormData();
   formData.append('file', file);
   formData.append('mode', mode);
+  formData.append('taskId', taskId);
 
   if (mode === 'precision' && level !== undefined) {
     formData.append('level', String(level))
