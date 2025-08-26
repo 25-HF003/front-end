@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import authReducer from '../features/auth/authSlice';
+import taskReducer from "../features/task/taskSlice";
 import {
   persistStore,
   persistReducer,
@@ -22,6 +23,7 @@ const persistedAuthReducer = persistReducer(persistConfig, authReducer);
 export const store = configureStore({
   reducer: {
     auth: persistedAuthReducer,
+    task: taskReducer
   },
     middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
