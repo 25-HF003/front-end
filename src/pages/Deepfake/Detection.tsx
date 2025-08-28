@@ -9,6 +9,7 @@ import { Mode, DetectionOptions } from '../../components/Upload/deepfake/ModeOpt
 import DeepfakeFileUpload from "../../components/Upload/deepfake/DeepfakeFileUpload";
 import { v4 as uuidv4 } from 'uuid';
 import { startTask, finishTask, failTask } from "../../features/task/taskSlice";
+import axios from "axios";
 
 function Detection() {
   const dispatch = useDispatch();
@@ -46,32 +47,28 @@ function Detection() {
 
   navigate("/detection/loading", { state: { taskId, successRedirect: "/detection/report" } });
 
-  try {
-    let results;
-    // UI 상태 → API 옵션 매핑
-    if (mode === "advanced") {
-      const optionsForApi: any = {
+    const optionsForApi = (mode === "advanced") ? {
       mode: "PRECISION",
-      useTta:     options.use_tta,
-      useIllum:   options.use_illum,
-      detector:   options.detector?.toUpperCase(), // 'Auto' -> 'AUTO'
+      useTta: options.use_tta,
+      useIllum: options.use_illum,
+      detector: options.detector?.toUpperCase(),
       smoothWindow: options.smooth_window,
-      minFace:      options.min_face,
-      sampleCount:  options.sample_count,
-      };
-    results = api.deepfake.upload(file, taskId, optionsForApi);
-    } else {
-      results = api.deepfake.upload(file, taskId);
-    }
-    
-    dispatch(finishTask(results));
-    } catch (error: any) {
-      console.error("업로드/예측 중 오류:", error);
-      console.log(error.response?.data?.message || error.message);
+      minFace: options.min_face,
+      sampleCount: options.sample_count,
+    } : undefined;
+
+    console.log("[DET] before upload", { taskId, mode, options });
+  await api.deepfake.upload(file, taskId, optionsForApi)
+    .then((data) => {
+      console.log("[DET] upload ok");
+      dispatch(finishTask(data));   // plain object
+    })
+     .catch((error) => {
+      alert(`업로드 실패: ${error.response?.data?.message ?? error.message}`);
+      console.error("[DET] upload fail", error?.response?.status, error?.response?.data || error);
       dispatch(failTask(error))
-      alert("서버 오류로 인해 업로드에 실패했습니다.");
-      navigate("/pages/NotFound")
-    }
+      //navigate("/pages/NotFound");
+    });
     
   };
 

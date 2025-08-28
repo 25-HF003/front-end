@@ -26,6 +26,7 @@
     "react-router-dom": "^7.4.1",
     "recharts": "^2.15.3",
     "redux-persist": "^6.0.0",
+    "sockjs": "^0.3.24",
     "sockjs-client": "^1.6.1",
     "uuid": "^11.1.0"
   },
