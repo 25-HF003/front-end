@@ -2,16 +2,16 @@ import { useEffect, useState } from "react";
 import FileUploadPage from "../../components/Upload/FileUploadPage";
 import { useNavigate } from "react-router-dom";
 import { postWatermarkDetection } from "../../api/watermark_api";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/store";
-
+import { v4 as uuidv4 } from 'uuid';
+import { finishTask, startTask } from "../../features/task/taskSlice";
 
 function WatermarkDetection() {
+  const dispatch = useDispatch();
 
   const [file, setFile] = useState<File | null>(null);
-
   const navigate = useNavigate();
-
   const isLoggedIn = useSelector((state: RootState) => !!state.auth.accessToken); 
 
   useEffect(() => {
@@ -30,10 +30,16 @@ function WatermarkDetection() {
     
     if (!file) return;
 
-    try {
-      const data = await postWatermarkDetection(file);
-      navigate("/watermark-report", { state: data });
-    } catch (error: any) {
+    const taskId = uuidv4();
+    dispatch(startTask(taskId));
+
+    navigate("/watermark-detection/loading", { state: { taskId, successRedirect: "/watermark-report" } });
+
+    postWatermarkDetection(file, taskId)
+      .then((resultInfo) => {
+        dispatch(finishTask(resultInfo))
+      })
+      .catch((error: any) => {
       if (error.response) {
       // 예외 처리
       const { status, message } = error.response.data;
@@ -42,6 +48,7 @@ function WatermarkDetection() {
       if (status === 404 && message?.startsWith("유사도가 임계값을 넘습니다")) {
         alert("워터마크가 삽입된 이미지를 넣어주세요!");
         setFile(null);    // 파일 초기화
+        navigate("/watermark-insert");
         return;
       }
 
@@ -53,7 +60,7 @@ function WatermarkDetection() {
       alert("서버와 연결할 수 없습니다.");
       setFile(null);    // 파일 초기화
       }
-    } 
+    })
   }
 
   return(

@@ -40,9 +40,10 @@ export const deepfakeAPI = {
     });
     return res.data.data;
   },
-  upload: async (file: File, options?: DeepfakeUploadOptions): Promise<DeepfakeResponse> => {
+  upload: async (file: File, taskId: string, options?: DeepfakeUploadOptions): Promise<DeepfakeResponse> => {
     const formData = new FormData();
     formData.append("file", file);
+    formData.append("taskId", taskId);
 
     if (options) {
       appendIfDefined(formData, "mode", options.mode);

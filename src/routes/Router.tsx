@@ -102,7 +102,7 @@ const Router = createBrowserRouter([
       },
       {
         path: '/detection/loading',
-        element: <InsertLoading text="탐지중..."/>
+        element: <InsertLoading/>
       },
       {
         path: '/detection/report',
@@ -113,8 +113,16 @@ const Router = createBrowserRouter([
         element: <WatermarkInsert />
       },
       {
+        path: '/watermark-insert/loading',
+        element: <InsertLoading />
+      },
+      {
         path: '/watermark-detection',
         element: <WatermarkDetection />
+      },
+      {
+        path: '/watermark-detection/loading',
+        element: <InsertLoading />
       },
       {
         path: '/watermark-success',
@@ -127,6 +135,10 @@ const Router = createBrowserRouter([
       {
         path: '/adversarial-noise',
         element: <AdversarialNoise />
+      },
+      {
+        path: '/adversarial-noise/loading',
+        element: <InsertLoading />
       },
       {
         path: '/adversarial-noise/result',
