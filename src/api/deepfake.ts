@@ -59,7 +59,6 @@ export const deepfakeAPI = {
       headers: { "Content-Type": "multipart/form-data" },
       signal: undefined,  
     });
-    console.log("[upload ok]", res.status, res.data);
     return res.data.data;
   },
   getById: async (id: number) => {

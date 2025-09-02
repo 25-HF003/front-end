@@ -2,20 +2,18 @@ import { useState,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/store";
-import { DeepfakeResponse } from "../../api/deepfake";
 import { api } from "../../api";
 import DeepfakeSetting from "../../components/Upload/deepfake/DeepfakeSetting";
 import { Mode, DetectionOptions } from '../../components/Upload/deepfake/ModeOptions'
 import DeepfakeFileUpload from "../../components/Upload/deepfake/DeepfakeFileUpload";
 import { v4 as uuidv4 } from 'uuid';
 import { startTask, finishTask, failTask } from "../../features/task/taskSlice";
-import axios from "axios";
 
 function Detection() {
   const dispatch = useDispatch();
 
   const [file, setFile] = useState<File | null>(null);
-  const [result, setResult] = useState<DeepfakeResponse | null>(null);
+  //const [result, setResult] = useState<DeepfakeResponse | null>(null);
   const navigate = useNavigate();
   const [mode, setMode] = useState<Mode>("basic");
   const [options, setOptions] = useState<DetectionOptions>({
@@ -45,72 +43,35 @@ function Detection() {
   const taskId = uuidv4();
   dispatch(startTask(taskId));
 
-  navigate("/detection/loading", { state: { taskId, successRedirect: "/detection/report" } });
+  navigate("/detection/loading", { state: { taskId, successRedirect: "/detection/report" }});
 
-    const optionsForApi = (mode === "advanced") ? {
+  try {
+    let results;
+    // UI 상태 → API 옵션 매핑
+    if (mode === "advanced") {
+      const optionsForApi: any = {
       mode: "PRECISION",
-      useTta: options.use_tta,
-      useIllum: options.use_illum,
-      detector: options.detector?.toUpperCase(),
+      useTta:     options.use_tta,
+      useIllum:   options.use_illum,
+      detector:   options.detector?.toUpperCase(), // 'Auto' -> 'AUTO'
       smoothWindow: options.smooth_window,
-      minFace: options.min_face,
-      sampleCount: options.sample_count,
-    } : undefined;
-
-    console.log("[DET] before upload", { taskId, mode, options });
-  await api.deepfake.upload(file, taskId, optionsForApi)
-    .then((data) => {
-      console.log("[DET] upload ok");
-      dispatch(finishTask(data));   // plain object
-    })
-     .catch((error) => {
-      alert(`업로드 실패: ${error.response?.data?.message ?? error.message}`);
-      console.error("[DET] upload fail", error?.response?.status, error?.response?.data || error);
+      minFace:      options.min_face,
+      sampleCount:  options.sample_count,
+    };
+    results = await api.deepfake.upload(file, taskId, optionsForApi);
+    } else {
+      results = await api.deepfake.upload(file, taskId);
+    }
+    dispatch(finishTask(results));
+    } catch (error: any) {
+      console.error("업로드/예측 중 오류:", error);
+      console.log(error.response?.data?.message || error.message);
       dispatch(failTask(error))
-      //navigate("/pages/NotFound");
-    });
-    
+      alert("서버 오류로 인해 업로드에 실패했습니다.");
+      navigate("/pages/NotFound")
+    }
   };
 
-  // 기존 코드
-  // const handleDetectionInsert = async() => {
-  //   if (!file || !isLoggedIn) {
-  //   navigate("/pages/NotFound")
-  //   return;
-  // }
-  // navigate("/detection/loading");
-  
-  // try {
-  //   // UI 상태 → API 옵션 매핑
-  //   if (mode === "advanced") {
-  //     const optionsForApi: any = {
-  //     mode: "PRECISION",
-  //     useTta:     options.use_tta,
-  //     useIllum:   options.use_illum,
-  //     detector:   options.detector?.toUpperCase(), // 'Auto' -> 'AUTO'
-  //     smoothWindow: options.smooth_window,
-  //     minFace:      options.min_face,
-  //     sampleCount:  options.sample_count,
-  //   };
-    
-  //   const results = await api.deepfake.upload(file, optionsForApi);
-  //   setResult(results);
-  //   navigate("/detection/report", {state: {results}});
-  //   } else {
-  //       const results = await api.deepfake.upload(file);
-  //       setResult(results);
-
-  //       console.log("파일 업로드 완료", results);
-  //       navigate("/detection/report", {state: {results}});
-  //     }
-  //   } catch (error: any) {
-  //     console.error("업로드/예측 중 오류:", error);
-  //     console.log(error.response?.data?.message || error.message);
-  //     alert("서버 오류로 인해 업로드에 실패했습니다.");
-  //     navigate("/pages/NotFound")
-  //   }
-    
-  // };
 
   return(
     <div className="max-w-3xl mx-auto space-y-6">

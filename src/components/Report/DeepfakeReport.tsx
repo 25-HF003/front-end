@@ -174,7 +174,7 @@ function DeepfakeReport({ result, createdAt, showXButton = true }: Props) {
         {/*분석결과 */}
         <div className="flex flex-col gap-5 ml-20">
           <h3 className="text-2xl font-bold">📊 분석 결과</h3>
-          <h3 className="text-xl font-bold">➡️ {result.result}</h3>
+          <h3 className="text-xl font-bold">➡️ {fake>50 ? "FAKE" : "REAL"}</h3>
           <p className="text-base">
             {message} <strong>({fake}%)</strong>
           </p>
