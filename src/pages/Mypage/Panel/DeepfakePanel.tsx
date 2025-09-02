@@ -23,7 +23,7 @@ function DeepfakePanel() {
   const [showModal, setShowModal] = useState(false);
   const [deleteId, setDeleteId] = useState<number | null>(null);
 
-  const [page, setPage] = useState(0);   // 0-based
+  const [page, setPage] = useState(0); 
   const [totalPages, setTotalPages] = useState(0);
   const [size, setSize] = useState(15);
   const [totalElements, setTotalElements] = useState(0);
