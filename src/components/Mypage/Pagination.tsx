@@ -28,13 +28,10 @@ export default function Pagination({
   );
   const end = Math.min(totalPages, start + maxButtons);
 
-  const baseBtn =
-    "w-9 h-9 grid place-items-center rounded-md border shadow-sm text-sm transition";
-  const numBtn =
-    "bg-white text-gray-800 hover:bg-gray-50 active:scale-[0.98]";
-  const activeBtn = "bg-blue-600 text-white border-blue-600";
-  const arrowBtn =
-    "bg-white text-gray-800 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed";
+  const baseBtn = "w-9 h-9 grid place-items-center rounded-full border shadow-sm text-sm transition";
+  const numBtn = "bg-white-100 text-gray-800 hover:bg-gray-50 active:scale-[0.98]";
+  const activeBtn = "bg-green-200 text-white-100 border-green-200";
+  const arrowBtn = "bg-white-100 text-gray-800 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed";
 
   return (
     <nav className="flex justify-center mt-6">

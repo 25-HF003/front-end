@@ -106,12 +106,6 @@ function DeepfakePanel() {
         showDownloadButton={false}
       />
       
-      {/* 번호형 페이지네이션 (이미지 스타일) */}
-      <Pagination
-        page={page}                 // 0-based
-        totalPages={totalPages}     // 스프링 Page에서 받은 값
-        onChange={(p) => setPage(p)}
-      />
       {/* 에러/로딩 상태 메시지 (리스트 아래에 보여짐) */}
       {loading && (
         <p className="text-center mt-4 text-gray-900">불러오는 중...</p>
@@ -122,6 +116,13 @@ function DeepfakePanel() {
       {!loading && error && (
         <p className="text-center mt-4 text-red-500">{error}</p>
       )}
+
+      {/* 번호형 페이지네이션 (이미지 스타일) */}
+      <Pagination
+        page={page}                 // 0-based
+        totalPages={totalPages}     // 스프링 Page에서 받은 값
+        onChange={(p) => setPage(p)}
+      />
 
       {showModal && (
         <ConfirmModal
