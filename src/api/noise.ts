@@ -2,7 +2,7 @@ import axiosInstance from "./axiosInstance";
 
 export const noiseAPI = {
     getAllByUser: async (page = 0, size = 15, sort = "createdAt,desc") => {
-      const res = await axiosInstance.get("/api/noise/history", {
+      const res = await axiosInstance.get("/api/noise", {
         params: { page, size, sort },
       });
       return res.data.data;
