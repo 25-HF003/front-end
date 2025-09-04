@@ -1,12 +1,12 @@
 type PaginationProps = {
-  /** 0-based 현재 페이지 */
+  //0-based 현재 페이지 
   page: number;
-  /** 전체 페이지 수(0이면 숨김) */
+  //전체 페이지 수(0이면 숨김)
   totalPages: number;
-  /** 페이지 변경 핸들러 (0-based) */
+  //페이지 변경 핸들러 (0-based)
   onChange: (page: number) => void;
-  /** 한 번에 표시할 페이지 버튼 개수 */
-  maxButtons?: number; // default 5
+  //한 번에 표시할 페이지 버튼 개수 
+  maxButtons?: number; 
 };
 
 export default function Pagination({

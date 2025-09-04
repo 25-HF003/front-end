@@ -101,6 +101,7 @@ function NoisePanel() {
         onItemClick={(id) => navigate(`/mypage/noise/${id}`)}
         onDeleteClick={handleDelete}
         showDownloadButton={false}
+        total={totalElements}
       />
     {/* 에러/로딩 상태 메시지 (리스트 아래에 보여짐) */}
       {loading && (

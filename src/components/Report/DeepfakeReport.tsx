@@ -25,7 +25,7 @@ interface Props {
 }
 
 function shrinkValue(x: number): number {
-  const alpha = 2.8;  // 지수 조절 (값이 클수록 더 많이 눌림)
+  const alpha =2.5;  // 지수 조절 (값이 클수록 더 많이 눌림)
   return Math.pow(x, alpha)*100;
 }
 

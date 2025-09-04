@@ -34,7 +34,7 @@ function appendIfDefined(fd: FormData, key: string, v: unknown) {
 }
 
 export const deepfakeAPI = {
-  getAllByUser: async (page = 0, size = 15, sort = "createdAt,desc"  ) => {
+  getAllByUser: async (page = 0, size = 15, sort = "createdAt,desc") => {
     const res = await axiosInstance.get("/api/deepfake", {
       params: { page, size, sort },
     });

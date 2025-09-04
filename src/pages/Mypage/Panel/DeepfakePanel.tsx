@@ -25,7 +25,7 @@ function DeepfakePanel() {
 
   const [page, setPage] = useState(0); 
   const [totalPages, setTotalPages] = useState(0);
-  const [size, setSize] = useState(15);
+  const [size, setSize] = useState(15); //15개씩 보이기
   const [totalElements, setTotalElements] = useState(0);
 
   //const userId = useSelector((state: RootState) => state.auth.user?.userId); // 로그인된 유저 ID 사용
@@ -104,6 +104,7 @@ function DeepfakePanel() {
         onItemClick={(id) => navigate(`/mypage/detection/${id}`)}
         onDeleteClick={handleDelete}
         showDownloadButton={false}
+        total={totalElements}
       />
       
       {/* 에러/로딩 상태 메시지 (리스트 아래에 보여짐) */}

@@ -95,12 +95,13 @@ function WatermarkPanel() {
     return (
     <>
       <RecordPage
-        title="디지털 워터마킹 기록"
+        title="디지털 워터마크 기록"
         records={formattedRecords}
         onAddClick={() => navigate("/watermark-detection")}
         onItemClick={(id) => navigate(`/mypage/watermark/${id}`)}
         onDeleteClick={handleDelete}
         showDownloadButton={false}
+        total={totalElements}
       />
 
       {/* 에러/로딩 상태 메시지 (리스트 아래에 보여짐) */}
