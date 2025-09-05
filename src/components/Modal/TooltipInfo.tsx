@@ -14,7 +14,7 @@ export default function TooltipInfo( {message}: Props) {
 
       {/* 말풍선 */}
       <div
-        className="pointer-events-none absolute top-full left-0 mt-2 w-[400px] max-w-[500px]
+        className="pointer-events-none absolute top-full left-0 mt-2 w-[390px] max-w-[500px]
                    whitespace-pre-line break-words
                    rounded-md bg-gray-300 text-black-100 text-sm p-3 shadow-lg z-[9999]
                    opacity-0 invisible transition-opacity duration-150
