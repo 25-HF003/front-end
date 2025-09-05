@@ -26,11 +26,20 @@ function checkNickname(nickname: string): string | null {
   return null;
 }
 
+function checkEmail(email: string): string | null {
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+    return "유효한 이메일 형식이 아닙니다.";
+  }
+  return null;
+}
+
+
 // useValidation 훅 정의
 export function useValidation() {
   const [idError, setIdError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [nicknameError, setNicknameError] = useState("");
+  const [emailError, setEmailError] = useState("");
 
   const validateId = (id: string) => {
     const error = checkId(id);
@@ -50,12 +59,21 @@ export function useValidation() {
     return !error;
   };
 
+  const validateEmail = (email: string) => {
+    const error = checkEmail(email);
+    setEmailError(error || "");
+    return !error;
+  };
+
+
   return {
     validateId,
     validatePassword,
     validateNickname,
+    validateEmail,
     idError,
     passwordError,
     nicknameError,
+    emailError,
   };
 }

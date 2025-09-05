@@ -39,6 +39,7 @@ function WatermarkPanel() {
           setLoading(true);
           // 서버는 토큰으로 유저 식별 → userId를 프론트에서 보낼 필요 X
           const data = await api.watermark.getAllByUser(0, 15, "createdAt,desc");
+          console.log("응답", data.content);
           setRecords(data.content ?? []);
           setTotalPages(data.totalPages ?? 1);
           setTotalElements(data.totalElements ?? 0);
@@ -115,7 +116,7 @@ function WatermarkPanel() {
         <p className="text-center mt-4 text-red-500">{error}</p>
       )}
 
-      {/* 번호형 페이지네이션 (이미지 스타일) */}
+      {/* 번호형 페이지네이션 */}
       <Pagination
         page={page}                 // 0-based
         totalPages={totalPages}     // 스프링 Page에서 받은 값

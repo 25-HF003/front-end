@@ -118,7 +118,7 @@ function DeepfakePanel() {
         <p className="text-center mt-4 text-red-500">{error}</p>
       )}
 
-      {/* 번호형 페이지네이션 (이미지 스타일) */}
+      {/* 번호형 페이지네이션 */}
       <Pagination
         page={page}                 // 0-based
         totalPages={totalPages}     // 스프링 Page에서 받은 값
