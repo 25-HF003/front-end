@@ -25,7 +25,7 @@ interface Props {
 }
 
 function shrinkValue(x: number): number {
-  const alpha = 1.8;  // 지수 조절 (값이 클수록 더 많이 눌림)
+  const alpha =2.5;  // 지수 조절 (값이 클수록 더 많이 눌림)
   return Math.pow(x, alpha)*100;
 }
 
@@ -42,7 +42,7 @@ function DeepfakeReport({ result, createdAt, showXButton = true }: Props) {
   const sampleCount = result?.sampleCount ?? 0;
 
   const averageFake = shrinkValue(averageFakeinit);
-  const maxConfidence = shrinkValue(maxConfidenceinit);
+  const maxConfidence = shrinkValue(maxConfidenceinit)-20;
   const fake = +(averageFake).toFixed(0);
   const real = 100 - fake;
 
@@ -174,7 +174,7 @@ function DeepfakeReport({ result, createdAt, showXButton = true }: Props) {
         {/*분석결과 */}
         <div className="flex flex-col gap-5 ml-20">
           <h3 className="text-2xl font-bold">📊 분석 결과</h3>
-          <h3 className="text-xl font-bold">➡️ {result.result}</h3>
+          <h3 className="text-xl font-bold">➡️ {fake>50 ? "FAKE" : "REAL"}</h3>
           <p className="text-base">
             {message} <strong>({fake}%)</strong>
           </p>

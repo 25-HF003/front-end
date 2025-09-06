@@ -12,20 +12,25 @@ type RecordListProps = {
   showDownloadButton?: boolean;
   onItemClick?: (id: number) => void;
   onDeleteClick?: (id: number) => void;
+  total: number;
 };
 
 
-function RecordPage({ title, records, onAddClick, showDownloadButton = true, onItemClick, onDeleteClick} :RecordListProps) {
+function RecordPage({ title, records, onAddClick, showDownloadButton = true, onItemClick, onDeleteClick, total} :RecordListProps) {
   return (
       <div className="flex-1 bg-white-100 text-black-100 p-5">
         {/* Header */}
-        <div className="flex justify-between items-center mb-10">
+        <div className="flex justify-between items-center mb-3">
           <h2 className="text-2xl font-bold">{title}</h2>
           <button
           onClick={onAddClick}
           className="bg-green-200 text-white-100 px-4 py-1 rounded">
           + ADD
           </button>
+        </div>
+
+        <div className="flex justify-between items-center mb-10">
+          <p className="text-base">총 {total}개</p>
         </div>
 
     {/* List */}

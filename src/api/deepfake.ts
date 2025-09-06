@@ -57,6 +57,7 @@ export const deepfakeAPI = {
 
     const res = await axiosInstance.post("/api/deepfake", formData, {
       headers: { "Content-Type": "multipart/form-data" },
+      signal: undefined,  
     });
     return res.data.data;
   },

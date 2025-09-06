@@ -1,15 +1,18 @@
-import { useLocation } from "react-router-dom";
+//import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import DeepfakeReport from "../../components/Report/DeepfakeReport";
 import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../app/store";
 
 
 
 function DetectionReport() {
   
   const navigate = useNavigate();
-  const location = useLocation();
-  const results = location.state?.results; 
+  //const location = useLocation();
+  //const results = location.state?.results; 
+  const results = useSelector((state: RootState) => state.task.resultInfo);
   console.log(results);
 
   useEffect(() => {
