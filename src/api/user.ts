@@ -18,22 +18,20 @@ export const userAPI = {
     return res.data.data;
   },
   putChangeUser: async (option: UserChangeOption = {}) => {
-    // 1) nickname, email은 값이 있을 때만 포함
-    const payload: Record<string, string> = {};
-    if (option.nickname) payload.nickname = option.nickname;
-    if (option.email) payload.email = option.email;
+    const isNonEmpty = (v?: string) => v != null && v.trim() !== "";
+    const anyPw = isNonEmpty(option.currentPassword) || isNonEmpty(option.newPassword) || isNonEmpty(option.newPasswordConfirm);
 
-    // 2) 비밀번호 관련 세트 처리
-    const hasPwField =
-      option.currentPassword !== undefined ||
-      option.newPassword !== undefined ||
-      option.newPasswordConfirm !== undefined;
-
-    if (hasPwField) {
-      payload.currentPassword = option.currentPassword ?? "";
-      payload.newPassword = option.newPassword ?? "";
-      payload.newPasswordConfirm = option.newPasswordConfirm ?? "";
-    }
+    const payload: Record<string, string> = {
+      ...(isNonEmpty(option.nickname) ? { nickname: option.nickname!.trim() } : {}),
+      ...(isNonEmpty(option.email) ? { email: option.email!.trim() } : {}),
+      ...(anyPw
+        ? {
+            currentPassword: option.currentPassword ?? "",
+            newPassword: option.newPassword ?? "",
+            newPasswordConfirm: option.newPasswordConfirm ?? "",
+          }
+        : {}),
+    };
 
     const res = await axiosInstance.put("/api/users", payload, {
       headers: { "Content-Type": "application/json" },

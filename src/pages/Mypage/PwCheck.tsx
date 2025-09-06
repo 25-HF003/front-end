@@ -21,7 +21,7 @@ function PwCheck() {
 
   const handleSubmit = async (password: string) => {
     try {
-      await api.user.putChangeUser({ currentPassword: `${password}` });
+      await api.user.putChangeUser({ currentPassword: password });
       console.log("입력된 비밀번호:", password);
     } catch (e: any) {
       const msg = e?.response?.data?.message;
