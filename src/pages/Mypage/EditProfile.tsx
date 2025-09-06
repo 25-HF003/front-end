@@ -136,11 +136,11 @@ function EditProfile() {
     <SignupModal isOpen={isModalOpen} message={modalMessage} onClose={handleModalClose} />
     <div className="flex items-center justify-center min-h-screen">
       <div className="bg-white-100 p-8 rounded-xl shadow-md w-full max-w-md">
-        <h2 className="text-xl font-bold text-center mb-6">정보 수정</h2>
+        <h2 className="text-2xl font-bold text-center mb-6">정보 수정</h2>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           {/* 이름 */}
           <div>
-            <label className="block text-sm font-medium mb-1">이름</label>
+            <label className="block text-base font-medium mb-1">이름</label>
             <input
               type="text"
               disabled
@@ -151,7 +151,7 @@ function EditProfile() {
 
           {/* 아이디 */}
           <div>
-            <label className="block text-sm font-medium mb-1">아이디</label>
+            <label className="block text-base font-medium mb-1">아이디</label>
             <input
               type="text"
               disabled
@@ -162,7 +162,7 @@ function EditProfile() {
 
           {/* 현재 비밀번호 */}
           <div>
-            <label className="block text-sm font-medium mb-1">현재 비밀번호</label>
+            <label className="block text-base font-medium mb-1">현재 비밀번호</label>
             <input 
               type="password" 
               disabled={isSocial}
@@ -181,7 +181,7 @@ function EditProfile() {
 
           {/* 새 비밀번호 */}
           <div>
-            <label className="block text-sm font-medium mb-1">새 비밀번호</label>
+            <label className="block text-base font-medium mb-1">새 비밀번호</label>
             <input
               type="password"
               disabled={isSocial}
@@ -201,7 +201,7 @@ function EditProfile() {
           
           {/* 새 비밀번호 확인 */}
           <div>
-            <label className="block text-sm font-medium mb-1">새 비밀번호 확인</label>
+            <label className="block text-base font-medium mb-1">새 비밀번호 확인</label>
             <input
               type="password"
               disabled={isSocial}
@@ -221,7 +221,7 @@ function EditProfile() {
 
           {/* 닉네임 */}
           <div>
-            <label className="block text-sm font-medium mb-1">닉네임</label>
+            <label className="block text-base font-medium mb-1">닉네임</label>
             <input
               type="text"
               {...register("nickname", { required: "닉네임을 입력해주세요."})}
@@ -232,7 +232,7 @@ function EditProfile() {
 
           {/* 이메일 */}
           <div>
-            <label className="block text-sm font-medium mb-1">이메일</label>
+            <label className="block text-base font-medium mb-1">이메일</label>
             <input
               type="text"
               disabled={isSocial}

@@ -41,6 +41,7 @@ function PwCheck() {
       title="정보 수정"
       buttonLabel="비밀번호 확인"
       onSubmit={handleSubmit}
+      isSocial={false}
     />
     </>
   );

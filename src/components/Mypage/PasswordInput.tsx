@@ -4,9 +4,10 @@ type Props = {
   title: string;
   buttonLabel: string;
   onSubmit: (password: string) => void;
+  isSocial: boolean;
 };
 
-function PasswordForm({ title, buttonLabel, onSubmit }: Props) {
+function PasswordForm({ title, buttonLabel, onSubmit, isSocial }: Props) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
 
@@ -27,11 +28,13 @@ function PasswordForm({ title, buttonLabel, onSubmit }: Props) {
 
   return (
     <div className="flex items-center justify-center min-h-screen">
-      <div className="bg-white-100 p-8 rounded-xl shadow-md w-full max-w-md text-center">
-        <h2 className="text-xl font-bold mb-6">{title}</h2>
+      <div className="bg-white-100 p-8 rounded-xl shadow-md w-full max-w-lg text-center">
+        <h2 className="text-2xl font-bold mb-6">{title}</h2>
         <form onSubmit={handleSubmit} className="space-y-6">
+          {isSocial ? <div></div>
+          :
           <div className="text-left">
-            <label className="block mb-1 text-sm font-medium">비밀번호</label>
+            <label className="block mb-1 text-base font-medium">비밀번호</label>
             <input
               type="password"
               value={password}
@@ -43,6 +46,7 @@ function PasswordForm({ title, buttonLabel, onSubmit }: Props) {
               <p className="text-red-500 text-sm mt-1">비밀번호를 입력해주세요.</p>
             )}
           </div>
+          }
           <button
             type="submit"
             className="w-full bg-green-200 text-black-100 font-semibold py-2 rounded hover:bg-green-300">

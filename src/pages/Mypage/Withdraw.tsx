@@ -1,12 +1,38 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PasswordInput from "../../components/Mypage/PasswordInput";
+import ConfirmModal from "../../components/Modal/ConfirmModal";
+import { useSelector } from "react-redux";
+import { RootState } from "../../app/store";
+import { api } from "../../api";
 
 function Withdraw() {
   const [password, setPassword] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [social, setSocial] = useState("");
   const navigate = useNavigate();
 
+  const isLoggedIn = useSelector((state: RootState) => !!state.auth.accessToken);  // 로그인 여부만 확인(토큰은 axiosInstance 인터셉터가 알아서 처리)
+  console.log("isLoggedIn", isLoggedIn);
+  
+    useEffect(() => {
+      if (!isLoggedIn) {
+        navigate("/login");
+      }
+      const fetchUser = async () => {
+        try {
+          const profile = await api.user.getProfile();
+          setSocial(profile.socialLoginType);
+        } catch (err) {
+          console.error("유저 정보 조회 실패", err);
+        }
+      };
+      fetchUser();
+    }, [isLoggedIn, navigate]);
+  
+  const isSocial = social !== "NONE";
+
+    
   const handleSubmit = (pw: string) => {
     setPassword(pw);
     setShowModal(true); // 모달로 분기
@@ -19,9 +45,6 @@ function Withdraw() {
     navigate("/");
   };
 
-  const cancelWithdraw = () => {
-    setShowModal(false);
-  };
 
   return (
     <>
@@ -29,28 +52,17 @@ function Withdraw() {
         title="회원탈퇴"
         buttonLabel="회원 탈퇴하기"
         onSubmit={handleSubmit}
+        isSocial={isSocial}
       />
 
       {/* 모달 */}
       {showModal && (
-        <div className="fixed inset-0 bg-black-100 bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white-100 p-6 rounded-lg shadow-lg w-full max-w-xs text-center">
-            <h3 className="text-lg font-bold mb-4">정말 탈퇴하시겠습니까?</h3>
-            <p className="text-sm text-gray-900 mb-6">탈퇴 후 계정은 복구되지 않습니다.</p>
-            <div className="flex justify-between space-x-4">
-              <button
-                onClick={cancelWithdraw}
-                className="flex-1 py-2 bg-gray-500 rounded hover:bg-gray-900">
-                취소
-              </button>
-              <button
-                onClick={confirmWithdraw}
-                className="flex-1 py-2 bg-red-500 text-white rounded hover:bg-red-600">
-                탈퇴
-              </button>
-            </div>
-          </div>
-        </div>
+        <ConfirmModal
+          message={"회원 탈퇴 시 아래의 데이터가 \n영구적으로 삭제되며 복구되지 않습니다. \n\n • 계정정보 및 저장된 모든 데이터 \n• 활동 기록 및 업로드된 이미지/영상"}
+          buttonmessage="탈퇴"
+          onConfirm={confirmWithdraw}
+          onCancel={() => setShowModal(false)}
+        />
       )}
     </>
   );
