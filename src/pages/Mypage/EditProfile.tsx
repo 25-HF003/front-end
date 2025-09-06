@@ -15,6 +15,7 @@ type UserProfile = {
   password: string;
   nickname: string;
   email: string;
+  socialLoginType: string;
 };
 
 export interface UserChangeFields {
@@ -46,16 +47,17 @@ function EditProfile() {
     },
   });
 
+  const isSocial = user?.socialLoginType !== "NONE";
   const currentPassword = watch("currentPassword");
   const newPassword = watch("newPassword");
   const newPasswordConfirm = watch("newPasswordConfirm");
 
   const isNonEmpty = (s?: string) => (s ?? "").trim() !== "";
-  const anyPasswordField =
+  const anyPasswordField = !isSocial &&(
     isNonEmpty(currentPassword) ||
     isNonEmpty(newPassword) ||
-    isNonEmpty(newPasswordConfirm);
-  
+    isNonEmpty(newPasswordConfirm)
+  );
   // 실제 변경된 필드만 체크
   const profileChanged = !!(dirtyFields.nickname || dirtyFields.email);
 
@@ -163,8 +165,10 @@ function EditProfile() {
             <label className="block text-sm font-medium mb-1">현재 비밀번호</label>
             <input 
               type="password" 
+              disabled={isSocial}
               {...register("currentPassword", { 
                 validate: (v) => {
+                  if (isSocial) return true; // 소셜이면 검사하지 않음
                   if (anyPasswordField && !v) return "현재 비밀번호를 입력해주세요.";
                   return true;
                 },
@@ -180,8 +184,10 @@ function EditProfile() {
             <label className="block text-sm font-medium mb-1">새 비밀번호</label>
             <input
               type="password"
+              disabled={isSocial}
               {...register("newPassword", { 
                 validate: (v) => {
+                  if (isSocial) return true;
                   if (anyPasswordField && !v) return "새 비밀번호를 입력해주세요.";
                   return true;
                 },
@@ -198,8 +204,10 @@ function EditProfile() {
             <label className="block text-sm font-medium mb-1">새 비밀번호 확인</label>
             <input
               type="password"
+              disabled={isSocial}
               {...register("newPasswordConfirm", {  
                 validate: (v) => {
+                  if (isSocial) return true;
                   if (anyPasswordField && !v) return "새 비밀번호 확인을 입력해주세요.";
                   if (anyPasswordField && v !== newPassword) return "비밀번호가 일치하지 않습니다.";
                   return true;
@@ -227,11 +235,14 @@ function EditProfile() {
             <label className="block text-sm font-medium mb-1">이메일</label>
             <input
               type="text"
+              disabled={isSocial}
               {...register("email", { 
                 required: "이메일을 입력해주세요.",
                 pattern: { value: /[^@\s]+@[^@\s]+\.[^@\s]+/, message: "유효한 이메일 형식이 아닙니다." },
               })}
-              className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-200"
+              className={`w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 ${
+                isSocial ? "text-gray-400" : "focus:ring-green-200"
+              }`}
             />
             {errors.email && <p className="text-rose-500 text-sm">{errors.email.message}</p>}
           </div>
