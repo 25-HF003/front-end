@@ -98,8 +98,8 @@ function Withdraw() {
     setShowModal(false);
     // 탈퇴 API 호출
     try {
-      await api.user.deleteByUser()
-      openModal("탈퇴에 성공했습니다.");
+      const res = await api.user.deleteByUser()
+      openModal(res.message);
       await sleep(1200);      
       await handleLogout();
       navigate("/", { replace: true });  
