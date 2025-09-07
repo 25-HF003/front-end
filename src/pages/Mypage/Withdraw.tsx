@@ -123,7 +123,7 @@ function Withdraw() {
       {/* 모달 */}
       {showModal && (
         <ConfirmModal
-          message={"회원 탈퇴 시 아래의 데이터가 \n영구적으로 삭제되며 \n복구되지 않습니다. \n또한, 동일한 계정으로의 회원가입이 30일동안 불가능합니다. \n\n • 계정정보 및 저장된 모든 데이터 \n• 활동 기록 및 업로드된 이미지/영상"}
+          message={"⚠ 회원 탈퇴 시 아래의 데이터가 \n영구적으로 삭제되며 \n복구되지 않습니다. \n또한, 동일한 계정으로의 회원가입이 30일동안 불가능합니다. \n\n • 계정정보 및 저장된 모든 데이터 \n• 활동 기록 및 업로드된 이미지/영상"}
           buttonmessage="탈퇴"
           onConfirm={confirmWithdraw}
           onCancel={() => setShowModal(false)}
