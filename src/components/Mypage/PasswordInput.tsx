@@ -7,7 +7,7 @@ type Props = {
   isSocial: boolean;
 };
 
-function PasswordForm({ title, buttonLabel, onSubmit, isSocial }: Props) {
+function PasswordInput({ title, buttonLabel, onSubmit, isSocial }: Props) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
 
@@ -19,6 +19,10 @@ function PasswordForm({ title, buttonLabel, onSubmit, isSocial }: Props) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSocial) {       //소셜은 비번 입력 없이 바로 진행
+      onSubmit("");          
+    return;
+    }
     if (!password.trim()) {
       setError(true);
       return;
@@ -57,4 +61,4 @@ function PasswordForm({ title, buttonLabel, onSubmit, isSocial }: Props) {
     </div>
   );
 }
-export default PasswordForm;
+export default PasswordInput;

@@ -18,9 +18,10 @@ export const userAPI = {
     return res.data.data;
   },
   putChangeUser: async (option: UserChangeOption = {}) => {
+    //닉네임/이메일/비밀번호 세트 처리
     const isNonEmpty = (v?: string) => v != null && v.trim() !== "";
     const anyPw = isNonEmpty(option.currentPassword) || isNonEmpty(option.newPassword) || isNonEmpty(option.newPasswordConfirm);
-
+    
     const payload: Record<string, string> = {
       ...(isNonEmpty(option.nickname) ? { nickname: option.nickname!.trim() } : {}),
       ...(isNonEmpty(option.email) ? { email: option.email!.trim() } : {}),
@@ -36,6 +37,10 @@ export const userAPI = {
     const res = await axiosInstance.put("/api/users", payload, {
       headers: { "Content-Type": "application/json" },
     });
+    return res.data;
+  },
+  deleteByUser: async () => {
+    const res = await axiosInstance.delete("/api/users");
     return res.data;
   },
 };
