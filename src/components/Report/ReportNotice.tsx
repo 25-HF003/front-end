@@ -43,12 +43,26 @@ function ReportNotice() {
         </ul>
 
         <div className="mt-6 grid grid-cols-2 gap-6 text-center text-white-100 text-xl">
-          <Link to="https://ecrm.police.go.kr/minwon/main">
-            <button className="bg-green-200 py-2 rounded-xl">사이버범죄 신고 및 상담<br />경찰청 사이버범죄 신고페이지</button>
-          </Link>
-          <Link to="https://d4u.stop.or.kr/">
-            <button className="bg-green-200 py-2 rounded-xl">사이버범죄 신고 및 상담<br />디지털 성범죄 피해자 지원센터</button>
-          </Link>
+          <a
+            href="https://ecrm.police.go.kr/minwon/main"
+            target="_blank" //새탭에서 열기
+            rel="noopener noreferrer" //새탭에서 열기
+            className="bg-green-200 py-2 rounded-xl w-full block"
+          >
+            사이버범죄 신고 및 상담
+            <br />
+            경찰청 사이버범죄 신고페이지
+          </a>
+          <a
+            href="https://d4u.stop.or.kr/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-green-200 py-2 rounded-xl w-full block"
+          >
+            사이버범죄 신고 및 상담
+            <br />
+            디지털 성범죄 피해자 지원센터
+          </a>
         </div>
       </div>
 

@@ -42,6 +42,7 @@ function DeepfakePanel() {
         setLoading(true);
         // userId 없이 전체 조회
         const data = await api.deepfake.getAllByUser(page, size, "createdAt,desc");
+        console.log(data.content);
         setRecords(data.content ?? []);
         setTotalPages(data.totalPages ?? 1);
         setTotalElements(data.totalElements ?? 0);

@@ -74,7 +74,7 @@ function Detection() {
 
 
   return(
-    <div className="max-w-3xl mx-auto space-y-6">
+    <>
       {/*
       <FileUploadPage 
         title="비디오"
@@ -90,9 +90,8 @@ function Detection() {
         accpet="video/*"
         onDone={handleDetectionInsert}
         settingsNode={<DeepfakeSetting onChange={(m, o) => { setMode(m); setOptions(o); }} />}
-    
       />
-    </div> 
+    </>
   )
 }
 
