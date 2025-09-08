@@ -2,6 +2,7 @@ import { PieChart, Pie, Cell, Label } from "recharts";
 import ReportNotice from "./ReportNotice";
 import { IoArrowBack } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
+import DfFrameHeatmap from "./DfFrameHeatmap";
 
 const COLORS = ["#3D3D42", "#FFFFFF"]; // gray, white
 
@@ -19,10 +20,19 @@ interface Props {
     smoothWindow?: number;
     minFace?: number;
     sampleCount?: number
+    temporalDeltaMean: number;
+    temporalDeltaStd: number;
+    timeseriesJson: string;
   };
   createdAt?: string; // 2. 바깥에서 별도로 받는 createdAt
   showXButton?: boolean;
 }
+
+type Timeseries = {
+  per_frame_conf: number[];
+  vmin: number;
+  vmax: number;
+};
 
 function shrinkValue(x: number): number {
   const alpha =2.5;  // 지수 조절 (값이 클수록 더 많이 눌림)
@@ -62,6 +72,11 @@ function DeepfakeReport({ result, createdAt, showXButton = true }: Props) {
   const handleClose = () => {
     navigate(-1); // 이전 페이지로 이동
   }
+
+  const raw = result.timeseriesJson;
+  const parsed: Timeseries = JSON.parse(raw);
+  const heatmapnum = parsed.per_frame_conf
+  console.log(heatmapnum);
 
 
   return (
@@ -206,6 +221,35 @@ function DeepfakeReport({ result, createdAt, showXButton = true }: Props) {
         <span className="text-lg flex items-center justify-center mt-5">
           위 영역의 딥페이크 확률 : {(maxConfidence).toFixed(0)}%
         </span>
+      </div>
+
+      {/*히트맵 */}
+      <div className="bg-gray-100 text-black-100 p-6 rounded-xl mb-6 mx-20">
+        <h3 className="text-2xl font-bold mb-4">📊영상의 프레임별 딥페이크 확률</h3>
+        <div className="flex items-center justify-center">
+          <DfFrameHeatmap data={heatmapnum}/>
+        </div>
+        <h2 className="text-xl font-bold text-center mb-4 mt-5">📋상세 지표</h2>
+        <div className="flex gap-4 mt-2 items-center justify-center">
+          <div className="w-[15%] bg-white-100 rounded-[10px] font-bold p-5 text-center border-gray-100 border-2">
+            <p>프레임 간 평균 출렁임</p>
+              <p className="text-[15px] mt-2">
+                {result.temporalDeltaMean}
+              </p>
+              <p className="text-[15px] mt-1">
+                {result.temporalDeltaMean<0.03 ? "🟢우수함" : "🟠보통"}
+              </p>
+          </div>
+         <div className="w-[15%] bg-white-100 rounded-[10px] font-bold p-5 text-center border-gray-100 border-2">
+            <p>출렁임의 변동성</p>
+              <p className="text-[15px] mt-2">
+                {result.temporalDeltaStd}
+              </p>
+              <p className="text-[15px] mt-1">
+                {result.temporalDeltaStd<0.03 ? "🟢우수함" : "🟠보통"}
+              </p>
+          </div>
+        </div>
       </div>
 
       {/* 주의 사항 */}

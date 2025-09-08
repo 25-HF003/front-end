@@ -34,6 +34,7 @@ function DeepfakePanelReport() {
 
   if (loading) return <p className="text-white-100 text-center mt-10">불러오는 중...</p>;
   if (!results) return null;
+  console.log(results);
 
   return (
     <DeepfakeReport result={results} createdAt={results.createdAt} showXButton={true}/>

@@ -8,6 +8,11 @@ export interface DeepfakeResponse {
   maxConfidence: number; //이미지 딥페이크 확률
   createdAt: string; //생성시간
 
+  temporalDeltaMean: number;
+  temporalDeltaStd: number;
+  timeseriesJson: string;
+
+
   // 서버가 함께 돌려줄 수 있는 옵션(있으면 받기)
   mode?: 'PRECISION' | 'DEFAULT' | string;
   useTta?: boolean;
