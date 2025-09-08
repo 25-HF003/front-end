@@ -45,7 +45,7 @@ function WatermarkDetection() {
       const { status, message } = error.response.data;
 
       // 워터마크가 없는 이미지를 탐지했을 때 (임계값 초과)
-      if (status === 404 && message?.startsWith("유사도가 임계값을 넘습니다")) {
+      if (status === 422) {
         alert("워터마크가 삽입된 이미지를 넣어주세요!");
         setFile(null);    // 파일 초기화
         navigate("/watermark-insert");
