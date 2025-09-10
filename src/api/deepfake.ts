@@ -11,6 +11,8 @@ export interface DeepfakeResponse {
   temporalDeltaMean: number;
   temporalDeltaStd: number;
   timeseriesJson: string;
+  stabilityBullets: number[];
+  speedBullets: number[];
 
 
   // 서버가 함께 돌려줄 수 있는 옵션(있으면 받기)
