@@ -121,8 +121,8 @@ export default function BandBullet({
     <div className="w-full">
       {/* 헤더 라벨 + 값 */}
       <div className="flex items-end justify-between mb-1">
-        <div className="text-sm font-medium text-gray-800">{item.label}</div>
-        <div className="text-xs text-gray-600">
+        <div className="text-base font-medium text-gray-800">{item.label}</div>
+        <div className="text-sm text-gray-600">
           {item.value}
           {item.unit ? <span className="ml-1">{item.unit}</span> : null}
         </div>
@@ -139,6 +139,7 @@ export default function BandBullet({
               title={`${s.label}`}
               style={{
                 width: `${s.widthPct}%`,
+                flex: i === segments.length - 1 ? "1" : "0 0 auto",
                 background: COLORS[s.label],
                 opacity: 0.6,
               }}
@@ -152,7 +153,7 @@ export default function BandBullet({
           style={{ left: `${valueLeftPct}%` }}
         >
           <div
-            className="w-3 h-3 rounded-full ring-2 ring-white shadow"
+            className="w-3 h-3 rounded-full ring-2 ring-white-100 shadow"
             style={{
               background:
                 currentBand ? COLORS[currentBand] : "#3b82f6", // 현재 구간 색
@@ -163,11 +164,32 @@ export default function BandBullet({
         </div>
       </div>
 
-      {/* 하단 눈금 (선택) */}
+      {/* 하단 눈금 */}
       {showTicks && (
-        <div className="flex justify-between text-[10px] text-gray-500 mt-1">
-          <span>{min.toString()}</span>
-          <span>{max.toString()}</span>
+        <div className="flex justify-between text-[12px] text-gray-400 mt-1 relative">
+        {(() => {
+        // 밴드 경계 수집
+        const boundaries: number[] = [];
+        Object.values(item.bands).forEach(([lo, hi]) => {
+            if (isFiniteNum(lo)) boundaries.push(lo);
+            if (isFiniteNum(hi)) boundaries.push(hi as number);
+        });
+        // min/max 포함해서 정렬 후 중복 제거
+        const uniq = Array.from(new Set(boundaries)).sort((a, b) => a - b);
+
+        return uniq.map((val, i) => {
+            const leftPct = ratioFromValue(val, domain) * 100;
+            return (
+            <span
+                key={i}
+                className="absolute -translate-x-1/2"
+                style={{ left: `${leftPct}%` }}
+            >
+                {val}
+            </span>
+            );
+        });
+        })()}
         </div>
       )}
     </div>

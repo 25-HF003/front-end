@@ -6,11 +6,11 @@ interface ModeSelectorProps {
   onChange: (m: Mode) => void;
   basicname: string;
   showTooltip?: boolean;
-  basemessage: string;
-  advancedmessage: string;
+  basemessage?: string;
+  advancedmessage?: string;
 }
 
-function ModeSelector({ value, onChange, basicname, showTooltip = false, basemessage, advancedmessage }: ModeSelectorProps) {
+function ModeSelector({ value, onChange, basicname, showTooltip = false, basemessage = "", advancedmessage = "" }: ModeSelectorProps) {
   return (
     <div className="flex items-center justify-center gap-6">
       <label className="inline-flex items-center gap-2 cursor-pointer">

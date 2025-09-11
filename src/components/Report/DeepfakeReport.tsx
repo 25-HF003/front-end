@@ -4,7 +4,8 @@ import { IoArrowBack } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import DfFrameHeatmap from "./DfFrameHeatmap";
 import BulletsPanel, { PayloadWire } from "./BulletPanel";
-import { BulletItemWire } from "./BandBullet"
+import { BulletItemWire } from "./BandBullet";
+import TooltipInfo from "../Modal/TooltipInfo";
 
 const COLORS = ["#3D3D42", "#FFFFFF"]; // gray, white
 
@@ -24,9 +25,14 @@ interface Props {
     sampleCount?: number
     temporalDeltaMean: number;
     temporalDeltaStd: number;
+    ttaMean: number;
+    ttaStd: number;
     timeseriesJson: string;
     stabilityBullets: BulletItemWire[];
     speedBullets: BulletItemWire[];
+    fpsProcessed: number;
+    msPerSample: number;
+    stabilityScore: number;
   };
   createdAt?: string; // 2. 바깥에서 별도로 받는 createdAt
   showXButton?: boolean;
@@ -198,9 +204,13 @@ function DeepfakeReport({ result, createdAt, showXButton = true }: Props) {
         <div className="flex flex-col gap-5 ml-20">
           <h3 className="text-2xl font-bold">📊 분석 결과</h3>
           <h3 className="text-xl font-bold">➡️ {fake>50 ? "FAKE" : "REAL"}</h3>
-          <p className="text-base">
-            {message} <strong>({fake}%)</strong>
-          </p>
+          <p>{message} <strong>({fake}%)</strong></p>
+          <div className="flex">
+            <h3 className="text-xl font-bold mt-5">✅ 탐지 신뢰도 점수</h3>
+            <div className="ml-2 mt-5"><TooltipInfo message="탐지 결과가 영상 전반에서 얼마나 일관되고 안정적으로 유지되는지를 평가한 결과로 Δ Mean, Δ Std, TTA Std, TTA Mean 4가지 핵심 안정성 지표를 종합해 계산한 점수입니다. \n각 지표의 세부적인 값은 하단의 딥페이크 탐지 성능 분석 리포트에서 확인하실 수 있습니다."/></div>
+          </div>
+         
+          <p>{result.stabilityScore.toFixed(0)}점</p>
           {/*<p className="text-sm">🔍 의심 영역</p>
           <p className="text-sm">얼굴 윤곽, 피부 질감, 눈 깜빡임 패턴</p>*/}
         </div>
@@ -245,7 +255,9 @@ function DeepfakeReport({ result, createdAt, showXButton = true }: Props) {
                 {result.temporalDeltaMean}
               </p>
               <p className="text-[15px] mt-1">
-                {result.temporalDeltaMean<0.03 ? "🟢우수함" : "🟠보통"}
+                {(result.temporalDeltaMean <= 0.03) ? "🟢우수함" 
+                : (result.temporalDeltaMean <= 0.06) ? "🟡보통" 
+                : "🔴위험"}
               </p>
           </div>
          <div className="w-[15%] bg-white-100 rounded-[10px] font-bold p-5 text-center border-gray-100 border-2">
@@ -254,7 +266,9 @@ function DeepfakeReport({ result, createdAt, showXButton = true }: Props) {
                 {result.temporalDeltaStd}
               </p>
               <p className="text-[15px] mt-1">
-                {result.temporalDeltaStd<0.03 ? "🟢우수함" : "🟠보통"}
+                {(result.temporalDeltaStd <= 0.02) ? "🟢우수함" 
+                : (result.temporalDeltaStd <= 0.05) ? "🟡보통"
+                : "🔴위험"}
               </p>
           </div>
         </div>
@@ -262,28 +276,94 @@ function DeepfakeReport({ result, createdAt, showXButton = true }: Props) {
 
       {/*밴드차트 */}
       <div className="bg-gray-100 text-black-100 p-6 rounded-xl mb-6 mx-20">
-        <h3 className="text-2xl font-bold mb-4">📊영상의 프레임별 딥페이크 확률</h3>
+        <h3 className="text-2xl font-bold mb-4">📊딥페이크 탐지 성능 분석 리포트</h3>
         <div className="flex items-center justify-center">
           <BulletsPanel data={bulletData}/>
         </div>
         <h2 className="text-xl font-bold text-center mb-4 mt-5">📋상세 지표</h2>
         <div className="flex gap-4 mt-2 items-center justify-center">
           <div className="w-[15%] bg-white-100 rounded-[10px] font-bold p-5 text-center border-gray-100 border-2">
-            <p>프레임 간 평균 출렁임</p>
+            <div className="flex items-center justify-center">
+              <p className="text-[18px]">Δ Mean</p>
+              <div className="ml-1"><TooltipInfo message="프레임 간 예측 값의 평균 출렁임 정도를 나타냅니다. \n값이 낮을수록 영상 내 예측이 안정적입니다."/></div>
+            </div>
               <p className="text-[15px] mt-2">
                 {result.temporalDeltaMean}
               </p>
               <p className="text-[15px] mt-1">
-                {result.temporalDeltaMean<0.03 ? "🟢우수함" : "🟠보통"}
+                {(result.temporalDeltaMean <= 0.03) ? "🟢우수함" 
+                : (result.temporalDeltaMean <= 0.06) ? "🟡보통" 
+                : "🔴위험"}
               </p>
           </div>
          <div className="w-[15%] bg-white-100 rounded-[10px] font-bold p-5 text-center border-gray-100 border-2">
-            <p>출렁임의 변동성</p>
+            <div className="flex items-center justify-center">
+              <p className="text-[18px]">Δ Std</p>
+              <div className="ml-1"><TooltipInfo message="출렁임의 변동성(일관성)을 의미합니다.\n 값이 낮을수록 모델의 판단이 균일합니다."/></div>
+            </div>
               <p className="text-[15px] mt-2">
                 {result.temporalDeltaStd}
               </p>
               <p className="text-[15px] mt-1">
-                {result.temporalDeltaStd<0.03 ? "🟢우수함" : "🟠보통"}
+                {(result.temporalDeltaStd <= 0.02) ? "🟢우수함" 
+                : (result.temporalDeltaStd <= 0.05) ? "🟡보통"
+                : "🔴위험"}
+              </p>
+          </div>
+          <div className="w-[15%] bg-white-100 rounded-[10px] font-bold p-5 text-center border-gray-100 border-2">
+            <div className="flex items-center justify-center">
+              <p className="text-[18px]">TTA Std</p>
+              <div className="ml-1"><TooltipInfo message="TTA(Test-Time Augmentation)를 여러 번 적용했을 때 결과의 표준편차입니다. 값이 낮으면 모델이 데이터 변형에도 안정적으로 작동함을 의미합니다."/></div>
+            </div>
+              <p className="text-[15px] mt-2">
+                {result.ttaStd}
+              </p>
+              <p className="text-[15px] mt-1">
+                {(result.ttaStd <= 0.03) ? "🟢우수함" 
+                : (result.ttaStd <= 0.05) ? "🟡보통"
+                : "🔴위험"}
+              </p>
+          </div>
+          <div className="w-[15%] bg-white-100 rounded-[10px] font-bold p-5 text-center border-gray-100 border-2">
+            <div className="flex items-center justify-center">
+              <p className="text-[18px]">TTA Mean</p>
+              <div className="ml-1"><TooltipInfo message="TTA 적용 후 평균적인 딥페이크일 확률입니다. \n높을수록 탐지력이 좋습니다."/></div>
+            </div>
+              <p className="text-[15px] mt-2">
+                {result.ttaMean}
+              </p>
+              <p className="text-[15px] mt-1">
+                {(result.ttaMean >= 0.6) ? "🟢우수함" 
+                : (result.ttaMean >= 0.4) ? "🟡보통"
+                : "🔴위험"}
+              </p>
+          </div>
+          <div className="w-[15%] bg-white-100 rounded-[10px] font-bold p-5 text-center border-gray-100 border-2">
+            <div className="flex items-center justify-center">
+              <p className="text-[18px]">Throughput</p>
+              <div className="ml-1"><TooltipInfo message="초당 처리 가능한 프레임 수입니다. \n값이 높을수록 빠른 탐지가 가능합니다."/></div>
+            </div>
+              <p className="text-[15px] mt-2">
+                {result.fpsProcessed}
+              </p>
+              <p className="text-[15px] mt-1">
+                {(result.fpsProcessed >= 0.27) ? "🟢우수함" 
+                : (result.fpsProcessed >= 0.135) ? "🟡보통"
+                : "🔴위험"}
+              </p>
+          </div>
+          <div className="w-[15%] bg-white-100 rounded-[10px] font-bold p-5 text-center border-gray-100 border-2">
+            <div className="flex items-center justify-center">
+              <p className="text-[18px]">Latency</p>
+              <div className="ml-1"><TooltipInfo message="프레임 하나를 처리하는 데 \n걸리는 시간(ms)입니다. \n낮을수록 빠른 응답성을 의미합니다."/></div>
+            </div>
+              <p className="text-[15px] mt-2">
+                {result.msPerSample}
+              </p>
+              <p className="text-[15px] mt-1">
+                {(result.fpsProcessed <= 4000) ? "🟢우수함" 
+                : (result.fpsProcessed <= 8000) ? "🟡보통"
+                : "🔴위험"}
               </p>
           </div>
         </div>

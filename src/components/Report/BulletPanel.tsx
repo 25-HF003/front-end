@@ -21,8 +21,8 @@ const normalizePayload = (w: PayloadWire) => {
 
 const Section: React.FC<{ title: string; items: BulletItem[] }> = ({ title, items }) => (
   <div className="space-y-3">
-    <h3 className="text-base font-semibold text-gray-900 mb-1">{title}</h3>
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <h3 className="text-xl font-semibold text-gray-600 mb-1">{title}</h3>
+    <div className="grid grid-cols-1 gap-y-9 md:grid-cols-2 gap-6">
       {items.map((it) => (
         <BandBullet key={it.key} item={it} />
       ))}
@@ -33,8 +33,8 @@ const Section: React.FC<{ title: string; items: BulletItem[] }> = ({ title, item
 export default function BulletsPanel({ data }: { data: PayloadWire }) {
   const normalized = useMemo(() => normalizePayload(data), [data]);
   return (
-    <div className="w-full max-w-4xl space-y-6">
-      <Section title="Stability" items={normalized.stabilityBullets} />
+    <div className="w-full max-w-full space-y-6">
+      <Section title="Stability" items={normalized.stabilityBullets}/>
       <Section title="Speed" items={normalized.speedBullets} />
       {/* 범례 */}
       <div className="flex items-center gap-4 text-xs text-gray-600">
