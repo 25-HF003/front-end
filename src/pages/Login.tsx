@@ -26,6 +26,7 @@ function Login() {
     const stateMsg = (location.state as any)?.errorMessage as string | undefined;
     const params = new URLSearchParams(location.search);
     const error = params.get("error"); // e.g. session_expired
+
     if (stateMsg) return stateMsg;
 
     if (error === "session_expired") return "세션이 만료되었습니다. 다시 로그인해주세요.";
