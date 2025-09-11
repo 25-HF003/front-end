@@ -31,7 +31,7 @@ function NoiseReport({ data, confirmMessage, showXButton = true }: Props) {
   const navigate = useNavigate();
 
   const originalImage = data.originalImageBase64;
-  const NoisedImage = data.processedImageBase64;
+  const NoisedImage = data.processedFilePath;
 
   // 신뢰도 값 계산
   const originalConfidenceNum = parseFloat(data.originalConfidence);

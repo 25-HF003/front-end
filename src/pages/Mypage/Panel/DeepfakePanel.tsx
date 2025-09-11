@@ -42,6 +42,7 @@ function DeepfakePanel() {
         setLoading(true);
         // userId 없이 전체 조회
         const data = await api.deepfake.getAllByUser(page, size, "createdAt,desc");
+        console.log(data.content);
         setRecords(data.content ?? []);
         setTotalPages(data.totalPages ?? 1);
         setTotalElements(data.totalElements ?? 0);
@@ -118,7 +119,7 @@ function DeepfakePanel() {
         <p className="text-center mt-4 text-red-500">{error}</p>
       )}
 
-      {/* 번호형 페이지네이션 (이미지 스타일) */}
+      {/* 번호형 페이지네이션 */}
       <Pagination
         page={page}                 // 0-based
         totalPages={totalPages}     // 스프링 Page에서 받은 값

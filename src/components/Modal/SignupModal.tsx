@@ -12,7 +12,7 @@ const SignupModal: React.FC<ModalProps> = ({ isOpen, message, onClose }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black-100 bg-opacity-50">
       <div className="bg-white-100 rounded-lg shadow-lg p-6 w-full max-w-sm text-center">
-        <p className="text-lg mb-4">{message}</p>
+        <p className="text-lg mb-4 whitespace-pre-line">{(message ?? '').replace(/\\n/g, '\n')}</p>
         <button
           className="bg-green-200 text-white-100 px-4 py-2 rounded"
           onClick={onClose}>
