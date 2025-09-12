@@ -40,7 +40,20 @@ function WatermarkModal({ setIsModal, file }: Props) {
       return;
     }
 
-    if (!file || !text) return;
+    if (!file) return;
+
+    if (!text) {
+      alert("메시지를 입력해주세요!");
+      return;
+    }
+
+    const byteLength = new TextEncoder().encode(text).length;
+
+    if (byteLength > 4) {
+      alert("메시지는 영문 기준 최대 4자, 한글은 최대 2자까지 입력할 수 있습니다");
+      setText("");
+      return;
+    }
 
     const taskId = uuidv4();
     dispatch(startTask(taskId));
