@@ -33,14 +33,14 @@ export interface DeepfakeResponse {
 // 업로드 시 프론트에서 넘길 수 있는 옵션 (모두 선택적)
 export interface DeepfakeUploadOptions {
   mode?: 'PRECISION' | 'DEFAULT' | string;
-  useTta?: boolean;
-  useIllum?: boolean;
+  use_tta?: boolean;
+  use_illum?: boolean;
   detector?: 'AUTO' | 'DLIB' | 'DNN' | string;
-  smoothWindow?: number;
-  minFace?: number;
-  sampleCount?: number;
+  smooth_window?: number;
+  min_face?: number;
+  sample_count?: number;
 }
-
+// 불리언/숫자도 문자열로
 function appendIfDefined(fd: FormData, key: string, v: unknown) {
   if (v !== undefined && v !== null) fd.append(key, String(v));
 }
@@ -59,16 +59,16 @@ export const deepfakeAPI = {
 
     if (options) {
       appendIfDefined(formData, "mode", options.mode);
-      appendIfDefined(formData, "useTta", options.useTta);
-      appendIfDefined(formData, "useIllum", options.useIllum);
+      appendIfDefined(formData, "use_tta", options.use_tta);
+      appendIfDefined(formData, "use_illum", options.use_illum);
       appendIfDefined(formData, "detector", options.detector);
-      appendIfDefined(formData, "smoothWindow", options.smoothWindow);
-      appendIfDefined(formData, "minFace", options.minFace);
-      appendIfDefined(formData, "sampleCount", options.sampleCount);
+      appendIfDefined(formData, "smooth_window", options.smooth_window);
+      appendIfDefined(formData, "min_face", options.min_face);
+      appendIfDefined(formData, "sample_count", options.sample_count);
     }
 
+    console.log("is FormData?", formData instanceof FormData, formData);
     const res = await axiosInstance.post("/api/deepfake", formData, {
-      headers: { "Content-Type": "multipart/form-data" },
       signal: undefined,  
     });
     return res.data.data;

@@ -247,29 +247,14 @@ function DeepfakeReport({ result, createdAt, showXButton = true }: Props) {
         <div className="flex items-center justify-center">
           <DfFrameHeatmap data={heatmapnum}/>
         </div>
-        <h2 className="text-xl font-bold text-center mb-4 mt-5">📋상세 지표</h2>
+        <h2 className="text-xl font-bold text-center mb-4 mt-5">📄히트맵 해석 가이드</h2>
         <div className="flex gap-4 mt-2 items-center justify-center">
-          <div className="w-[15%] bg-white-100 rounded-[10px] font-bold p-5 text-center border-gray-100 border-2">
-            <p>프레임 간 평균 출렁임</p>
-              <p className="text-[15px] mt-2">
-                {result.temporalDeltaMean}
-              </p>
-              <p className="text-[15px] mt-1">
-                {(result.temporalDeltaMean <= 0.03) ? "🟢우수함" 
-                : (result.temporalDeltaMean <= 0.06) ? "🟡보통" 
-                : "🔴위험"}
-              </p>
-          </div>
-         <div className="w-[15%] bg-white-100 rounded-[10px] font-bold p-5 text-center border-gray-100 border-2">
-            <p>출렁임의 변동성</p>
-              <p className="text-[15px] mt-2">
-                {result.temporalDeltaStd}
-              </p>
-              <p className="text-[15px] mt-1">
-                {(result.temporalDeltaStd <= 0.02) ? "🟢우수함" 
-                : (result.temporalDeltaStd <= 0.05) ? "🟡보통"
-                : "🔴위험"}
-              </p>
+          <div className="w-[70%] bg-white-100 rounded-[10px] font-bold p-5 text-center border-gray-400 border-2">
+            <p>이 그래프는 영상의 각 프레임마다 딥페이크로 판단된 확률을 색으로 표현한 히트맵입니다.<br/> 
+              연두색에 가까울수록 딥페이크일 가능성이 높고, 보라색에 가까울수록 가능성이 낮습니다. 
+              특정 구간이 연두색으로 나타난 부분은 해당 프레임에서 딥페이크 징후가 강하게 드러난 지점입니다.<br/> 
+              프레임별 확률이 뚜렷하게 달라지고 색상분포가 다양할수록 영상 속 미세한 패턴 차이를 더 명확하게 감지한 것입니다.
+            </p>
           </div>
         </div>
       </div>
