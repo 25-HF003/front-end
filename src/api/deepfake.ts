@@ -67,7 +67,6 @@ export const deepfakeAPI = {
       appendIfDefined(formData, "sample_count", options.sample_count);
     }
 
-    console.log("is FormData?", formData instanceof FormData, formData);
     const res = await axiosInstance.post("/api/deepfake", formData, {
       signal: undefined,  
     });

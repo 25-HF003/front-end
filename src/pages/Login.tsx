@@ -29,7 +29,7 @@ function Login() {
 
     if (stateMsg) return stateMsg;
 
-    if (error === "session_expired") return "세션이 만료되었습니다. 다시 로그인해주세요.";
+    if (error === "session_expired") return "세션이 만료되었습니다. \n 다시 로그인해주세요.";
     //if (error === "missing_token") return "소셜 로그인에 실패했습니다. 다시 시도해주세요.";
     if (error) return "로그인 도중 문제가 발생했습니다. 다시 시도해주세요.";
     return undefined;

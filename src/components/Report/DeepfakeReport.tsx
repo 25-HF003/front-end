@@ -249,7 +249,7 @@ function DeepfakeReport({ result, createdAt, showXButton = true }: Props) {
         </div>
         <h2 className="text-xl font-bold text-center mb-4 mt-5">📄히트맵 해석 가이드</h2>
         <div className="flex gap-4 mt-2 items-center justify-center">
-          <div className="w-[70%] bg-white-100 rounded-[10px] font-bold p-5 text-center border-gray-400 border-2">
+          <div className="w-[80%] bg-white-100 rounded-[10px] font-bold p-5 text-center border-gray-400 border-2">
             <p>이 그래프는 영상의 각 프레임마다 딥페이크로 판단된 확률을 색으로 표현한 히트맵입니다.<br/> 
               연두색에 가까울수록 딥페이크일 가능성이 높고, 보라색에 가까울수록 가능성이 낮습니다. 
               특정 구간이 연두색으로 나타난 부분은 해당 프레임에서 딥페이크 징후가 강하게 드러난 지점입니다.<br/> 
