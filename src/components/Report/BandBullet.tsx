@@ -28,7 +28,7 @@ export type Bands = {
 
 export type BulletItem = {
   key: string;
-  label: string;        // e.g., "Δ Mean (↓)"
+  label: string;        // 이름
   value: number;        // 실제 값
   bands: Bands;         // 구간 정의
   direction: "higher" | "lower"; // 높을수록/낮을수록 좋은 지표
@@ -130,7 +130,7 @@ export default function BandBullet({
 
       {/* 막대 */}
       <div className="relative w-full rounded-lg overflow-hidden border border-gray-900"
-           style={{ height }}>
+          style={{ height }}>
         <div className="flex w-full h-full">
           {segments.map((s, i) => (
             <div
@@ -171,8 +171,8 @@ export default function BandBullet({
         // 밴드 경계 수집
         const boundaries: number[] = [];
         Object.values(item.bands).forEach(([lo, hi]) => {
-            if (isFiniteNum(lo)) boundaries.push(lo);
-            if (isFiniteNum(hi)) boundaries.push(hi as number);
+          if (isFiniteNum(lo)) boundaries.push(lo);
+          if (isFiniteNum(hi)) boundaries.push(hi as number);
         });
         // min/max 포함해서 정렬 후 중복 제거
         const uniq = Array.from(new Set(boundaries)).sort((a, b) => a - b);
@@ -181,11 +181,11 @@ export default function BandBullet({
             const leftPct = ratioFromValue(val, domain) * 100;
             return (
             <span
-                key={i}
-                className="absolute -translate-x-1/2"
-                style={{ left: `${leftPct}%` }}
+              key={i}
+              className="absolute -translate-x-1/2"
+              style={{ left: `${leftPct}%` }}
             >
-                {val}
+              {val}
             </span>
             );
         });

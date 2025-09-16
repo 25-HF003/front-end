@@ -49,6 +49,15 @@ function shrinkValue(x: number): number {
   return Math.pow(x, alpha)*100;
 }
 
+
+function bandchartres(name: number, minnum: number, maxnum: number): string {
+  let text;
+  {(name <= minnum) ? text = "🟢우수함" 
+  : (name <= maxnum) ? text = "🟡보통" 
+  : text = "🔴위험"}
+  return text;
+}
+
 function DeepfakeReport({ result, createdAt, showXButton = true }: Props) {
   const averageFakeinit = result?.averageConfidence ?? 0;
   const maxConfidenceinit = result?.maxConfidence ?? 0;
@@ -192,12 +201,6 @@ function DeepfakeReport({ result, createdAt, showXButton = true }: Props) {
               />
             </Pie>
           </PieChart>
-
-          {/* 도넛차트 안 글자
-          <div className="absolute text-center">
-            <p className="text-2xl font-bold text-black-200">{fake}%</p>
-            <p className="text-sm text-gray-600">Fake 가능성</p>
-          </div> */}
         </div>
 
         {/*분석결과 */}
@@ -207,9 +210,10 @@ function DeepfakeReport({ result, createdAt, showXButton = true }: Props) {
           <p>{message} <strong>({fake}%)</strong></p>
           <div className="flex">
             <h3 className="text-xl font-bold mt-5">✅ 탐지 신뢰도 점수</h3>
-            <div className="ml-2 mt-5"><TooltipInfo message="탐지 결과가 영상 전반에서 얼마나 일관되고 안정적으로 유지되는지를 평가한 결과로 Δ Mean, Δ Std, TTA Std, TTA Mean 4가지 핵심 안정성 지표를 종합해 계산한 점수입니다. \n각 지표의 세부적인 값은 하단의 딥페이크 탐지 성능 분석 리포트에서 확인하실 수 있습니다."/></div>
+            <div className="ml-2 mt-5">
+              <TooltipInfo message="탐지 결과가 영상 전반에서 얼마나 일관되고 안정적으로 유지되는지를 평가한 결과로 Δ Mean, Δ Std, TTA Std, TTA Mean 4가지 핵심 안정성 지표를 종합해 계산한 점수입니다. \n각 지표의 세부적인 값은 하단의 딥페이크 탐지 성능 분석 리포트에서 확인하실 수 있습니다."/>
+            </div>
           </div>
-         
           <p>{result.stabilityScore.toFixed(0)}점</p>
           {/*<p className="text-sm">🔍 의심 영역</p>
           <p className="text-sm">얼굴 윤곽, 피부 질감, 눈 깜빡임 패턴</p>*/}
@@ -249,7 +253,7 @@ function DeepfakeReport({ result, createdAt, showXButton = true }: Props) {
         </div>
         <h2 className="text-xl font-bold text-center mb-4 mt-5">📄히트맵 해석 가이드</h2>
         <div className="flex gap-4 mt-2 items-center justify-center">
-          <div className="w-[80%] bg-white-100 rounded-[10px] font-bold p-5 text-center border-gray-400 border-2">
+          <div className="w-[80%] bg-white-100 rounded-[10px] font-bold p-5 text-center">
             <p>이 그래프는 영상의 각 프레임마다 딥페이크로 판단된 확률을 색으로 표현한 히트맵입니다.<br/> 
               연두색에 가까울수록 딥페이크일 가능성이 높고, 보라색에 가까울수록 가능성이 낮습니다. 
               특정 구간이 연두색으로 나타난 부분은 해당 프레임에서 딥페이크 징후가 강하게 드러난 지점입니다.<br/> 
@@ -276,9 +280,7 @@ function DeepfakeReport({ result, createdAt, showXButton = true }: Props) {
                 {result.temporalDeltaMean}
               </p>
               <p className="text-[15px] mt-1">
-                {(result.temporalDeltaMean <= 0.03) ? "🟢우수함" 
-                : (result.temporalDeltaMean <= 0.06) ? "🟡보통" 
-                : "🔴위험"}
+                {bandchartres(result.temporalDeltaMean, 0.03, 0.06)}
               </p>
           </div>
          <div className="w-[15%] bg-white-100 rounded-[10px] font-bold p-5 text-center border-gray-100 border-2">
@@ -290,9 +292,7 @@ function DeepfakeReport({ result, createdAt, showXButton = true }: Props) {
                 {result.temporalDeltaStd}
               </p>
               <p className="text-[15px] mt-1">
-                {(result.temporalDeltaStd <= 0.02) ? "🟢우수함" 
-                : (result.temporalDeltaStd <= 0.05) ? "🟡보통"
-                : "🔴위험"}
+                {bandchartres(result.temporalDeltaStd, 0.02, 0.05)}
               </p>
           </div>
           <div className="w-[15%] bg-white-100 rounded-[10px] font-bold p-5 text-center border-gray-100 border-2">
@@ -304,9 +304,7 @@ function DeepfakeReport({ result, createdAt, showXButton = true }: Props) {
                 {result.ttaStd}
               </p>
               <p className="text-[15px] mt-1">
-                {(result.ttaStd <= 0.03) ? "🟢우수함" 
-                : (result.ttaStd <= 0.05) ? "🟡보통"
-                : "🔴위험"}
+                {bandchartres(result.ttaStd, 0.03, 0.05)}
               </p>
           </div>
           <div className="w-[15%] bg-white-100 rounded-[10px] font-bold p-5 text-center border-gray-100 border-2">
@@ -346,9 +344,7 @@ function DeepfakeReport({ result, createdAt, showXButton = true }: Props) {
                 {result.msPerSample}
               </p>
               <p className="text-[15px] mt-1">
-                {(result.fpsProcessed <= 4000) ? "🟢우수함" 
-                : (result.fpsProcessed <= 8000) ? "🟡보통"
-                : "🔴위험"}
+                {bandchartres(result.fpsProcessed, 4000, 8000)}
               </p>
           </div>
         </div>

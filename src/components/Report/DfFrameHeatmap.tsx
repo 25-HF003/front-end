@@ -1,8 +1,8 @@
 type Props = {
   data: number[];           // 각 프레임의 fake confidence (0~1)
   title?: string;           // 상단 제목
-  width?: number;           // 전체 SVG 너비
-  height?: number;          // 전체 SVG 높이
+  width?: number;           // 전체 너비
+  height?: number;          // 전체 높이
   barHeight?: number;       // 메인 히트맵 바 높이
 };
 
