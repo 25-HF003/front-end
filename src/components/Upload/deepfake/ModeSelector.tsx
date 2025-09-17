@@ -1,12 +1,16 @@
 import { Mode } from './ModeOptions';
+import TooltipInfo from '../../Modal/TooltipInfo';
 
 interface ModeSelectorProps {
   value: Mode;
   onChange: (m: Mode) => void;
   basicname: string;
+  showTooltip?: boolean;
+  basemessage: string;
+  advancedmessage: string;
 }
 
-function ModeSelector({ value, onChange, basicname }: ModeSelectorProps) {
+function ModeSelector({ value, onChange, basicname, showTooltip = false, basemessage, advancedmessage }: ModeSelectorProps) {
   return (
     <div className="flex items-center justify-center gap-6">
       <label className="inline-flex items-center gap-2 cursor-pointer">
@@ -24,6 +28,9 @@ function ModeSelector({ value, onChange, basicname }: ModeSelectorProps) {
           aria-hidden
         />
         <span className="text-3xl font-semibold">{basicname}</span>
+        {showTooltip && (
+          <TooltipInfo message={basemessage}/>
+        )}
         {value === 'basic' ? (
           <span className="ml-1 mr-20 text-[10px] px-1.5 py-0.5 rounded bg-emerald-100 text-green-200">ON</span>
         ) : (
@@ -46,6 +53,9 @@ function ModeSelector({ value, onChange, basicname }: ModeSelectorProps) {
           aria-hidden
         />
         <span className="text-3xl font-semibold">정밀모드</span>
+        {showTooltip && (
+          <TooltipInfo message={advancedmessage}/>
+        )}
         {value === 'advanced' && (
           <span className="ml-1 text-[10px] px-1.5 py-0.5 rounded bg-emerald-100 text-green-200">ON</span>
         )}

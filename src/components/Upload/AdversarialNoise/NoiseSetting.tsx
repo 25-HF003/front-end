@@ -23,7 +23,10 @@ function NoiseSetting({ onChange }: NoiseSettingProps) {
     <div className="border-b p-2">
       {/* 모드 선택 */}
       <div className="mb-4">
-        <ModeSelector value={mode} onChange={setMode} basicname='자동모드'/>
+        <ModeSelector value={mode} onChange={setMode} basicname='자동모드' showTooltip={true} 
+          basemessage='AI 모델의 예측 신뢰도를 분석하여 최적의 노이즈 강도를 자동 결정합니다. 초보자나 간편한 사용을 원할 때 추천합니다.'
+          advancedmessage='원하는 노이즈 강도를 직접 선택할 수 있습니다. 세밀한 조절이나 특정 강도 확인이 필요할 때 추천합니다.'
+        />
       </div>
 
       {/* 정밀모드일 때만 옵션 보이기 */}

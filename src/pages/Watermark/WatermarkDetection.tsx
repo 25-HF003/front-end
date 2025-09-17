@@ -6,11 +6,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/store";
 import { v4 as uuidv4 } from 'uuid';
 import { finishTask, startTask } from "../../features/task/taskSlice";
+import SignupModal from "../../components/Modal/SignupModal";
 
 function WatermarkDetection() {
   const dispatch = useDispatch();
 
   const [file, setFile] = useState<File | null>(null);
+  const [isModal, setIsModal] = useState(false);
   const navigate = useNavigate();
   const isLoggedIn = useSelector((state: RootState) => !!state.auth.accessToken); 
 
@@ -18,6 +20,7 @@ function WatermarkDetection() {
       if (!isLoggedIn) {
         navigate("/login");
       }
+      setIsModal(true);
     }, [isLoggedIn, navigate]);
   
 
@@ -65,6 +68,10 @@ function WatermarkDetection() {
 
   return(
     <>
+      <SignupModal 
+        isOpen={isModal}
+        message="⚠ DeepTruth에서 생성된 워터마크만 \n탐지 가능합니다. \n\n DeepTruth 전용 디지털워터마크를 개발하여\n 사용 중이기에 다른 디지털 워터마크는 탐지 안되는 점 양해 부탁드립니다."
+        onClose={() => setIsModal(false)}/>
       <FileUploadPage
         title="이미지"
         file={file}

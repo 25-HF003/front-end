@@ -35,6 +35,7 @@ function WatermarkSuccessReport({ result, confirmMessage }: Props) {
     } 
     catch (err) {
       console.error("다운로드 실패:", err);
+      alert("다운로드에 실패했습니다.");
     }
   }
 

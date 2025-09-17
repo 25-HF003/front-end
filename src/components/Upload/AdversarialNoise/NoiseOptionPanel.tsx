@@ -1,5 +1,6 @@
 import { useId, useState } from 'react';
 import { NoiseOptions } from '../deepfake/ModeOptions';
+import TooltipInfo from '../../Modal/TooltipInfo';
 
 interface OptionsPanelProps {
   value: NoiseOptions;
@@ -14,7 +15,7 @@ function NoiseOptionPanel({ value, onChange }: OptionsPanelProps) {
     onChange({ ...value, [k]: v });
 
   const Select = ({ label, value, options, onChange }:{
-    label: string; value: number; options: {value:number; label:string}[]; onChange:(v:number)=>void; 
+    label: string; value: number; options: {value:number; label:string; tooltip: string}[]; onChange:(v:number)=>void;
   }) => {
       const [openSel, setOpenSel] = useState(false);
       return (
@@ -32,16 +33,17 @@ function NoiseOptionPanel({ value, onChange }: OptionsPanelProps) {
               </button>
             </div>
             {openSel && (
-              <ul className="mt-2 border rounded-md bg-white shadow-sm divide-y" role="listbox" aria-labelledby={secId + '-select'}>
+              <ul className="mt-2 border rounded-md bg-white-100 shadow-sm divide-y" role="listbox" aria-labelledby={secId + '-select'}>
                 {options.map((opt) => (
                   <li key={opt.value}>
                     <button
                       type="button"
-                      className={`w-full text-left px-3 py-2 text-base hover:bg-emerald-50 ${value === opt.value ? 'text-green-200 font-base' : ''}`}
+                      className={`w-full flex items-center justify-start gap-1 px-3 py-2 text-base hover:bg-emerald-50 ${value === opt.value ? 'text-green-200 font-base' : ''}`}
                       role="option"
                       aria-selected={value === opt.value}
                       onClick={() => { onChange(opt.value); setOpenSel(false); }}>
-                      {opt.label}
+                      <span>{opt.label}</span>
+                      <TooltipInfo message={opt.tooltip} />
                     </button>
                   </li>
                 ))}
@@ -74,10 +76,10 @@ function NoiseOptionPanel({ value, onChange }: OptionsPanelProps) {
               label="강도 단계"
               value={value.level}
               options={[
-                { value: 1, label: '1' },
-                { value: 2, label: '2' },
-                { value: 3, label: '3' },
-                { value: 4, label: '4' },
+                { value: 1, label: '1 - 약함',  tooltip: '원본과 거의 비슷, 화질 저하가 거의 없습니다.' },
+                { value: 2, label: '2 - 보통',  tooltip: '적당한 효과, 약간의 화질 저하가 있습니다.' },
+                { value: 3, label: '3 - 강함',  tooltip: '눈에 띄는 변화, 어느 정도 화질 저하가 있습니다.' },
+                { value: 4, label: '4 - 매우 강함',  tooltip: '가장 강한 효과, 화질 저하가 있습니다.' },
               ]}
               onChange={(v) => set('level', v as NoiseOptions['level'])}
             />

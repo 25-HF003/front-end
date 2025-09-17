@@ -14,6 +14,9 @@ type UserProfile = {
   nickname: string;
   email: string;
   role: "USER" | "ADMIN";
+  level: string;
+  point: number;
+  socialLoginType: string;
 };
 
 function UserInfo() {
@@ -50,7 +53,7 @@ function UserInfo() {
         <img src="/img/Explorer.jpg" alt="감별사" className="rounded-full"/>
       </div>
         <h2 className="text-lg font-bold">{user.nickname}</h2>
-        <p className="text-sm text-green-100">{user.role === "ADMIN" ? "관리자" : "감별사"}</p>
+        <p className="text-sm text-green-100">{user.level}</p>
         <hr className="my-4 w-full border-t" />
         <div className="text-sm w-full space-y-2">
           <div>
@@ -67,11 +70,16 @@ function UserInfo() {
           </div>
           <div>
             <strong>포인트</strong>
-            <p className="text-gray-900 mb-4 mt-2">50점</p>
+            <p className="text-gray-900 mb-4 mt-2">{user.point}</p>
           </div>
+          {user.socialLoginType === "NONE" ?
           <Link to="/mypage/check" className="mt-auto pt-10">
             <button className="text-sm text-gray-400 mt-20 ml-20">회원정보 수정</button>
           </Link>
+          : 
+          <Link to="/mypage/edit" className="mt-auto pt-10">
+            <button className="text-sm text-gray-400 mt-20 ml-20">회원정보 수정</button>
+          </Link>}
         </div>
         
         {/*로그아웃 */}
