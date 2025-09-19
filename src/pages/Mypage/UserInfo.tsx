@@ -68,10 +68,6 @@ function UserInfo() {
             <strong>이메일</strong>
             <p className="text-gray-900 mb-4 mt-2">{user.email}</p>
           </div>
-          <div>
-            <strong>포인트</strong>
-            <p className="text-gray-900 mb-4 mt-2">{user.point}</p>
-          </div>
           {user.socialLoginType === "NONE" ?
           <Link to="/mypage/check" className="mt-auto pt-10">
             <button className="text-sm text-gray-400 mt-20 ml-20">회원정보 수정</button>

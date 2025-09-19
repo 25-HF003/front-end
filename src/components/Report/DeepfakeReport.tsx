@@ -2,6 +2,10 @@ import { PieChart, Pie, Cell, Label } from "recharts";
 import ReportNotice from "./ReportNotice";
 import { IoArrowBack } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
+import DfFrameHeatmap from "./DfFrameHeatmap";
+import BulletsPanel, { PayloadWire } from "./BulletPanel";
+import { BulletItemWire } from "./BandBullet";
+import TooltipInfo from "../Modal/TooltipInfo";
 
 const COLORS = ["#3D3D42", "#FFFFFF"]; // gray, white
 
@@ -19,14 +23,39 @@ interface Props {
     smoothWindow?: number;
     minFace?: number;
     sampleCount?: number
+    temporalDeltaMean: number;
+    temporalDeltaStd: number;
+    ttaMean: number;
+    ttaStd: number;
+    timeseriesJson: string;
+    stabilityBullets: BulletItemWire[];
+    speedBullets: BulletItemWire[];
+    fpsProcessed: number;
+    msPerSample: number;
+    stabilityScore: number;
   };
   createdAt?: string; // 2. 바깥에서 별도로 받는 createdAt
   showXButton?: boolean;
 }
 
+type Timeseries = {
+  per_frame_conf: number[];
+  vmin: number;
+  vmax: number;
+};
+
 function shrinkValue(x: number): number {
   const alpha =2.5;  // 지수 조절 (값이 클수록 더 많이 눌림)
   return Math.pow(x, alpha)*100;
+}
+
+
+function bandchartres(name: number, minnum: number, maxnum: number): string {
+  let text;
+  {(name <= minnum) ? text = "🟢우수함" 
+  : (name <= maxnum) ? text = "🟡보통" 
+  : text = "🔴위험"}
+  return text;
 }
 
 function DeepfakeReport({ result, createdAt, showXButton = true }: Props) {
@@ -40,6 +69,10 @@ function DeepfakeReport({ result, createdAt, showXButton = true }: Props) {
   const smoothWindow = result?.smoothWindow ?? 0;
   const minFace = result?.minFace ?? 0;
   const sampleCount = result?.sampleCount ?? 0;
+  const bulletData: PayloadWire ={
+    stabilityBullets: result.stabilityBullets, 
+    speedBullets: result.speedBullets,
+  }
 
   const averageFake = shrinkValue(averageFakeinit);
   const maxConfidence = shrinkValue(maxConfidenceinit)-20;
@@ -62,6 +95,11 @@ function DeepfakeReport({ result, createdAt, showXButton = true }: Props) {
   const handleClose = () => {
     navigate(-1); // 이전 페이지로 이동
   }
+
+  const raw = result.timeseriesJson;
+  const parsed: Timeseries = JSON.parse(raw);
+  const heatmapnum = parsed.per_frame_conf
+  console.log(heatmapnum);
 
 
   return (
@@ -163,21 +201,20 @@ function DeepfakeReport({ result, createdAt, showXButton = true }: Props) {
               />
             </Pie>
           </PieChart>
-
-          {/* 도넛차트 안 글자
-          <div className="absolute text-center">
-            <p className="text-2xl font-bold text-black-200">{fake}%</p>
-            <p className="text-sm text-gray-600">Fake 가능성</p>
-          </div> */}
         </div>
 
         {/*분석결과 */}
         <div className="flex flex-col gap-5 ml-20">
           <h3 className="text-2xl font-bold">📊 분석 결과</h3>
           <h3 className="text-xl font-bold">➡️ {fake>50 ? "FAKE" : "REAL"}</h3>
-          <p className="text-base">
-            {message} <strong>({fake}%)</strong>
-          </p>
+          <p>{message} <strong>({fake}%)</strong></p>
+          <div className="flex">
+            <h3 className="text-xl font-bold mt-5">✅ 탐지 신뢰도 점수</h3>
+            <div className="ml-2 mt-5">
+              <TooltipInfo message="탐지 결과가 영상 전반에서 얼마나 일관되고 안정적으로 유지되는지를 평가한 결과로 Δ Mean, Δ Std, TTA Std, TTA Mean 4가지 핵심 안정성 지표를 종합해 계산한 점수입니다. \n각 지표의 세부적인 값은 하단의 딥페이크 탐지 성능 분석 리포트에서 확인하실 수 있습니다."/>
+            </div>
+          </div>
+          <p>{result.stabilityScore.toFixed(0)}점</p>
           {/*<p className="text-sm">🔍 의심 영역</p>
           <p className="text-sm">얼굴 윤곽, 피부 질감, 눈 깜빡임 패턴</p>*/}
         </div>
@@ -206,6 +243,111 @@ function DeepfakeReport({ result, createdAt, showXButton = true }: Props) {
         <span className="text-lg flex items-center justify-center mt-5">
           위 영역의 딥페이크 확률 : {(maxConfidence).toFixed(0)}%
         </span>
+      </div>
+
+      {/*히트맵 */}
+      <div className="bg-gray-100 text-black-100 p-6 rounded-xl mb-6 mx-20">
+        <h3 className="text-2xl font-bold mb-4">📊영상의 프레임별 딥페이크 확률</h3>
+        <div className="flex items-center justify-center">
+          <DfFrameHeatmap data={heatmapnum}/>
+        </div>
+        <h2 className="text-xl font-bold text-center mb-4 mt-5">📄히트맵 해석 가이드</h2>
+        <div className="flex gap-4 mt-2 items-center justify-center">
+          <div className="w-[80%] bg-white-100 rounded-[10px] font-bold p-5 text-center">
+            <p>이 그래프는 영상의 각 프레임마다 딥페이크로 판단된 확률을 색으로 표현한 히트맵입니다.<br/> 
+              연두색에 가까울수록 딥페이크일 가능성이 높고, 보라색에 가까울수록 가능성이 낮습니다. 
+              특정 구간이 연두색으로 나타난 부분은 해당 프레임에서 딥페이크 징후가 강하게 드러난 지점입니다.<br/> 
+              프레임별 확률이 뚜렷하게 달라지고 색상분포가 다양할수록 영상 속 미세한 패턴 차이를 더 명확하게 감지한 것입니다.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/*밴드차트 */}
+      <div className="bg-gray-100 text-black-100 p-6 rounded-xl mb-6 mx-20">
+        <h3 className="text-2xl font-bold mb-4">📊딥페이크 탐지 성능 분석 리포트</h3>
+        <div className="flex items-center justify-center">
+          <BulletsPanel data={bulletData}/>
+        </div>
+        <h2 className="text-xl font-bold text-center mb-4 mt-5">📋상세 지표</h2>
+        <div className="flex gap-4 mt-2 items-center justify-center">
+          <div className="w-[15%] bg-white-100 rounded-[10px] font-bold p-5 text-center border-gray-100 border-2">
+            <div className="flex items-center justify-center">
+              <p className="text-[18px]">Δ Mean</p>
+              <div className="ml-1"><TooltipInfo message="프레임 간 예측 값의 평균 출렁임 정도를 나타냅니다. \n값이 낮을수록 영상 내 예측이 안정적입니다."/></div>
+            </div>
+              <p className="text-[15px] mt-2">
+                {result.temporalDeltaMean}
+              </p>
+              <p className="text-[15px] mt-1">
+                {bandchartres(result.temporalDeltaMean, 0.03, 0.06)}
+              </p>
+          </div>
+         <div className="w-[15%] bg-white-100 rounded-[10px] font-bold p-5 text-center border-gray-100 border-2">
+            <div className="flex items-center justify-center">
+              <p className="text-[18px]">Δ Std</p>
+              <div className="ml-1"><TooltipInfo message="출렁임의 변동성(일관성)을 의미합니다.\n 값이 낮을수록 모델의 판단이 균일합니다."/></div>
+            </div>
+              <p className="text-[15px] mt-2">
+                {result.temporalDeltaStd}
+              </p>
+              <p className="text-[15px] mt-1">
+                {bandchartres(result.temporalDeltaStd, 0.02, 0.05)}
+              </p>
+          </div>
+          <div className="w-[15%] bg-white-100 rounded-[10px] font-bold p-5 text-center border-gray-100 border-2">
+            <div className="flex items-center justify-center">
+              <p className="text-[18px]">TTA Std</p>
+              <div className="ml-1"><TooltipInfo message="TTA(Test-Time Augmentation)를 여러 번 적용했을 때 결과의 표준편차입니다. 값이 낮으면 모델이 데이터 변형에도 안정적으로 작동함을 의미합니다."/></div>
+            </div>
+              <p className="text-[15px] mt-2">
+                {result.ttaStd}
+              </p>
+              <p className="text-[15px] mt-1">
+                {bandchartres(result.ttaStd, 0.03, 0.05)}
+              </p>
+          </div>
+          <div className="w-[15%] bg-white-100 rounded-[10px] font-bold p-5 text-center border-gray-100 border-2">
+            <div className="flex items-center justify-center">
+              <p className="text-[18px]">TTA Mean</p>
+              <div className="ml-1"><TooltipInfo message="TTA 적용 후 평균적인 딥페이크일 확률입니다. \n높을수록 탐지력이 좋습니다."/></div>
+            </div>
+              <p className="text-[15px] mt-2">
+                {result.ttaMean}
+              </p>
+              <p className="text-[15px] mt-1">
+                {(result.ttaMean >= 0.6) ? "🟢우수함" 
+                : (result.ttaMean >= 0.4) ? "🟡보통"
+                : "🔴위험"}
+              </p>
+          </div>
+          <div className="w-[15%] bg-white-100 rounded-[10px] font-bold p-5 text-center border-gray-100 border-2">
+            <div className="flex items-center justify-center">
+              <p className="text-[18px]">Throughput</p>
+              <div className="ml-1"><TooltipInfo message="초당 처리 가능한 프레임 수입니다. \n값이 높을수록 빠른 탐지가 가능합니다."/></div>
+            </div>
+              <p className="text-[15px] mt-2">
+                {result.fpsProcessed}
+              </p>
+              <p className="text-[15px] mt-1">
+                {(result.fpsProcessed >= 0.27) ? "🟢우수함" 
+                : (result.fpsProcessed >= 0.135) ? "🟡보통"
+                : "🔴위험"}
+              </p>
+          </div>
+          <div className="w-[15%] bg-white-100 rounded-[10px] font-bold p-5 text-center border-gray-100 border-2">
+            <div className="flex items-center justify-center">
+              <p className="text-[18px]">Latency</p>
+              <div className="ml-1"><TooltipInfo message="프레임 하나를 처리하는 데 \n걸리는 시간(ms)입니다. \n낮을수록 빠른 응답성을 의미합니다."/></div>
+            </div>
+              <p className="text-[15px] mt-2">
+                {result.msPerSample}
+              </p>
+              <p className="text-[15px] mt-1">
+                {bandchartres(result.fpsProcessed, 4000, 8000)}
+              </p>
+          </div>
+        </div>
       </div>
 
       {/* 주의 사항 */}
