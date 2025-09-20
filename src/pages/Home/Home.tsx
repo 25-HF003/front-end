@@ -15,7 +15,7 @@ function Home() {
       </div>
 
       {/* 이미지 그리드 */}
-      <div className="grid grid-cols-4 gap-2">
+      <div className="grid grid-cols-4 gap-2 animate-fade-in">
         <div className="img1 justify-self-end pr-4 pt-6">
           <img src="/img/IMG1.png" alt="이미지1" />
         </div>

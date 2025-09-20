@@ -39,22 +39,13 @@ export default {
             },
           },
           animation: {
-            'fade-in': 'fadeIn 1s ease-in-out forwards',
+            'fade-in': 'fadeIn 3s ease-in-out forwards',
           },
           keyframes: {
             fadeIn: {
               '0%': { opacity: 0, transform: 'translateY(20px)' },
               '100%': { opacity: 1, transform: 'translateY(0)' },
             }
-          },
-          delay: {
-            '200': '200ms',
-            '400': '400ms',
-            '600': '600ms',
-            '800': '800ms',
-            '1000': '1000ms',
-            '1200': '1200ms',
-            '1400': '1400ms',
           },
         },
       },
