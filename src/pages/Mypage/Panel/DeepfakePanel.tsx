@@ -25,7 +25,7 @@ function DeepfakePanel() {
 
   const [page, setPage] = useState(0); 
   const [totalPages, setTotalPages] = useState(0);
-  const [size, setSize] = useState(15); //15개씩 보이기
+  const [size, setSize] = useState(10); //10개씩 보이기
   const [totalElements, setTotalElements] = useState(0);
 
   //const userId = useSelector((state: RootState) => state.auth.user?.userId); // 로그인된 유저 ID 사용

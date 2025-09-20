@@ -8,6 +8,7 @@ import { Mode, DetectionOptions } from '../../components/Upload/deepfake/ModeOpt
 import DeepfakeFileUpload from "../../components/Upload/deepfake/DeepfakeFileUpload";
 import { v4 as uuidv4 } from 'uuid';
 import { startTask, finishTask, failTask } from "../../features/task/taskSlice";
+import axios from "axios";
 
 function Detection() {
   const dispatch = useDispatch();
@@ -51,24 +52,41 @@ function Detection() {
     if (mode === "advanced") {
       const optionsForApi: any = {
       mode: "PRECISION",
-      useTta:     options.use_tta,
-      useIllum:   options.use_illum,
+      use_tta:     options.use_tta,
+      use_illum:   options.use_illum,
       detector:   options.detector?.toUpperCase(), // 'Auto' -> 'AUTO'
-      smoothWindow: options.smooth_window,
-      minFace:      options.min_face,
-      sampleCount:  options.sample_count,
+      smooth_window: options.smooth_window,
+      min_face:      options.min_face,
+      sample_count:  options.sample_count,
     };
     results = await api.deepfake.upload(file, taskId, optionsForApi);
     } else {
       results = await api.deepfake.upload(file, taskId);
     }
     dispatch(finishTask(results));
-    } catch (error: any) {
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        const status = err.response?.status;
+    const data = err.response?.data; // 서버가 보낸 JSON/문자열
+    console.groupCollapsed("❌ Upload/Detect failed");
+    console.log("status:", status);
+    console.log("response.data:", data);
+    console.log("request url:", err.config?.url);
+    console.log("request headers:", err.config?.headers);
+    console.groupEnd();
+
+    const msg =
+      (typeof data === "string" ? data :
+       data?.message) || err.message || "서버 내부 오류가 발생했습니다.";
+    alert(msg);
+      }
+      /*
       console.error("업로드/예측 중 오류:", error);
       console.log(error.response?.data?.message || error.message);
-      dispatch(failTask(error))
+      const message =error.response?.data?.message || error.message || "알 수 없는 오류";
+      dispatch(failTask(message));
       alert("서버 오류로 인해 업로드에 실패했습니다.");
-      navigate("/pages/NotFound")
+      navigate("/pages/NotFound")*/
     }
   };
 
