@@ -19,11 +19,6 @@ function Home() {
           pauseBetweenAnimations={2}
           />
       </div>
-      {/* <div className="absolute h-[80vh] inset-0 flex text-black-100 text-8xl z-20 justify-center items-center font-bold">
-        <p>Detect Deepfakes</p>
-        <img src="/lock.svg" alt="로고"/>
-        <p>Defend the Truth</p>
-      </div> */}
 
       {/* 이미지 그리드 */}
       <div className="grid grid-cols-4 gap-2 animate-fade-in mt-5">
