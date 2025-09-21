@@ -59,8 +59,8 @@ function bandchartres(name: number, minnum: number, maxnum: number): string {
 }
 
 function DeepfakeReport({ result, createdAt, showXButton = true }: Props) {
-  const averageFakeinit = result?.averageConfidence ?? 0;
-  const maxConfidenceinit = result?.maxConfidence ?? 0;
+  const averageFake = result?.averageConfidence ?? 0;
+  const maxConfidence = result?.maxConfidence ?? 0;
   const suspectImage = result?.filePath ?? null;
   const mode = result?.mode ?? 'DEFAULT';
   const useTta = result?.useTta ?? false;
@@ -74,9 +74,9 @@ function DeepfakeReport({ result, createdAt, showXButton = true }: Props) {
     speedBullets: result.speedBullets,
   }
 
-  const averageFake = shrinkValue(averageFakeinit);
-  const maxConfidence = shrinkValue(maxConfidenceinit)-20;
-  const fake = +(averageFake).toFixed(0);
+  //const averageFake = shrinkValue(averageFakeinit);
+  //const maxConfidence = shrinkValue(maxConfidenceinit)-20;
+  const fake = +(averageFake*100).toFixed(0);
   const real = 100 - fake;
 
   const navigate = useNavigate();
@@ -206,7 +206,7 @@ function DeepfakeReport({ result, createdAt, showXButton = true }: Props) {
         {/*분석결과 */}
         <div className="flex flex-col gap-5 ml-20">
           <h3 className="text-2xl font-bold">📊 분석 결과</h3>
-          <h3 className="text-xl font-bold">➡️ {fake>50 ? "FAKE" : "REAL"}</h3>
+          <h3 className="text-xl font-bold">➡️ {result.result}</h3>
           <p>{message} <strong>({fake}%)</strong></p>
           <div className="flex">
             <h3 className="text-xl font-bold mt-5">✅ 탐지 신뢰도 점수</h3>
@@ -241,7 +241,7 @@ function DeepfakeReport({ result, createdAt, showXButton = true }: Props) {
           <span className="text-xs">03:40 ~ 03:55</span>*/}
         </div>
         <span className="text-lg flex items-center justify-center mt-5">
-          위 영역의 딥페이크 확률 : {(maxConfidence).toFixed(0)}%
+          위 영역의 딥페이크 확률 : {(maxConfidence*100).toFixed(0)}%
         </span>
       </div>
 
@@ -265,7 +265,7 @@ function DeepfakeReport({ result, createdAt, showXButton = true }: Props) {
 
       {/*밴드차트 */}
       <div className="bg-gray-100 text-black-100 p-6 rounded-xl mb-6 mx-20">
-        <h3 className="text-2xl font-bold mb-4">📊딥페이크 탐지 성능 분석 리포트</h3>
+        <h3 className="text-2xl font-bold mb-10">📊딥페이크 탐지 성능 분석 리포트</h3>
         <div className="flex items-center justify-center">
           <BulletsPanel data={bulletData}/>
         </div>
@@ -305,20 +305,6 @@ function DeepfakeReport({ result, createdAt, showXButton = true }: Props) {
               </p>
               <p className="text-[15px] mt-1">
                 {bandchartres(result.ttaStd, 0.03, 0.05)}
-              </p>
-          </div>
-          <div className="w-[15%] bg-white-100 rounded-[10px] font-bold p-5 text-center border-gray-100 border-2">
-            <div className="flex items-center justify-center">
-              <p className="text-[18px]">TTA Mean</p>
-              <div className="ml-1"><TooltipInfo message="TTA 적용 후 평균적인 딥페이크일 확률입니다. \n높을수록 탐지력이 좋습니다."/></div>
-            </div>
-              <p className="text-[15px] mt-2">
-                {result.ttaMean}
-              </p>
-              <p className="text-[15px] mt-1">
-                {(result.ttaMean >= 0.6) ? "🟢우수함" 
-                : (result.ttaMean >= 0.4) ? "🟡보통"
-                : "🔴위험"}
               </p>
           </div>
           <div className="w-[15%] bg-white-100 rounded-[10px] font-bold p-5 text-center border-gray-100 border-2">

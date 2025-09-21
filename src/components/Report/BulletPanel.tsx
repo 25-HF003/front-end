@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import BandBullet, { BulletItemWire, BulletItem, normalizeBands } from "./BandBullet";
+import BandBullet, { BulletItemWire, BulletItem, normalizeBands, mapStabilityWithoutTtaMean } from "./BandBullet";
 
 
 export type PayloadWire = {
@@ -8,21 +8,21 @@ export type PayloadWire = {
 };
 
 //정규화 유틸(NaN 문자열 처리)
-const normalizePayload = (w: PayloadWire) => {
+const normalizePayload = (w: PayloadWire): { stabilityBullets: BulletItem[]; speedBullets: BulletItem[] } => {
   const mapItem = (it: BulletItemWire): BulletItem => ({
     ...it,
     bands: normalizeBands(it.bands),
   });
   return {
-    stabilityBullets: w.stabilityBullets.map(mapItem),
+    stabilityBullets: mapStabilityWithoutTtaMean(w.stabilityBullets),
     speedBullets: w.speedBullets.map(mapItem),
   };
 };
 
 const Section: React.FC<{ title: string; items: BulletItem[] }> = ({ title, items }) => (
-  <div className="space-y-3">
+  <div className="space-y-4">
     <h3 className="text-xl font-semibold text-gray-600 mb-1">{title}</h3>
-    <div className="grid grid-cols-1 gap-y-9 md:grid-cols-2 gap-6">
+    <div className="grid grid-cols-1 gap-y-9 md:grid-cols-1 gap-6">
       {items.map((it) => (
         <BandBullet key={it.key} item={it} />
       ))}
@@ -33,8 +33,9 @@ const Section: React.FC<{ title: string; items: BulletItem[] }> = ({ title, item
 export default function BulletsPanel({ data }: { data: PayloadWire }) {
   const normalized = useMemo(() => normalizePayload(data), [data]);
   return (
-    <div className="w-full max-w-full space-y-6">
+    <div className="w-[80%] max-w-full space-y-6">
       <Section title="Stability" items={normalized.stabilityBullets}/>
+      <br/>
       <Section title="Speed" items={normalized.speedBullets} />
       {/* 범례 */}
       <div className="flex items-center gap-4 text-xs text-gray-600">
