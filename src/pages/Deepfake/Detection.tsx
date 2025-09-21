@@ -51,7 +51,7 @@ function Detection() {
     // UI 상태 → API 옵션 매핑
     if (mode === "advanced") {
       const optionsForApi: any = {
-      mode: "PRECISION",
+      mode: "precision",
       use_tta:     options.use_tta,
       use_illum:   options.use_illum,
       detector:   options.detector?.toUpperCase(), // 'Auto' -> 'AUTO'
@@ -59,6 +59,7 @@ function Detection() {
       min_face:      options.min_face,
       sample_count:  options.sample_count,
     };
+    console.log(optionsForApi);
     results = await api.deepfake.upload(file, taskId, optionsForApi);
     } else {
       results = await api.deepfake.upload(file, taskId);

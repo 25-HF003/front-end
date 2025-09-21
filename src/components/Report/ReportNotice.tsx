@@ -21,7 +21,7 @@ function ReportNotice() {
   );
 
   return(
-    <div className="bg-gray-50 p-6 rounded-xl">
+    <div className="bg-gray-100 p-6 rounded-xl">
         <h3 className="text-3xl font-extrabold text-red-100 mb-4">⚠️ 주의 사항</h3>
         <ul className="list-disc ml-5 space-y-5 text-xl">
           <p>

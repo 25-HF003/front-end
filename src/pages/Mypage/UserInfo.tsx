@@ -53,7 +53,8 @@ function UserInfo() {
         <img src="/img/Explorer.jpg" alt="감별사" className="rounded-full"/>
       </div>
         <h2 className="text-lg font-bold">{user.nickname}</h2>
-        <p className="text-sm text-green-100">{user.level}</p>
+        {/* 
+        <p className="text-sm text-green-100">{user.level}</p>*/}
         <hr className="my-4 w-full border-t" />
         <div className="text-sm w-full space-y-2">
           <div>

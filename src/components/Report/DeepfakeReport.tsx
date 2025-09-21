@@ -209,12 +209,14 @@ function DeepfakeReport({ result, createdAt, showXButton = true }: Props) {
           <h3 className="text-xl font-bold">➡️ {result.result}</h3>
           <p>{message} <strong>({fake}%)</strong></p>
           <div className="flex">
-            <h3 className="text-xl font-bold mt-5">✅ 탐지 신뢰도 점수</h3>
+            <h3 className="text-xl font-bold mt-5">✅ 탐지 신뢰도 지표</h3>
             <div className="ml-2 mt-5">
               <TooltipInfo message="탐지 결과가 영상 전반에서 얼마나 일관되고 안정적으로 유지되는지를 평가한 결과로 Δ Mean, Δ Std, TTA Std, TTA Mean 4가지 핵심 안정성 지표를 종합해 계산한 점수입니다. \n각 지표의 세부적인 값은 하단의 딥페이크 탐지 성능 분석 리포트에서 확인하실 수 있습니다."/>
             </div>
           </div>
-          <p>{result.stabilityScore.toFixed(0)}점</p>
+          <p>{result.stabilityScore>70 ? "🟢 우수"
+              : result.stabilityScore>30 ? "🟡 양호"
+              : "🟠 보통"}</p>
           {/*<p className="text-sm">🔍 의심 영역</p>
           <p className="text-sm">얼굴 윤곽, 피부 질감, 눈 깜빡임 패턴</p>*/}
         </div>
