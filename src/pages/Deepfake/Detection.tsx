@@ -22,7 +22,7 @@ function Detection() {
     use_illum: true,
     smooth_window: 5,
     min_face: 64,
-    sample_count: 15,
+    sample_count: 20,
     detector: 'Auto',
   });
 

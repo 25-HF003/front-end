@@ -36,7 +36,7 @@ function InsertLoading() {
   return(
     <div className="w-full h-screen flex flex-col justify-center items-center gap-10">
       <div className="w-[80vw] h-[60vh] rounded-[10px] flex flex-col justify-center items-center bg-white-100 gap-7">
-        <h1 className="text-[64px] font-semibold">{progress == 100 ? "조금만 더 기다려주세요 !" : "AI 기능이 적용되고 있어요 !"}</h1>
+        <h1 className="text-[64px] font-semibold">{progress == 100 ? <>결과를 정리 중입니다<br />잠시만 기다려주세요 !</> : "AI 기능이 적용되고 있어요 !"}</h1>
         {/* 퍼센티지 */}
         {/*
         <div className="relative w-28 h-28 rounded-full border-4 border-green-200 flex justify-center items-center">
