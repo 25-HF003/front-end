@@ -18,7 +18,7 @@
     "@tanstack/react-query-devtools": "^5.71.1",
     "@types/uuid": "^10.0.0",
     "axios": "^1.8.4",
-    "motion": "^12.23.16",
+    "motion": "^12.23.19",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.56.4",
