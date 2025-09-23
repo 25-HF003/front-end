@@ -114,7 +114,7 @@ function DeepfakeReport({ result, createdAt, showXButton = true }: Props) {
         </button>
       )}
       {/* 헤더 */}
-      <div className="bg-white-200 p-6 rounded-xl mb-6 mx-20">
+      <div className="bg-gray-100 p-6 rounded-xl mb-6 mx-20">
         <h2 className="text-3xl font-semibold mb-3">딥페이크 탐지</h2>
         <p className="text-sm">
           분석 날짜: {createdAt ? new Date(createdAt).toLocaleString("ko-KR") : new Date().toLocaleString("ko-KR")} | 영상 분석
