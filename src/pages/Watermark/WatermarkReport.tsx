@@ -2,12 +2,15 @@ import { useLocation } from "react-router-dom";
 import { PieChart, Pie, Cell, Label } from 'recharts';
 import WatermarkFailReport from "./WatermarkFailReport";
 import ReportNotice from "../../components/Report/ReportNotice";
+import HammingDistanceBar from "./HammingDistanceBar";
 
 function WatermarkReport() {
 
   const location = useLocation();
   const data = location.state?.data;
   const acc = parseFloat(data.bitAccuracy);
+  const pHash = data.phashDistance;
+  console.log(data);
 
   const chart = [
     { name: '정상', value: (acc) }, 
@@ -20,7 +23,7 @@ function WatermarkReport() {
   const COLORS = ['#000000', '#FFFFFF'];
 
   return(
-    <div className="flex flex-col min-h-screen px-20 py-10 mx-20">
+    <div className="flex flex-col min-h-screen gap-10 px-20 py-10 mx-20">
 
       <div className="bg-gray-50 rounded-[44px] h-[730px]">
 
@@ -68,12 +71,12 @@ function WatermarkReport() {
               <p>❌ 워터마크 훼손됨</p>
             )}
             <div className="my-2"></div>
-            <p className="font-bold">🔢 일치율</p>
+            <p className="font-bold">🔢 워터마크 일치율</p>
             <p>{acc}%</p>
             <div className="my-2"></div>
-            <p className="font-bold">⚠️ 훼손 여부</p>
+            <p className="font-bold">⚠️ 워터마크 훼손 여부</p>
             {acc >= 90 ? (
-              <p>변조되지 않음</p>
+              <p>훼손되지 않음</p>
             ) : (
               <p className="text-red-100">훼손된 부분이 감지되었습니다!</p>
             )}
@@ -81,11 +84,20 @@ function WatermarkReport() {
         </div>
       </div>
 
+      {acc >= 90 && (
+        <>
+        {/* 해밍거리 */}
+        <div className="p-7 bg-gray-50 rounded-[44px]">
+          <h1 className="flex mb-7 justify-center text-[30px] font-bold">📊 pHash 분석 결과</h1>
+          <HammingDistanceBar pHash={pHash} />
+        </div>
+        </>
+      )}
+
       {acc < 90 && (
         <>
           <WatermarkFailReport 
             uploaded={data.uploadedImageBase64}
-            // masked={data.mask_gt}
           />
           <ReportNotice />
         </>
