@@ -7,7 +7,6 @@ import { TERMS_OF_SERVICE, PRIVACY_POLICY, AGE_CONFIRMATION } from "./termsText"
 
 function AgreementSection({
   register,
-  errors,
   over14,
   terms,
   privacy,

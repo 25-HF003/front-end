@@ -9,7 +9,7 @@ import SignupModal from "../../components/Modal/SignupModal";
 import { logout } from "../../features/auth/authSlice";
 
 function Withdraw() {
-  const [password, setPassword] = useState("");
+  const [_, setPassword] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [social, setSocial] = useState("");
   const [modalMessage, setModalMessage] = useState("");

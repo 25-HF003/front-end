@@ -1,6 +1,6 @@
 import ImageUploader from "../FileUploader";
 import UploadProgressBar from "../UploadProgressBar";
-import { Dispatch, SetStateAction, useState, useEffect, ReactNode } from "react";
+import { useState, useEffect, ReactNode } from "react";
 
 type Props = {
   title: String;
@@ -15,7 +15,7 @@ type Props = {
 // 딥페이크 -> <ImageUploadPage title="비디오" />
 // 노이즈, 워터마크 -> <ImageUploadPage title="이미지" />
 
-function DeepfakeFileUpload({ title, onDone, file, setFile, accpet, isModal = false, settingsNode }: Props) {
+function DeepfakeFileUpload({ title, onDone, file, setFile, accpet, settingsNode }: Props) {
 
   //upload 100 => 버튼 활성화
   const [uploadDone, setUploadDone] = useState(false);

@@ -17,7 +17,7 @@ function WatermarkModal({ setIsModal, file }: Props) {
   const dispatch = useDispatch();
 
   const [text, setText] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [_, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);

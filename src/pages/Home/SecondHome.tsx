@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 function SecondHome() {
   
   const targetRef = useRef(null);
-  const [isVisible, setIsVisible] = useState(false);
+  const [_, setIsVisible] = useState(false);
 
   // 스크롤 이벤트
   useEffect(() => {
