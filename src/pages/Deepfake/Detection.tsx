@@ -7,7 +7,7 @@ import DeepfakeSetting from "../../components/Upload/deepfake/DeepfakeSetting";
 import { Mode, DetectionOptions } from '../../components/Upload/deepfake/ModeOptions'
 import DeepfakeFileUpload from "../../components/Upload/deepfake/DeepfakeFileUpload";
 import { v4 as uuidv4 } from 'uuid';
-import { startTask, finishTask, failTask } from "../../features/task/taskSlice";
+import { startTask, finishTask } from "../../features/task/taskSlice";
 import axios from "axios";
 
 function Detection() {
@@ -22,7 +22,7 @@ function Detection() {
     use_illum: true,
     smooth_window: 5,
     min_face: 64,
-    sample_count: 15,
+    sample_count: 20,
     detector: 'Auto',
   });
 
@@ -51,7 +51,7 @@ function Detection() {
     // UI 상태 → API 옵션 매핑
     if (mode === "advanced") {
       const optionsForApi: any = {
-      mode: "PRECISION",
+      mode: "precision",
       use_tta:     options.use_tta,
       use_illum:   options.use_illum,
       detector:   options.detector?.toUpperCase(), // 'Auto' -> 'AUTO'
@@ -59,6 +59,7 @@ function Detection() {
       min_face:      options.min_face,
       sample_count:  options.sample_count,
     };
+    console.log(optionsForApi);
     results = await api.deepfake.upload(file, taskId, optionsForApi);
     } else {
       results = await api.deepfake.upload(file, taskId);
@@ -67,18 +68,18 @@ function Detection() {
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
         const status = err.response?.status;
-    const data = err.response?.data; // 서버가 보낸 JSON/문자열
-    console.groupCollapsed("❌ Upload/Detect failed");
-    console.log("status:", status);
-    console.log("response.data:", data);
-    console.log("request url:", err.config?.url);
-    console.log("request headers:", err.config?.headers);
-    console.groupEnd();
-
-    const msg =
-      (typeof data === "string" ? data :
-       data?.message) || err.message || "서버 내부 오류가 발생했습니다.";
-    alert(msg);
+        const data = err.response?.data; // 서버가 보낸 JSON/문자열
+        console.groupCollapsed("❌ Upload/Detect failed");
+        console.log("status:", status);
+        console.log("response.data:", data);
+        console.log("request url:", err.config?.url);
+        console.log("request headers:", err.config?.headers);
+        console.groupEnd();
+        const msg =
+          (typeof data === "string" ? data :
+          data?.message) || err.message || "서버 내부 오류가 발생했습니다.";
+        alert(msg);
+        navigate("/detection")
       }
       /*
       console.error("업로드/예측 중 오류:", error);

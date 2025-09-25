@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../app/store";
 import { updatedProgress } from "../features/task/taskSlice";
+import MoonLoader from "react-spinners/MoonLoader";
 
 function InsertLoading() {
 
@@ -35,11 +36,23 @@ function InsertLoading() {
   return(
     <div className="w-full h-screen flex flex-col justify-center items-center gap-10">
       <div className="w-[80vw] h-[60vh] rounded-[10px] flex flex-col justify-center items-center bg-white-100 gap-7">
-        <h1 className="text-[64px]" >AI 기능이 적용되고 있어요!</h1>
+        <h1 className="text-[64px] font-semibold">{progress == 100 ? <>결과를 정리 중입니다<br />잠시만 기다려주세요 !</> : "AI 기능이 적용되고 있어요 !"}</h1>
         {/* 퍼센티지 */}
-        <div className="relative w-28 h-28 rounded-full border-4 border-green-200 flex justify-center items-center ">
+        {/*
+        <div className="relative w-28 h-28 rounded-full border-4 border-green-200 flex justify-center items-center">
+          <p className="absolute text-[36px] font-bold">{progress}%</p>
+        </div> */}
+        <div className="relative flex justify-center items-center">
+          <MoonLoader
+            color="#0AA689"
+            size={130}
+            speedMultiplier={0.5}
+            aria-label="Loading Spinner"
+            data-testid="loader"
+          />
           <p className="absolute text-[36px] font-bold">{progress}%</p>
         </div>
+          
         {/* 로딩바 */}
         <div className="w-[80%] h-10 border-2 border-green-200 rounded-full overflow-hidden">
           <div

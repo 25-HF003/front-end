@@ -32,7 +32,7 @@ export interface DeepfakeResponse {
 
 // 업로드 시 프론트에서 넘길 수 있는 옵션 (모두 선택적)
 export interface DeepfakeUploadOptions {
-  mode?: 'PRECISION' | 'DEFAULT' | string;
+  mode?: 'precision' | 'default' | string;
   use_tta?: boolean;
   use_illum?: boolean;
   detector?: 'AUTO' | 'DLIB' | 'DNN' | string;
@@ -69,6 +69,7 @@ export const deepfakeAPI = {
 
     const res = await axiosInstance.post("/api/deepfake", formData, {
       signal: undefined,  
+      timeout : 0,
     });
     return res.data.data;
   },

@@ -36,11 +36,28 @@ export type BulletItem = {
 };
 
 
+
 //정규화 유틸(NaN 문자열 처리)
 export const normalizeBands = (b: BandsWire): Bands => {
   const toTuple = (t: BandTupleWire): BandTuple => [t[0], t[1] === "NaN" ? null : t[1]];
   return { good: toTuple(b.good), warn: toTuple(b.warn), bad: toTuple(b.bad) };
 };
+
+export const toBulletItem = (w: BulletItemWire): BulletItem => ({
+  key: w.key,
+  label: w.label,
+  value: w.value,
+  bands: normalizeBands(w.bands),
+  direction: w.direction,
+  unit: w.unit ?? null,
+});
+
+// stabilityBullets에서 tta_mean만 제외
+export const mapStabilityWithoutTtaMean = (wires: BulletItemWire[]): BulletItem[] =>
+  wires
+    .filter((w) => w.key !== "tta_mean") 
+    .map(toBulletItem);
+
 
 type Props = {
   item: BulletItem;

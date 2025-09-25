@@ -45,8 +45,8 @@ type Timeseries = {
 };
 
 function shrinkValue(x: number): number {
-  const alpha =2.5;  // 지수 조절 (값이 클수록 더 많이 눌림)
-  return Math.pow(x, alpha)*100;
+  const alpha =1.6;  // 지수 조절 (값이 클수록 더 많이 눌림)
+  return Math.pow(x, alpha);
 }
 
 
@@ -59,8 +59,8 @@ function bandchartres(name: number, minnum: number, maxnum: number): string {
 }
 
 function DeepfakeReport({ result, createdAt, showXButton = true }: Props) {
-  const averageFakeinit = result?.averageConfidence ?? 0;
-  const maxConfidenceinit = result?.maxConfidence ?? 0;
+  let averageFake = result?.averageConfidence ?? 0;
+  let maxConfidence= result?.maxConfidence ?? 0;
   const suspectImage = result?.filePath ?? null;
   const mode = result?.mode ?? 'DEFAULT';
   const useTta = result?.useTta ?? false;
@@ -74,9 +74,11 @@ function DeepfakeReport({ result, createdAt, showXButton = true }: Props) {
     speedBullets: result.speedBullets,
   }
 
-  const averageFake = shrinkValue(averageFakeinit);
-  const maxConfidence = shrinkValue(maxConfidenceinit)-20;
-  const fake = +(averageFake).toFixed(0);
+  if (result.result === "REAL") {
+    averageFake=shrinkValue(averageFake)
+    maxConfidence=shrinkValue(maxConfidence)
+  }
+  const fake = +(averageFake*100).toFixed(0);
   const real = 100 - fake;
 
   const navigate = useNavigate();
@@ -87,8 +89,8 @@ function DeepfakeReport({ result, createdAt, showXButton = true }: Props) {
   ];
 
   let message = "";
-  if (fake <= 20) message = "딥페이크 가능성이 매우 낮음";
-  else if (fake <= 50) message = "딥페이크 가능성이 낮음";
+  if (fake <= 30) message = "딥페이크 가능성이 매우 낮음";
+  else if (fake <= 60) message = "딥페이크 가능성이 낮음";
   else if (fake <= 80) message = "딥페이크 가능성이 높음";
   else message = "딥페이크 가능성이 매우 높음";
 
@@ -112,7 +114,7 @@ function DeepfakeReport({ result, createdAt, showXButton = true }: Props) {
         </button>
       )}
       {/* 헤더 */}
-      <div className="bg-white-200 p-6 rounded-xl mb-6 mx-20">
+      <div className="bg-gray-100 p-6 rounded-xl mb-6 mx-20">
         <h2 className="text-3xl font-semibold mb-3">딥페이크 탐지</h2>
         <p className="text-sm">
           분석 날짜: {createdAt ? new Date(createdAt).toLocaleString("ko-KR") : new Date().toLocaleString("ko-KR")} | 영상 분석
@@ -163,60 +165,91 @@ function DeepfakeReport({ result, createdAt, showXButton = true }: Props) {
       </div>
 
       {/* 그래프+결과 */}
-      <div className="bg-white-200 text-black-100 p-6 rounded-xl mb-6 mx-20 flex gap-6  justify-center items-center">
-        {/*파이차트 */}
-        <div className="relative w-[300px] h-[300px] mr-20 flex items-center justify-center">
-          <PieChart width={300} height={300}>
-            <Pie
-              data={data}
-              cx="50%"
-              cy="50%"
-              innerRadius={60}
-              outerRadius={130}
-              dataKey="value"
-              startAngle={90}
-              endAngle={-270}
-            >
-              {data.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-              ))}
-              {/* 차트 중앙 퍼센트 값 */}
-              <Label
-                position="center"
-                content={({ viewBox }) => {
-                  if (viewBox && "cx" in viewBox && "cy" in viewBox){
-                    const { cx, cy } = viewBox;
-                    return (
-                      <text x={cx} y={cy} textAnchor="middle" dominantBaseline="middle">
-                        <tspan fontSize="24" fontWeight="bold" fill="#00060D">
-                          {fake}%
-                        </tspan>
-                        <tspan x={cx} dy="1.4em" fontSize="14" fill="#757575">
-                          Fake 가능성
-                        </tspan>
-                      </text>
-                    );
+      <div className="flex flex-row">
+        <div className="bg-gray-100 text-black-100 w-[46%] p-6 rounded-xl mb-6 ml-20 mr-3">
+          <h3 className="text-2xl font-bold mb-10">📝 분석 결과</h3>
+          <div className="flex gap-6 justify-center items-center">
+            {/*분석결과 */}
+            <div className="flex flex-col w-[65%] justify-center items-center gap-5 mt-12">
+              <h1 className="text-7xl font-bold mb-10">{result.result=="REAL"? "✅":"🚨"}{result.result}</h1>
+              <div className="w-[100%] bg-white-100 rounded-[10px] font-bold p-5 text-center border-gray-100 border-2">
+                <div className="flex items-center justify-center">
+                  <p className="text-[25px] mb-5">{result.result=="REAL"? "이 영상은 딥페이크로 탐지되지 않았습니다.":"이 영상은 딥페이크로 판별되었습니다."}</p>
+                </div>
+                  <p className="text-[18px] mt-2 text-gray-600">
+                    {result.result=="REAL"? 
+                    <>현재 분석 기준으로는 영상에 뚜렷한 변조 흔적이 <br/>발견되지 않아 신뢰할 수 있는 콘텐츠로 판정됩니다.</>
+                    :<>영상 내 변조 흔적이 뚜렷하게 확인되어 <br/> 신뢰할 수 없는 콘텐츠일 수 있습니다. <br/> 시청 시 각별한 주의가 필요합니다.</>
                   }
-                }}
-              />
-            </Pie>
-          </PieChart>
-        </div>
-
-        {/*분석결과 */}
-        <div className="flex flex-col gap-5 ml-20">
-          <h3 className="text-2xl font-bold">📊 분석 결과</h3>
-          <h3 className="text-xl font-bold">➡️ {fake>50 ? "FAKE" : "REAL"}</h3>
-          <p>{message} <strong>({fake}%)</strong></p>
-          <div className="flex">
-            <h3 className="text-xl font-bold mt-5">✅ 탐지 신뢰도 점수</h3>
-            <div className="ml-2 mt-5">
-              <TooltipInfo message="탐지 결과가 영상 전반에서 얼마나 일관되고 안정적으로 유지되는지를 평가한 결과로 Δ Mean, Δ Std, TTA Std, TTA Mean 4가지 핵심 안정성 지표를 종합해 계산한 점수입니다. \n각 지표의 세부적인 값은 하단의 딥페이크 탐지 성능 분석 리포트에서 확인하실 수 있습니다."/>
+                  </p>
+              </div>
+              {/* 
+              <div className="flex">
+                <h3 className="text-xl font-bold mt-5">✅ 탐지 신뢰도 지표</h3>
+                <div className="ml-2 mt-5">
+                  <TooltipInfo message="탐지 결과가 영상 전반에서 얼마나 일관되고 안정적으로 유지되는지를 평가한 결과로 Δ Mean, Δ Std, TTA Std, TTA Mean 4가지 핵심 안정성 지표를 종합해 계산한 점수입니다. \n각 지표의 세부적인 값은 하단의 딥페이크 탐지 성능 분석 리포트에서 확인하실 수 있습니다."/>
+                </div>
+              </div>
+            
+              <p>{result.stabilityScore>70 ? "🟢 우수"
+                  : result.stabilityScore>30 ? "🟡 양호"
+                  : "🟠 보통"}</p>  */}
+              {/*<p className="text-sm">🔍 의심 영역</p>
+              <p className="text-sm">얼굴 윤곽, 피부 질감, 눈 깜빡임 패턴</p>*/}
             </div>
           </div>
-          <p>{result.stabilityScore.toFixed(0)}점</p>
-          {/*<p className="text-sm">🔍 의심 영역</p>
-          <p className="text-sm">얼굴 윤곽, 피부 질감, 눈 깜빡임 패턴</p>*/}
+        </div>
+        {/*파이차트 */}
+        <div className="bg-gray-100 text-black-100 w-[45%] p-6 rounded-xl mb-6 mr-20 ml-3">
+          <h3 className="text-2xl font-bold mb-4">📊 영상의 평균 딥페이크 확률</h3>
+          <div className="w-[100%] bg-white-100 rounded-[10px] font-bold p-5 text-center border-gray-100 border-2 mb-5">
+            <div className="flex items-center justify-center">
+              <p className="text-[20x] mb-3">ℹ️표시된 확률은 영상 전체 프레임에서 산출된 평균값입니다.</p>
+            </div>
+            <p className="text-[14px] text-gray-600">
+              <>화면에 제시된 수치는 영상 전체의 평균적인 확률로, 전반적인 경향을 참고하기 위한 지표일 뿐 모든 프레임을 단정하기는 어렵습니다. <br/>따라서 숫자 자체보다는 분석 결과에 더 비중을 두어 해석하시길 권장합니다.</>
+            </p>
+          </div>
+          <div className="flex flex-col justify-center items-center gap-5">
+            <div className="relative w-[300px] h-[300px]">
+              <PieChart width={300} height={300}>
+                <Pie
+                  data={data}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={60}
+                  outerRadius={130}
+                  dataKey="value"
+                  startAngle={90}
+                  endAngle={-270}
+                >
+                {data.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                ))}
+                {/* 차트 중앙 퍼센트 값 */}
+                <Label
+                  position="center"
+                    content={({ viewBox }) => {
+                      if (viewBox && "cx" in viewBox && "cy" in viewBox){
+                        const { cx, cy } = viewBox;
+                        return (
+                          <text x={cx} y={cy} textAnchor="middle" dominantBaseline="middle">
+                            <tspan fontSize="24" fontWeight="bold" fill="#00060D">
+                              {fake}%
+                            </tspan>
+                            <tspan x={cx} dy="1.4em" fontSize="14" fill="#757575">
+                              Fake 가능성
+                            </tspan>
+                          </text>
+                          );
+                        }
+                      }}
+                    />
+                  </Pie>
+                </PieChart>
+            </div>
+            <p className="text-xl mb-2">{message} <strong>({fake}%)</strong></p>
+          </div>
         </div>
       </div>
 
@@ -240,8 +273,8 @@ function DeepfakeReport({ result, createdAt, showXButton = true }: Props) {
           />
           <span className="text-xs">03:40 ~ 03:55</span>*/}
         </div>
-        <span className="text-lg flex items-center justify-center mt-5">
-          위 영역의 딥페이크 확률 : {(maxConfidence).toFixed(0)}%
+        <span className="text-xl flex items-center justify-center mt-5">
+          위 영역의 딥페이크 확률 : {(maxConfidence*100).toFixed(0)}%
         </span>
       </div>
 
@@ -265,7 +298,7 @@ function DeepfakeReport({ result, createdAt, showXButton = true }: Props) {
 
       {/*밴드차트 */}
       <div className="bg-gray-100 text-black-100 p-6 rounded-xl mb-6 mx-20">
-        <h3 className="text-2xl font-bold mb-4">📊딥페이크 탐지 성능 분석 리포트</h3>
+        <h3 className="text-2xl font-bold mb-10">📊딥페이크 탐지 성능 분석 리포트</h3>
         <div className="flex items-center justify-center">
           <BulletsPanel data={bulletData}/>
         </div>
@@ -309,20 +342,6 @@ function DeepfakeReport({ result, createdAt, showXButton = true }: Props) {
           </div>
           <div className="w-[15%] bg-white-100 rounded-[10px] font-bold p-5 text-center border-gray-100 border-2">
             <div className="flex items-center justify-center">
-              <p className="text-[18px]">TTA Mean</p>
-              <div className="ml-1"><TooltipInfo message="TTA 적용 후 평균적인 딥페이크일 확률입니다. \n높을수록 탐지력이 좋습니다."/></div>
-            </div>
-              <p className="text-[15px] mt-2">
-                {result.ttaMean}
-              </p>
-              <p className="text-[15px] mt-1">
-                {(result.ttaMean >= 0.6) ? "🟢우수함" 
-                : (result.ttaMean >= 0.4) ? "🟡보통"
-                : "🔴위험"}
-              </p>
-          </div>
-          <div className="w-[15%] bg-white-100 rounded-[10px] font-bold p-5 text-center border-gray-100 border-2">
-            <div className="flex items-center justify-center">
               <p className="text-[18px]">Throughput</p>
               <div className="ml-1"><TooltipInfo message="초당 처리 가능한 프레임 수입니다. \n값이 높을수록 빠른 탐지가 가능합니다."/></div>
             </div>
@@ -351,7 +370,7 @@ function DeepfakeReport({ result, createdAt, showXButton = true }: Props) {
       </div>
 
       {/* 주의 사항 */}
-      {fake > 50 && (
+      {result.result == "FAKE" && (
         <div className="mx-20">
           <ReportNotice />
         </div>
