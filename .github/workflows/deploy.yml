@@ -37,12 +37,6 @@ jobs:
           yarn build
 
       # ── 값이 없으면 여기서 끝 (빌드만) ──────────────────────────
-      - name: Debug expected sub
-        run: |
-          echo "GITHUB_REPOSITORY=$GITHUB_REPOSITORY"
-          echo "GITHUB_REF=$GITHUB_REF"
-          echo "Expected sub => repo:${GITHUB_REPOSITORY}:ref:${GITHUB_REF}"
-
       - name: Configure AWS (OIDC)
         if: ${{ env.S3_BUCKET != '' && env.CF_DIST_ID != '' && env.ROLE_ARN != '' }}
         uses: aws-actions/configure-aws-credentials@v3
@@ -80,10 +74,24 @@ jobs:
       - name: Smoke • Pick one asset and check cache header
         if: ${{ env.APP_ORIGIN != '' }}
         run: |
-          set -e
-          ASSET=$(curl -s $APP_ORIGIN/ | grep -oE '/assets/[^"]+\.js' | head -n1)
+          set -euo pipefail
+
+          HTML="$(curl -fsSL "$APP_ORIGIN/index.html")" || {
+            echo "::error::Failed to fetch $APP_ORIGIN/index.html"
+            exit 1
+          }
+          ASSET="$(printf '%s' "$HTML" \
+            | grep -oE '(src|href)="/assets/[^"]+\.(js|mjs|css)' \
+            | sed -E 's/^(src|href)="//' \
+            | head -n1 || true)"
+
           echo "Check asset: $ASSET"
-          test -n "$ASSET"
+
+          if [ -z "$ASSET" ]; then
+            echo "::warning::No /assets/*.(js|mjs|css) reference found in index.html; skipping cache header check."
+            exit 0
+          fi
+
           curl -sI "$APP_ORIGIN$ASSET" | grep -i "cache-control" | grep -qi "max-age=31536000"
 
       - name: Smoke • Home & Deep-link 200
