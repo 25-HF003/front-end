@@ -8,7 +8,7 @@ function HomeHeader() {
   const [navOpen, setNavOpen] = useState(false);
 
   return(
-    <div className="relative flex h-[90px] items-center">
+    <div className="relative ml-5 flex h-[90px] items-center">
         <AiOutlineMenu className="w-[50px] h-[50px] text-white-200" onClick={() => setNavOpen(!navOpen)} />
         {navOpen && (
           <div className="z-50 fixed inset-0 bg-black bg-opacity-50">

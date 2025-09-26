@@ -1,12 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FileUploadPage from "../../components/Upload/FileUploadPage";
-import InsertFail from "../../components/InsertFail";
-import InsertLoading from "../../components/InsertLoading";
+import { useSelector } from "react-redux";
+import { RootState } from "../../app/store";
+import { useNavigate } from "react-router-dom";
 
 function WatermarkInsert() {
-
   const [file, setFile] = useState<File | null>(null);
-  const [isSModal, setIsModal] = useState(false);
+  const [isModal, setIsModal] = useState(false);
+  const navigate = useNavigate();
+
+  const isLoggedIn = useSelector((state: RootState) => !!state.auth.accessToken);
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      navigate("/login");
+    }
+  }, [isLoggedIn, navigate]);
 
   const handleDone = () => {
     setIsModal(true);
@@ -14,15 +23,13 @@ function WatermarkInsert() {
 
   return(
     <>
-      {/* <InsertLoading text="삽입중..." /> */}
-      {/* <InsertFail title="워터마크" link="watermark-insert" /> */}
       <FileUploadPage 
         title="이미지"
         file={file}
         setFile={setFile}
         accpet="image/*"
         onDone={handleDone}
-        isModal={isSModal} 
+        isModal={isModal} 
         setIsModal={setIsModal}
         />
     </>)

@@ -1,56 +1,24 @@
-import axios from "axios";
+import axiosInstance from "./axiosInstance";
 
-const BASE_URL = "http://127.0.0.1:5000";
-
-export const postWatermarkInsert = async (file: File, text: string) => {
+export const postWatermarkInsert = async (file: File, text: string, taskId: string) => {
   const formData = new FormData();
-  formData.append("image", file);
+  formData.append("file", file);
   formData.append("message", text);
+  formData.append("taskId", taskId);
 
-  const response = await axios.post(`${BASE_URL}/watermark-insert`, formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
+  const response = await axiosInstance.post("/api/watermark", formData);
 
-  return response.data;
+  return response.data.data;
 }
 
-export const getWatermarkImage = async (downloadUrl: string) => {
-  const urlParts = downloadUrl.split('/')
-  const originalFileName = urlParts[urlParts.length - 1];
-
-  // 확장자 분리
-  const dotIndex = originalFileName.lastIndexOf('.');
-  const name = originalFileName.substring(0, dotIndex);
-  const ext = originalFileName.substring(dotIndex);
-
-  // 새로운 파일명 생성
-  const downloadFileName = `${name}${ext}`;
-
-  const response = await axios.get(`${BASE_URL}${downloadUrl}`, {
-    responseType: 'blob',
-  });
-
-  const url = window.URL.createObjectURL(new Blob([response.data]));
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = downloadFileName;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  window.URL.revokeObjectURL(url);
-}
-
-export const postWatermarkDetection = async (file: File) => {
+export const postWatermarkDetection = async (file: File, taskId: string) => {
   const formData = new FormData();
-  formData.append("image", file);
+  formData.append("file", file);
+  formData.append("taskId", taskId);
 
-  const response = await axios.post(`${BASE_URL}/watermark-detection`, formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
+  const response = await axiosInstance.post("/api/watermark/detection", formData)
+
+  console.log(response.data);
 
   return response.data;
 }

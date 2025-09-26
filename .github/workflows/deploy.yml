@@ -1,0 +1,101 @@
+name: Deploy Frontend (S3 + CloudFront, yarn)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+concurrency:
+  group: frontend-deploy
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write # OIDC
+      contents: read
+
+    env:
+      AWS_REGION: ap-northeast-2
+      S3_BUCKET: deeptruth-frontend-bucket
+      CF_DIST_ID: ${{ secrets.CF_DIST_ID }} # 예: E2ABCDEF1234
+      ROLE_ARN: ${{ secrets.ROLE_ARN }} # 예: arn:aws:iam::<ACCOUNT_ID>:role/<GHA_OIDC_ROLE>
+      APP_ORIGIN: ${{ secrets.APP_ORIGIN }} # 예: https://app.example.com (스모크용, 선택)
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: yarn
+
+      - name: Build (yarn)
+        run: |
+          [ -f .env.production ] || cp .env.production.example .env.production || true
+          yarn install --frozen-lockfile
+          yarn build
+
+      # ── 값이 없으면 여기서 끝 (빌드만) ──────────────────────────
+      - name: Configure AWS (OIDC)
+        if: ${{ env.S3_BUCKET != '' && env.CF_DIST_ID != '' && env.ROLE_ARN != '' }}
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Upload HTML (short cache)
+        if: ${{ env.S3_BUCKET != '' && env.CF_DIST_ID != '' && env.ROLE_ARN != '' }}
+        run: |
+          aws s3 sync dist/ s3://$S3_BUCKET/ \
+            --delete \
+            --exclude "*.js" --exclude "*.css" --exclude "*.map" --exclude "assets/*" \
+            --cache-control "no-cache, no-store, must-revalidate" \
+            --metadata-directive REPLACE
+
+      - name: Upload Assets (long cache)
+        if: ${{ env.S3_BUCKET != '' && env.CF_DIST_ID != '' && env.ROLE_ARN != '' }}
+        run: |
+          aws s3 sync dist/ s3://$S3_BUCKET/ \
+            --exclude "*" \
+            --include "*.js" --include "*.css" --include "*.map" \
+            --include "assets/*" --include "*.png" --include "*.jpg" --include "*.svg" --include "*.webp" --include "*.woff2" \
+            --cache-control "public, max-age=31536000, immutable" \
+            --metadata-directive REPLACE
+
+      - name: Invalidate CloudFront
+        if: ${{ env.S3_BUCKET != '' && env.CF_DIST_ID != '' && env.ROLE_ARN != '' }}
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id $CF_DIST_ID \
+            --paths "/index.html" "/"
+
+      # ── Smoke tests ─────────────────────────
+      - name: Smoke • Pick one asset and check cache header
+        if: ${{ env.APP_ORIGIN != '' }}
+        run: |
+          set -e
+          ASSET=$(curl -s $APP_ORIGIN/ | grep -oE '/assets/[^"]+\.js' | head -n1)
+          echo "Check asset: $ASSET"
+          test -n "$ASSET"
+          curl -sI "$APP_ORIGIN$ASSET" | grep -i "cache-control" | grep -qi "max-age=31536000"
+
+      - name: Smoke • Home & Deep-link 200
+        if: ${{ env.APP_ORIGIN != '' }}
+        run: |
+          set -euo pipefail
+          curl -s -o /dev/null -w "%{http_code}\n" $APP_ORIGIN/                       | grep -qE "^200|^304$"
+          curl -s -o /dev/null -w "%{http_code}\n" $APP_ORIGIN/non-existent/deeplink  | grep -qE "^200|^304$"
+
+      - name: Smoke • index.html no-cache
+        if: ${{ env.APP_ORIGIN != '' }}
+        run: |
+          set -euo pipefail
+          curl -sI $APP_ORIGIN/index.html | grep -i "cache-control" | grep -qi "no-cache"
+
+      - name: Smoke • Health file
+        if: ${{ env.APP_ORIGIN != '' }}
+        run: |
+          set -euo pipefail
+          curl -fsSL $APP_ORIGIN/health.txt | grep -q "^ok$"

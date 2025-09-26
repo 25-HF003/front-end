@@ -1,0 +1,61 @@
+import React, { useMemo } from "react";
+import BandBullet, { BulletItemWire, BulletItem, normalizeBands, mapStabilityWithoutTtaMean } from "./BandBullet";
+
+
+export type PayloadWire = {
+  stabilityBullets: BulletItemWire[];
+  speedBullets: BulletItemWire[];
+};
+
+//정규화 유틸(NaN 문자열 처리)
+const normalizePayload = (w: PayloadWire): { stabilityBullets: BulletItem[]; speedBullets: BulletItem[] } => {
+  const mapItem = (it: BulletItemWire): BulletItem => ({
+    ...it,
+    bands: normalizeBands(it.bands),
+  });
+  return {
+    stabilityBullets: mapStabilityWithoutTtaMean(w.stabilityBullets),
+    speedBullets: w.speedBullets.map(mapItem),
+  };
+};
+
+const Section: React.FC<{ title: string; items: BulletItem[] }> = ({ title, items }) => (
+  <div className="space-y-4">
+    <h3 className="text-xl font-semibold text-gray-600 mb-1">{title}</h3>
+    <div className="grid grid-cols-1 gap-y-9 md:grid-cols-1 gap-6">
+      {items.map((it) => (
+        <BandBullet key={it.key} item={it} />
+      ))}
+    </div>
+  </div>
+);
+
+export default function BulletsPanel({ data }: { data: PayloadWire }) {
+  const normalized = useMemo(() => normalizePayload(data), [data]);
+  return (
+    <div className="w-[80%] max-w-full space-y-6">
+      <Section title="Stability" items={normalized.stabilityBullets}/>
+      <br/>
+      <Section title="Speed" items={normalized.speedBullets} />
+      {/* 범례 */}
+      <div className="flex items-center gap-4 text-xs text-gray-600">
+        <span className="inline-flex items-center gap-1">
+          <span className="w-3 h-3 inline-block rounded-sm" style={{ background: "#4ade80" }} />
+          Good
+        </span>
+        <span className="inline-flex items-center gap-1">
+          <span className="w-3 h-3 inline-block rounded-sm" style={{ background: "#facc15" }} />
+          Warn
+        </span>
+        <span className="inline-flex items-center gap-1">
+          <span className="w-3 h-3 inline-block rounded-sm" style={{ background: "#f87171" }} />
+          Bad
+        </span>
+        <span className="inline-flex items-center gap-1 ml-2">
+          <span className="w-3 h-3 rounded-full inline-block" style={{ background: "#4ade80", border: "1px solid rgba(0,0,0,.15)" }} />
+          Actual
+        </span>
+      </div>
+    </div>
+  );
+}
