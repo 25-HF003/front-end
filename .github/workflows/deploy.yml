@@ -37,6 +37,12 @@ jobs:
           yarn build
 
       # ── 값이 없으면 여기서 끝 (빌드만) ──────────────────────────
+      - name: Debug expected sub
+        run: |
+          echo "GITHUB_REPOSITORY=$GITHUB_REPOSITORY"
+          echo "GITHUB_REF=$GITHUB_REF"
+          echo "Expected sub => repo:${GITHUB_REPOSITORY}:ref:${GITHUB_REF}"
+
       - name: Configure AWS (OIDC)
         if: ${{ env.S3_BUCKET != '' && env.CF_DIST_ID != '' && env.ROLE_ARN != '' }}
         uses: aws-actions/configure-aws-credentials@v4
