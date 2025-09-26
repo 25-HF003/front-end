@@ -30,7 +30,6 @@ function NoiseReport({ data, confirmMessage, showXButton = true }: Props) {
 
   const navigate = useNavigate();
 
-  const originalImage = data.originalImageBase64;
   const NoisedImage = data.processedFilePath;
 
   // 신뢰도 값 계산
@@ -99,7 +98,7 @@ function NoiseReport({ data, confirmMessage, showXButton = true }: Props) {
 
       {/* 통계 정보 */}
       <div className="w-[1200px] flex flex-col items-center justify-center mt-5 p-5 gap-5 rounded-[10px] bg-blue-100">
-        <h1 className="font-bold text-2xl">📊 상세 통계</h1>
+        <h1 className="font-bold text-2xl">📊 분석 결과</h1>
         <div className="flex justify-center w-[100%] gap-5 text-center">
           <div className="w-[15%] bg-white-100 rounded-[10px] p-5">
             <p>결과</p>

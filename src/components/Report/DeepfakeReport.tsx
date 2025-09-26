@@ -223,7 +223,7 @@ function DeepfakeReport({ result, createdAt, showXButton = true }: Props) {
                   startAngle={90}
                   endAngle={-270}
                 >
-                {data.map((entry, index) => (
+                {data.map((_, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
                 {/* 차트 중앙 퍼센트 값 */}

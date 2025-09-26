@@ -16,7 +16,7 @@ function InsertLoading() {
   const taskId = taskIdFromState || taskIdFromStore;
 
   const dispatch = useDispatch();
-  const { progress, ready } = useProgressWebSocket(taskId);
+  const { progress } = useProgressWebSocket(taskId);
   const taskState = useSelector((state: RootState) => state.task);
 
   const navigate = useNavigate();
