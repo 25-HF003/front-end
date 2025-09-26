@@ -19,10 +19,9 @@ jobs:
     env:
       AWS_REGION: ap-northeast-2
       S3_BUCKET: deeptruth-frontend-bucket
-      CF_DIST_ID: ${{ secrets.CF_DIST_ID }} # 예: E2ABCDEF1234
-      ROLE_ARN: ${{ secrets.ROLE_ARN }} # 예: arn:aws:iam::<ACCOUNT_ID>:role/<GHA_OIDC_ROLE>
-      APP_ORIGIN: ${{ secrets.APP_ORIGIN }} # 예: https://app.example.com (스모크용, 선택)
-
+      CF_DIST_ID: E2LILKD2SITZTJ
+      ROLE_ARN: arn:aws:iam::420978537502:role/DeepTruthGitHubActionsOIDCRole
+      APP_ORIGIN: dxx0lclicpmhj.cloudfront.net
     steps:
       - uses: actions/checkout@v4
 
