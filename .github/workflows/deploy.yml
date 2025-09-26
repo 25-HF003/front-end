@@ -21,7 +21,7 @@ jobs:
       S3_BUCKET: deeptruth-frontend-bucket
       CF_DIST_ID: E2LILKD2SITZTJ
       ROLE_ARN: arn:aws:iam::420978537502:role/DeepTruthGitHubActionsOIDCRole
-      APP_ORIGIN: dxx0lclicpmhj.cloudfront.net
+      APP_ORIGIN: https://dxx0lclicpmhj.cloudfront.net
     steps:
       - uses: actions/checkout@v4
 
@@ -71,13 +71,6 @@ jobs:
             --paths "/index.html" "/"
 
       # ── Smoke tests ─────────────────────────
-      - name: Debug • print headers for picked asset
-        if: ${{ env.APP_ORIGIN != '' }}
-        run: |
-          set -euo pipefail
-          ASSET=$(curl -s "$APP_ORIGIN/index.html" | grep -oE '(src|href)="/assets/[^"]+\.(js|mjs|css)' | sed -E 's/^(src|href)="//' | head -n1)
-          echo "ASSET=$ASSET"
-          curl -sI "$APP_ORIGIN$ASSET"
       - name: Smoke • Pick one asset and check cache header
         if: ${{ env.APP_ORIGIN != '' }}
         run: |
