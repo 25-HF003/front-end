@@ -45,7 +45,7 @@ jobs:
 
       - name: Configure AWS (OIDC)
         if: ${{ env.S3_BUCKET != '' && env.CF_DIST_ID != '' && env.ROLE_ARN != '' }}
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v3
         with:
           role-to-assume: ${{ env.ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
