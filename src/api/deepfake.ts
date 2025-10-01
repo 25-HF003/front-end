@@ -25,7 +25,6 @@ export interface DeepfakeResponse {
   useTta?: boolean;
   useIllum?: boolean;
   detector?: 'AUTO' | 'DLIB' | 'DNN' | string;
-  smoothWindow?: number;
   minFace?: number;
   sampleCount?: number
 }
