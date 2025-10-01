@@ -13,7 +13,7 @@ export function useProgressWebSocket(taskId: string): {progress: number, ready: 
       return;
     }
 
-    const socket = new SockJS("http://localhost:8080/ws");
+    const socket = new SockJS(`${import.meta.env.VITE_WS_BASE}`);
     const stompClient = new Client({
       webSocketFactory: () => socket,
       reconnectDelay: 2000,

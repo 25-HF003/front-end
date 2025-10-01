@@ -20,7 +20,7 @@ const isAuthFree = (url?: string) =>
   !!url && AUTH_FREE_PATHS.some((p) => url.includes(p));
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:8080", // API 서버 주소
+  baseURL: import.meta.env.VITE_API_BASE, // API 서버 주소
   withCredentials: true,            // 쿠키 기반 인증 필요 시 true
 });
 
