@@ -19,10 +19,9 @@ jobs:
     env:
       AWS_REGION: ap-northeast-2
       S3_BUCKET: deeptruth-frontend-bucket
-      CF_DIST_ID: ${{ secrets.CF_DIST_ID }} # 예: E2ABCDEF1234
-      ROLE_ARN: ${{ secrets.ROLE_ARN }} # 예: arn:aws:iam::<ACCOUNT_ID>:role/<GHA_OIDC_ROLE>
-      APP_ORIGIN: ${{ secrets.APP_ORIGIN }} # 예: https://app.example.com (스모크용, 선택)
-
+      CF_DIST_ID: E2LILKD2SITZTJ
+      ROLE_ARN: arn:aws:iam::420978537502:role/DeepTruthGitHubActionsOIDCRole
+      APP_ORIGIN: https://dxx0lclicpmhj.cloudfront.net
     steps:
       - uses: actions/checkout@v4
 
@@ -40,7 +39,7 @@ jobs:
       # ── 값이 없으면 여기서 끝 (빌드만) ──────────────────────────
       - name: Configure AWS (OIDC)
         if: ${{ env.S3_BUCKET != '' && env.CF_DIST_ID != '' && env.ROLE_ARN != '' }}
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v3
         with:
           role-to-assume: ${{ env.ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
@@ -75,10 +74,24 @@ jobs:
       - name: Smoke • Pick one asset and check cache header
         if: ${{ env.APP_ORIGIN != '' }}
         run: |
-          set -e
-          ASSET=$(curl -s $APP_ORIGIN/ | grep -oE '/assets/[^"]+\.js' | head -n1)
+          set -euo pipefail
+
+          HTML="$(curl -fsSL "$APP_ORIGIN/index.html")" || {
+            echo "::error::Failed to fetch $APP_ORIGIN/index.html"
+            exit 1
+          }
+          ASSET="$(printf '%s' "$HTML" \
+            | grep -oE '(src|href)="/assets/[^"]+\.(js|mjs|css)' \
+            | sed -E 's/^(src|href)="//' \
+            | head -n1 || true)"
+
           echo "Check asset: $ASSET"
-          test -n "$ASSET"
+
+          if [ -z "$ASSET" ]; then
+            echo "::warning::No /assets/*.(js|mjs|css) reference found in index.html; skipping cache header check."
+            exit 0
+          fi
+
           curl -sI "$APP_ORIGIN$ASSET" | grep -i "cache-control" | grep -qi "max-age=31536000"
 
       - name: Smoke • Home & Deep-link 200

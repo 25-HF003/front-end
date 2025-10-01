@@ -21,7 +21,7 @@ function Login() {
   const location = useLocation();
 
   
-  // 에러 메시지 소스: (A) location.state.errorMessage (소셜 실패) (B) ?error=... (세션만료 등)
+  //  에러 메시지 소스: (A) location.state.errorMessage (소셜 실패) (B) ?error=... (세션만료 등)
   const incomingErrorMessage = useMemo(() => {
     const stateMsg = (location.state as any)?.errorMessage as string | undefined;
     const params = new URLSearchParams(location.search);
