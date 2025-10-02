@@ -8,7 +8,7 @@ type Props = {
 
 function UploadProgressBar({ file, onProgressDone }: Props) {
 
-  const [progress, setProgress] = useState(0);// 진행률
+  const [progress, setProgress] = useState(0); // 진행률
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
