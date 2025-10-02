@@ -32,7 +32,9 @@ jobs:
 
       - name: Build (yarn)
         run: |
-          [ -f .env.production ] || cp .env.production.example .env.production || true
+          echo "VITE_API_BASE=${{ secrets.VITE_API_BASE }}" >> .env.production
+          echo "VITE_WS_BASE=${{ secrets.VITE_WS_BASE }}" >> .env.production
+
           yarn install --frozen-lockfile
           yarn build
 
