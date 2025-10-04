@@ -7,7 +7,7 @@ import BulletsPanel, { PayloadWire } from "./BulletPanel";
 import { BulletItemWire } from "./BandBullet";
 import TooltipInfo from "../Modal/TooltipInfo";
 
-const COLORS = ["#3D3D42", "#FFFFFF"]; // gray, white
+const COLORS = ["#3D3D42", "#FFFFFF"];  // gray, white
 
 interface Props {
   result: {
