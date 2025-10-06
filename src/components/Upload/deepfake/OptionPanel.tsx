@@ -104,19 +104,7 @@ function OptionsPanel({ value, onChange }: OptionsPanelProps) {
             message='영상 속 얼굴이 어두워지거나 밝아질 때 자동으로 보정을 해서 더 안정적으로 검출할 수 있습니다.'
           />
           
-          {/* 슬라이더 3개 */}
-          <RadixSlider
-            label="시각적 스무딩 적용 프레임 수"
-            value={value.smooth_window}
-            min={0}
-            max={10}
-            step={1}
-            decimals={0}
-            onChange={(v) => set('smooth_window', v)}
-            className="py-2"
-            message='검출 결과가 프레임마다 균일하게 지정한 개수만큼 묶어서 평균내어 더 부드럽게 보여줍니다.'
-          />
-
+          {/* 슬라이더 2개 */}
           <RadixSlider
             label="검출할 최소 얼굴 크기"
             value={value.min_face}

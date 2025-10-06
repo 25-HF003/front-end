@@ -35,7 +35,7 @@ function NoisePanel() {
       (async () => {
         try {
           setLoading(true);
-          // 서버는 토큰으로 유저 식별 → userId를 프론트에서 보낼 필요 X
+          // 서버는 토큰으로 유저 식별 →  userId를 프론트에서 보낼 필요 X
           const data = await api.noise.getAllByUser(page, size, "createdAt,desc");
           console.log("응답", data.content);
           setRecords(data.content ?? []);

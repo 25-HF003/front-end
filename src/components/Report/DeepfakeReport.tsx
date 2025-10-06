@@ -7,7 +7,7 @@ import BulletsPanel, { PayloadWire } from "./BulletPanel";
 import { BulletItemWire } from "./BandBullet";
 import TooltipInfo from "../Modal/TooltipInfo";
 
-const COLORS = ["#3D3D42", "#FFFFFF"]; // gray, white
+const COLORS = ["#3D3D42", "#FFFFFF"];  // gray, white
 
 interface Props {
   result: {
@@ -20,7 +20,6 @@ interface Props {
     useTta?: boolean;
     useIllum?: boolean;
     detector?: 'AUTO' | 'DLIB' | 'DNN' | string;
-    smoothWindow?: number;
     minFace?: number;
     sampleCount?: number
     temporalDeltaMean: number;
@@ -52,7 +51,7 @@ function shrinkValue(x: number): number {
 
 function bandchartres(name: number, minnum: number, maxnum: number): string {
   let text;
-  {(name <= minnum) ? text = "🟢우수함" 
+  {(name <= minnum) ? text = "🟢우수" 
   : (name <= maxnum) ? text = "🟡보통" 
   : text = "🔴위험"}
   return text;
@@ -66,7 +65,6 @@ function DeepfakeReport({ result, createdAt, showXButton = true }: Props) {
   const useTta = result?.useTta ?? false;
   const useIllum = result?.useIllum ?? false;
   const detector = result?.detector ?? 'AUTO';
-  const smoothWindow = result?.smoothWindow ?? 0;
   const minFace = result?.minFace ?? 0;
   const sampleCount = result?.sampleCount ?? 0;
   const bulletData: PayloadWire ={
@@ -143,11 +141,6 @@ function DeepfakeReport({ result, createdAt, showXButton = true }: Props) {
           </label>
 
           <label className="inline-flex items-center gap-1 cursor-pointer">
-            <span className="text-base">시각적 스무딩 적용 프레임 수</span>
-              <span className="text-[11px] mr-4 px-1.5 py-0.5 rounded bg-white-100 text-green-200">{smoothWindow}</span>
-          </label>
-
-          <label className="inline-flex items-center gap-1 cursor-pointer">
             <span className="text-base">검출할 최소 얼굴 크기</span>
               <span className="text-[11px] mr-4 px-1.5 py-0.5 rounded bg-white-100 text-green-200">{minFace}</span>
           </label>
@@ -207,7 +200,7 @@ function DeepfakeReport({ result, createdAt, showXButton = true }: Props) {
               <p className="text-[20x] mb-3">ℹ️표시된 확률은 영상 전체 프레임에서 산출된 평균값입니다.</p>
             </div>
             <p className="text-[14px] text-gray-600">
-              <>화면에 제시된 수치는 영상 전체의 평균적인 확률로, 전반적인 경향을 참고하기 위한 지표일 뿐 모든 프레임을 단정하기는 어렵습니다. <br/>따라서 숫자 자체보다는 분석 결과에 더 비중을 두어 해석하시길 권장합니다.</>
+              <>화면에 제시된 수치는 영상 전체의 평균적인 확률로, 전반적인 경향을 참고하기 위한 지표일 뿐 모든 프레임을 단정하기는 어렵습니다. 따라서 숫자 자체보다는 분석 결과에 더 비중을 두어 해석하시길 권장합니다.</>
             </p>
           </div>
           <div className="flex flex-col justify-center items-center gap-5">
@@ -288,8 +281,8 @@ function DeepfakeReport({ result, createdAt, showXButton = true }: Props) {
         <div className="flex gap-4 mt-2 items-center justify-center">
           <div className="w-[80%] bg-white-100 rounded-[10px] font-bold p-5 text-center">
             <p>이 그래프는 영상의 각 프레임마다 딥페이크로 판단된 확률을 색으로 표현한 히트맵입니다.<br/> 
-              연두색에 가까울수록 딥페이크일 가능성이 높고, 보라색에 가까울수록 가능성이 낮습니다. 
-              특정 구간이 연두색으로 나타난 부분은 해당 프레임에서 딥페이크 징후가 강하게 드러난 지점입니다.<br/> 
+              빨간색에 가까울수록 딥페이크일 가능성이 높고, 초록색에 가까울수록 가능성이 낮습니다. 
+              특정 구간이 빨간색인 부분은 해당 프레임에서 딥페이크 징후가 강하게 드러난 지점입니다.<br/> 
               프레임별 확률이 뚜렷하게 달라지고 색상분포가 다양할수록 영상 속 미세한 패턴 차이를 더 명확하게 감지한 것입니다.
             </p>
           </div>
@@ -349,7 +342,7 @@ function DeepfakeReport({ result, createdAt, showXButton = true }: Props) {
                 {result.fpsProcessed}
               </p>
               <p className="text-[15px] mt-1">
-                {(result.fpsProcessed >= 0.27) ? "🟢우수함" 
+                {(result.fpsProcessed >= 0.27) ? "🟢우수" 
                 : (result.fpsProcessed >= 0.135) ? "🟡보통"
                 : "🔴위험"}
               </p>

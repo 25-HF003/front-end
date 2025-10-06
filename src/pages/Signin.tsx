@@ -108,7 +108,7 @@ function Signin() {
         {/* 비밀번호 */}
           <input type="password" {...register("password", { required: "비밀번호를 입력해주세요." })} placeholder="비밀번호 - 8자~30자의 영대문자·소문자·숫자·특수문자 모두 포함" className="w-full rounded-lg border p-3" />
           {errors.password && <p className="text-rose-500 text-sm">{errors.password.message}</p>}
-        {/* 비밀번호 확인 */}
+        {/* 비밀번호 확인  */}
           <input
             type="password"
             {...register("confirmPassword", {

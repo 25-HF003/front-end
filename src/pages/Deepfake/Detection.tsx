@@ -20,7 +20,6 @@ function Detection() {
   const [options, setOptions] = useState<DetectionOptions>({
     use_tta: true,
     use_illum: true,
-    smooth_window: 5,
     min_face: 64,
     sample_count: 20,
     detector: 'Auto',
@@ -55,7 +54,6 @@ function Detection() {
       use_tta:     options.use_tta,
       use_illum:   options.use_illum,
       detector:   options.detector?.toUpperCase(), // 'Auto' -> 'AUTO'
-      smooth_window: options.smooth_window,
       min_face:      options.min_face,
       sample_count:  options.sample_count,
     };

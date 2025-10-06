@@ -6,7 +6,6 @@ import { DetectionOptions, Mode } from './ModeOptions';
 const defaultOptions: DetectionOptions = { //정밀모드 기존 기본세팅
   use_tta: true,
   use_illum: true,
-  smooth_window: 5,
   min_face: 64,
   sample_count: 20,
   detector: 'Dnn',

@@ -13,7 +13,7 @@ export function useProgressWebSocket(taskId: string): {progress: number, ready: 
       return;
     }
 
-    const socket = new SockJS("http://localhost:8080/ws");
+    const socket = new SockJS(`${import.meta.env.VITE_WS_BASE}`);
     const stompClient = new Client({
       webSocketFactory: () => socket,
       reconnectDelay: 2000,
@@ -23,7 +23,7 @@ export function useProgressWebSocket(taskId: string): {progress: number, ready: 
         console.log("WebSocket 연결 성공!", taskId);
         setReady(true);
 
-        stompClient.subscribe(`/topic/progress/${taskId}`, (message) => {
+        stompClient.subscribe("/user/queue/tasks/" + taskId, (message) => {
           console.log("수신 원문: ", message.body);
             const data = JSON.parse(message.body);
             console.log("진행률 메시지 수신:", data.progress);
