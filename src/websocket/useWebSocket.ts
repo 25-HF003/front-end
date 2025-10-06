@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import SockJS from "sockjs-client";
 import { Client } from '@stomp/stompjs';
+import { useSelector } from "react-redux";
+import { RootState } from "../app/store";
 
 export function useProgressWebSocket(taskId: string): {progress: number, ready: boolean} {
   const [progress, setProgress] = useState(0);
   const [ready, setReady] = useState(false);
+  const userId = useSelector((state: RootState) => state.auth.user?.userId); 
 
   useEffect(() => {
     if (!taskId) {
@@ -18,6 +21,10 @@ export function useProgressWebSocket(taskId: string): {progress: number, ready: 
       webSocketFactory: () => socket,
       reconnectDelay: 2000,
       debug: (m) => console.log("stomp", m),
+
+      connectHeaders: {
+        loginId: userId?.toString() || "", 
+      },
 
       onConnect: () => {
         console.log("WebSocket 연결 성공!", taskId);
