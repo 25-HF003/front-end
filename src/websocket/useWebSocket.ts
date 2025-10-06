@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import SockJS from "sockjs-client";
 import { Client } from '@stomp/stompjs';
 import { useSelector } from "react-redux";
@@ -7,6 +7,7 @@ import { RootState } from "../app/store";
 export function useProgressWebSocket(taskId: string): {progress: number, ready: boolean} {
   const [progress, setProgress] = useState(0);
   const [ready, setReady] = useState(false);
+  const clientRef = useRef<Client | null>(null);
   const userId = useSelector((state: RootState) => state.auth.user?.userId); 
 
   useEffect(() => {
@@ -21,10 +22,10 @@ export function useProgressWebSocket(taskId: string): {progress: number, ready: 
       webSocketFactory: () => socket,
       reconnectDelay: 2000,
       debug: (m) => console.log("stomp", m),
-
+      /*
       connectHeaders: {
         loginId: userId?.toString() || "", 
-      },
+      },*/
 
       onConnect: () => {
         console.log("WebSocket 연결 성공!", taskId);
@@ -40,14 +41,20 @@ export function useProgressWebSocket(taskId: string): {progress: number, ready: 
       onStompError: (frame) => {
         console.error("WebSocket STOMP 에러:", frame.headers['message'], frame.body);
         setReady(false);
-      }
+      },
+      onWebSocketClose: (ev) => {
+        console.warn("WS closed", ev.code, ev.reason);
+        setReady(false);
+      },
     });
 
+    clientRef.current = stompClient;
     stompClient.activate();
 
     return () => {
       stompClient.deactivate();
       setReady(false);
+      clientRef.current = null;
       console.log("🔌 WebSocket 연결 해제");
     };
   }, [taskId]);
