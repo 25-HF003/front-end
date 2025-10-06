@@ -1,14 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import SockJS from "sockjs-client";
 import { Client } from '@stomp/stompjs';
-import { useSelector } from "react-redux";
-import { RootState } from "../app/store";
+
 
 export function useProgressWebSocket(taskId: string): {progress: number, ready: boolean} {
   const [progress, setProgress] = useState(0);
   const [ready, setReady] = useState(false);
   const clientRef = useRef<Client | null>(null);
-  const userId = useSelector((state: RootState) => state.auth.user?.userId); 
+  //const userId = useSelector((state: RootState) => state.auth.user?.userId); 
 
   useEffect(() => {
     if (!taskId) {
