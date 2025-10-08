@@ -96,14 +96,14 @@ function Signin() {
     <SignupModal isOpen={isModalOpen} message={modalMessage} onClose={handleModalClose} />
     <div className="flex min-h-screen items-center justify-center bg-black-100 p-4">
       {/* 회원가입 모달 */}
-      <div className="w-full max-w-lg overflow-y-auto max-h-[90vh] rounded-2xl bg-white-100 shadow-2xl p-8">
+      <div className="w-full max-w-xl overflow-y-auto max-h-[90vh] rounded-2xl bg-white-100 shadow-2xl p-8">
         <h2 className="text-2xl font-bold text-center mb-6">회원가입</h2>
         {/* 이름 */}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <input {...register("name", { required: "이름을 입력해주세요." })} placeholder="이름" className="w-full rounded-lg border p-3" />
           {errors.name && <p className="text-rose-500 text-sm">{errors.name.message}</p>}
         {/* 아이디 */}
-          <input {...register("username", { required: "아이디를 입력해주세요." })} placeholder="아이디 - 6~20자의 영소문자/숫자만 가능" className="w-full rounded-lg border p-3" />
+          <input {...register("username", { required: "아이디를 입력해주세요." })} placeholder="아이디 - 6자~20자의 영소문자·숫자만 가능" className="w-full rounded-lg border p-3" />
           {errors.username && <p className="text-rose-500 text-sm">{errors.username.message}</p>}
         {/* 비밀번호 */}
           <input type="password" {...register("password", { required: "비밀번호를 입력해주세요." })} placeholder="비밀번호 - 8자~30자의 영대문자·소문자·숫자·특수문자 모두 포함" className="w-full rounded-lg border p-3" />
@@ -120,7 +120,7 @@ function Signin() {
           {errors.confirmPassword && <p className="text-rose-500 text-sm">{errors.confirmPassword.message}</p>}
 
         {/* 닉네임 */}
-          <input {...register("nickname", { required: "닉네임을 입력해주세요." })} placeholder="닉네임 - 2자~15자의 한글/영문/숫자만 가능" className="w-full rounded-lg border p-3" />
+          <input {...register("nickname", { required: "닉네임을 입력해주세요." })} placeholder="닉네임 - 2자~15자의 한글·영문·숫자만 가능" className="w-full rounded-lg border p-3" />
           {errors.nickname && <p className="text-rose-500 text-sm">{errors.nickname.message}</p>}
 
         {/* 이메일 */}
