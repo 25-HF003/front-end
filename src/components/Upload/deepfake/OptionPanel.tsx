@@ -114,7 +114,7 @@ function OptionsPanel({ value, onChange }: OptionsPanelProps) {
             decimals={0}
             onChange={(v) => set('min_face', v)}
             className="py-2"
-            message='너무 작은 얼굴은 무시하고 설정한 크기 이상의 얼굴만 검출합니다.'
+            message='작은 얼굴은 무시하고 설정한 크기 이상의 얼굴만 검출합니다.'
           />
 
           <RadixSlider
@@ -142,7 +142,7 @@ function OptionsPanel({ value, onChange }: OptionsPanelProps) {
             message='얼굴 검출 방식을 고르는 옵션입니다.\n
                       · Auto: 먼저 Dlib을 쓰고 실패하면 DNN으로 자동 전환 \n
                       · Dlib: 빠르지만 회전/가림이 심하면 탐지율 저하 \n
-                      · DNN: 좀 더 느리지만 다양한 각도/표정/조명에서도 높은 정확도'
+                      · DNN: 느리지만 다양한 각도/표정/조명에서도 높은 정확도'
           />
         </div>
       )}
