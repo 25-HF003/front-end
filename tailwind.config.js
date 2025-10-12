@@ -35,7 +35,8 @@ export default {
               100: "#FB923C"
             },
             'blue': {
-              100: "#e3f2fd"
+              100: "#e3f2fd",
+              500: "#1D4ED8"
             },
           },
           animation: {
