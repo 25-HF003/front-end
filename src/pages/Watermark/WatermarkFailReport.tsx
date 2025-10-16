@@ -1,30 +1,22 @@
 type Props = {
   uploaded: string;
-  // masked: string;
 }
 
 function WatermarkFailReport({ uploaded }: Props) {
-// function WatermarkFailReport({ uploaded, masked }: Props) {
   return(
-    <div className="my-10 bg-gray-50 rounded-[44px] h-[730px]">
-      <h1 className="p-4 text-[36px] font-bold ">✔️ 탐지된 영역</h1>
+    <div className="flex flex-col items-center my-10 bg-gray-50 rounded-[44px] h-[730px]">
+      <h1 className="p-4 text-[36px] font-bold ">✔️ 탐지한 이미지</h1>
       
       {/* 탐지된 영역*/}
-      <div className="flex justify-around my-5">
-        <div className="w-[40%] flex flex-col gap-5">
-          <p className="text-[30px] text-center">탐지한 이미지</p>
+      <div className="flex-1 flex justify-center my-5 w-full">
+        <div className="w-[40%] h-[80%] flex flex-col justify-center items-center">
+          {/* <p className="text-[30px] text-center">✔️ 탐지한 이미지</p> */}
           <img
+            className="h-full object-contain" 
             src={`data:image/png;base64,${uploaded}`}
             alt="업로드된 이미지" 
           />
         </div>
-        {/* <div className="w-[40%] flex flex-col gap-5">
-          <h1 className="text-[30px] text-center my-1">훼손된 워터마크 위치</h1>
-          <img
-            src={`http://127.0.0.1:5000${masked}`}
-            alt="훼손된 이미지"
-          />
-        </div> */}
       </div>
     </div>
   );

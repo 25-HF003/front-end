@@ -117,7 +117,7 @@ function NoiseReport({ data, confirmMessage, showXButton = true }: Props) {
               {data.attackSuccess ? '-' : confidenceDrop}
             </p>
           </div>
-          <div className="w-[20%] bg-white-100 rounded-[10px] p-5">
+          <div className="w-[25%] bg-white-100 rounded-[10px] p-5">
             <p>적대적 노이즈 강도</p>
             <div className="flex justify-center items-center mt-3 gap-2">
               <p className="font-bold text-[20px]">{data.modeDescription}</p>
