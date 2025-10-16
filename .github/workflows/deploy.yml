@@ -64,7 +64,8 @@ jobs:
           aws s3 sync dist/ s3://$S3_BUCKET/ \
             --exclude "*" \
             --include "*.js" --include "*.css" --include "*.map" \
-            --include "assets/*" --include "*.png" --include "*.jpg" --include "*.svg" --include "*.webp" --include "*.woff2" \
+            --include "assets/*" \
+            --include "*.png" --include "*.jpg" --include "*.svg" --include "*.webp" --include "*.woff2" --include "*.ico" \
             --cache-control "public, max-age=31536000, immutable" \
             --metadata-directive REPLACE
 
