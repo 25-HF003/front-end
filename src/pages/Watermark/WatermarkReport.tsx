@@ -88,7 +88,7 @@ function WatermarkReport() {
         <>
         {/* 해밍거리 */}
         <div className="p-7 bg-gray-50 rounded-[44px]">
-          <h1 className="flex mb-7 justify-center text-[30px] font-bold">📊 pHash 분석 결과</h1>
+          <h1 className="flex mb-7 justify-center text-[30px] font-bold">📊 HammingDistance 분석 결과</h1>
           <HammingDistanceBar pHash={pHash} />
         </div>
         </>

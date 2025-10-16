@@ -59,7 +59,7 @@ function Features() {
           <div className="w-[360px] h-[400px] bg-white-200 p-8 flex flex-col justify-center items-center text-center rounded-xl shadow-lg hover:shadow-2xl transition duration-300 transform hover:scale-[1.02]">
             <h5 className="justify-start text-[28px] py-2 mb-4">워터마크 탐지</h5>
             <div className="h-[200px] py-7 flex flex-col">
-              사용자가 업로드한 이미지를 AI 모델로 분석해 워터마크의 존재 여부와 일치율을 계산해 보고서 형태로 제공하는 기능
+              사용자가 업로드한 이미지를 AI 모델로 분석해 워터마크의 존재 여부와 일치율을 계산해 보고서 형태로 제공합니다.
               <Link to="/watermark-detection" className="pt-10 text-blue-500">
               바로가기
             </Link>
