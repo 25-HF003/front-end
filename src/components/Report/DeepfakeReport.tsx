@@ -165,9 +165,9 @@ function DeepfakeReport({ result, createdAt, showXButton = true }: Props) {
             {/*분석결과 */}
             <div className="flex flex-col w-[65%] justify-center items-center gap-5 mt-12">
               <h1 className="text-7xl font-bold mb-10">{result.result=="REAL"? "✅":"🚨"}{result.result}</h1>
-              <div className="w-[100%] bg-white-100 rounded-[10px] font-bold p-5 text-center border-gray-100 border-2">
+              <div className="w-[105%] bg-white-100 rounded-[10px] font-bold p-5 text-center border-gray-100 border-2">
                 <div className="flex items-center justify-center">
-                  <p className="text-[25px] mb-5">{result.result=="REAL"? "이 영상은 딥페이크로 탐지되지 않았습니다.":"이 영상은 딥페이크로 판별되었습니다."}</p>
+                  <p className="text-[25px] mb-5">{result.result=="REAL"? "이 영상은 딥페이크가 탐지되지 않았습니다.":"이 영상은 딥페이크로 판별되었습니다."}</p>
                 </div>
                   <p className="text-[18px] mt-2 text-gray-600">
                     {result.result=="REAL"? 
