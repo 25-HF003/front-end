@@ -10,6 +10,8 @@ export default function ImageQuiz({ options, onSelect, selectId }: Options) {
             onClick={() => onSelect(item.id)}>
             <img
               src={item.img}
+              width="350px"
+              height="350px"
               alt="퀴즈 이미지" />
         </div>
       ))}
