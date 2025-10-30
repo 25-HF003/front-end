@@ -22,8 +22,8 @@ const mockData: QuizItem[] = [
     type: 'image',
     title: '아래 두 이미지 중에서 딥페이크(조작된 이미지)는 무엇일까요?',
     options: [
-      { id: 1, img: "/img/mock/deepfake.png", isCorrect: true },
-      { id: 2, img: "/img/mock/virtual_character.png", isCorrect: false },
+      { id: 1, img: "/img/fake.png", isCorrect: true },
+      { id: 2, img: "/img/real.jpg", isCorrect: false },
     ]
   },
   {
