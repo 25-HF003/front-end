@@ -2,6 +2,7 @@ import { useId, useState } from 'react';
 import { DetectionOptions } from './ModeOptions';
 import RadixSlider from './RadixSlider';
 import TooltipInfo from '../../Modal/TooltipInfo';
+import Toggle from './Toggle';
 
 interface OptionsPanelProps {
   value: DetectionOptions;
@@ -15,22 +16,6 @@ function OptionsPanel({ value, onChange }: OptionsPanelProps) {
   const set = <K extends keyof DetectionOptions>(k: K, v: DetectionOptions[K]) =>
     onChange({ ...value, [k]: v });
 
-  const Toggle = ({ label, checked, onToggle, message }:{
-    label: string; checked: boolean; onToggle: (v: boolean)=> void; message: string;
-  }) => (
-    <div className="flex items-center justify-between py-2">
-      <span className="text-lg ">{label}</span>
-      <div className="mr-auto ml-2"><TooltipInfo message={message}/></div>
-      <button
-        type="button"
-        role="switch"
-        aria-checked={checked}
-        onClick={() => onToggle(!checked)}
-        className={`relative inline-flex h-6 w-11 items-center rounded-full transition ${checked ? 'bg-green-100' : 'bg-gray-900'}`}>
-        <span className={`inline-block h-5 w-5 transform rounded-full bg-white-100 transition ${checked ? 'translate-x-5' : 'translate-x-1'}`} />
-      </button>
-    </div>
-  );
 
   const Select = ({ label, value, options, onChange, message }:{
     label: string; value: string; options: {value:string; label:string}[]; onChange:(v:string)=>void; message: string;
